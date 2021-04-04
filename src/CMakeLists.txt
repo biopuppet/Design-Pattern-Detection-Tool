@@ -29,6 +29,7 @@ include_directories(
 add_executable(dpds
     pugixml.cpp
     src_parser.cpp
+    node.cpp
 )
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
