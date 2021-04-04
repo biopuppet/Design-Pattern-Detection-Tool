@@ -1,0 +1,23 @@
+# TODO: Remove this part when released
+.github/
+.travis.yml
+
+# VS Code
+.vscode/
+
+# Cmake
+debug/
+build/
+bin/
+
+# ctags
+tags
+
+# Other
+*.exe
+*.elf
+*.spec
+
+*.[oa]
+*~
+*.swp
