@@ -164,7 +164,7 @@ enum xml_node_type {
     node_pi,           // Processing instruction, i.e. '<?name?>'
     node_declaration,  // Document declaration, i.e. '<?xml
                        // version="1.0"?>'
-    node_doctype  // Document type declaration, i.e. '<!DOCTYPE doc>'
+    node_doctype       // Document type declaration, i.e. '<!DOCTYPE doc>'
 };
 
 // Parsing options
@@ -252,23 +252,22 @@ const unsigned int parse_default =
 // Nodes of all types are added to the DOM tree, character/reference
 // entities are expanded, End-of-Line characters are normalized,
 // attribute values are normalized using CDATA normalization rules.
-const unsigned int parse_full = parse_default | parse_pi |
-                                parse_comments | parse_declaration |
-                                parse_doctype;
+const unsigned int parse_full = parse_default | parse_pi | parse_comments |
+                                parse_declaration | parse_doctype;
 
 // These flags determine the encoding of input data for XML document
 enum xml_encoding {
-    encoding_auto,  // Auto-detect input encoding using BOM or < / <?
-                    // detection; use UTF8 if BOM is not found
-    encoding_utf8,  // UTF8 encoding
+    encoding_auto,      // Auto-detect input encoding using BOM or < / <?
+                        // detection; use UTF8 if BOM is not found
+    encoding_utf8,      // UTF8 encoding
     encoding_utf16_le,  // Little-endian UTF16
     encoding_utf16_be,  // Big-endian UTF16
     encoding_utf16,     // UTF16 with native endianness
     encoding_utf32_le,  // Little-endian UTF32
     encoding_utf32_be,  // Big-endian UTF32
     encoding_utf32,     // UTF32 with native endianness
-    encoding_wchar,  // The same encoding wchar_t has (either UTF16 or
-                     // UTF32)
+    encoding_wchar,     // The same encoding wchar_t has (either UTF16 or
+                        // UTF32)
     encoding_latin1
 };
 
@@ -380,8 +379,7 @@ public:
     // header dependencies on stdio
     xml_writer_file(void *file);
 
-    virtual void write(const void *data,
-                       size_t size) PUGIXML_OVERRIDE;
+    virtual void write(const void *data, size_t size) PUGIXML_OVERRIDE;
 
 private:
     void *file;
@@ -392,19 +390,15 @@ private:
 class PUGIXML_CLASS xml_writer_stream : public xml_writer {
 public:
     // Construct writer from an output stream object
+    xml_writer_stream(std::basic_ostream<char, std::char_traits<char>> &stream);
     xml_writer_stream(
-        std::basic_ostream<char, std::char_traits<char>> &stream);
-    xml_writer_stream(
-        std::basic_ostream<wchar_t, std::char_traits<wchar_t>>
-            &stream);
+        std::basic_ostream<wchar_t, std::char_traits<wchar_t>> &stream);
 
-    virtual void write(const void *data,
-                       size_t size) PUGIXML_OVERRIDE;
+    virtual void write(const void *data, size_t size) PUGIXML_OVERRIDE;
 
 private:
     std::basic_ostream<char, std::char_traits<char>> *narrow_stream;
-    std::basic_ostream<wchar_t, std::char_traits<wchar_t>>
-        *wide_stream;
+    std::basic_ostream<wchar_t, std::char_traits<wchar_t>> *wide_stream;
 };
 #endif
 
@@ -447,8 +441,7 @@ public:
     const char_t *value() const;
 
     // Get attribute value, or the default value if attribute is empty
-    const char_t *
-    as_string(const char_t *def = PUGIXML_TEXT("")) const;
+    const char_t *as_string(const char_t *def = PUGIXML_TEXT("")) const;
 
     // Get attribute value as a number, or the default value if
     // conversion did not succeed or attribute is empty
@@ -600,8 +593,7 @@ public:
 
     // Get attribute, starting the search from a hint (and updating
     // hint so that searching for a sequence of attributes is fast)
-    xml_attribute attribute(const char_t *name,
-                            xml_attribute &hint) const;
+    xml_attribute attribute(const char_t *name, xml_attribute &hint) const;
 
     // Get child value of current node; that is, value of the first
     // child node of type PCDATA/CDATA
@@ -638,37 +630,29 @@ public:
     // empty node on errors.
     xml_node append_child(xml_node_type type = node_element);
     xml_node prepend_child(xml_node_type type = node_element);
-    xml_node insert_child_after(xml_node_type type,
-                                const xml_node &node);
-    xml_node insert_child_before(xml_node_type type,
-                                 const xml_node &node);
+    xml_node insert_child_after(xml_node_type type, const xml_node &node);
+    xml_node insert_child_before(xml_node_type type, const xml_node &node);
 
     // Add child element with specified name. Returns added node, or
     // empty node on errors.
     xml_node append_child(const char_t *name);
     xml_node prepend_child(const char_t *name);
-    xml_node insert_child_after(const char_t *name,
-                                const xml_node &node);
-    xml_node insert_child_before(const char_t *name,
-                                 const xml_node &node);
+    xml_node insert_child_after(const char_t *name, const xml_node &node);
+    xml_node insert_child_before(const char_t *name, const xml_node &node);
 
     // Add a copy of the specified node as a child. Returns added
     // node, or empty node on errors.
     xml_node append_copy(const xml_node &proto);
     xml_node prepend_copy(const xml_node &proto);
-    xml_node insert_copy_after(const xml_node &proto,
-                               const xml_node &node);
-    xml_node insert_copy_before(const xml_node &proto,
-                                const xml_node &node);
+    xml_node insert_copy_after(const xml_node &proto, const xml_node &node);
+    xml_node insert_copy_before(const xml_node &proto, const xml_node &node);
 
     // Move the specified node to become a child of this node. Returns
     // moved node, or empty node on errors.
     xml_node append_move(const xml_node &moved);
     xml_node prepend_move(const xml_node &moved);
-    xml_node insert_move_after(const xml_node &moved,
-                               const xml_node &node);
-    xml_node insert_move_before(const xml_node &moved,
-                                const xml_node &node);
+    xml_node insert_move_after(const xml_node &moved, const xml_node &node);
+    xml_node insert_move_before(const xml_node &moved, const xml_node &node);
 
     // Remove specified attribute
     bool remove_attribute(const xml_attribute &a);
@@ -690,11 +674,10 @@ public:
     // append_buffer allocates memory that has the lifetime of the
     // owning document; removing the appended nodes does not
     // immediately reclaim that memory.
-    xml_parse_result
-    append_buffer(const void *contents,
-                  size_t size,
-                  unsigned int options = parse_default,
-                  xml_encoding encoding = encoding_auto);
+    xml_parse_result append_buffer(const void *contents,
+                                   size_t size,
+                                   unsigned int options = parse_default,
+                                   xml_encoding encoding = encoding_auto);
 
     // Find attribute using predicate. Returns first attribute for
     // which predicate returned true.
@@ -718,8 +701,7 @@ public:
         if (!_root)
             return xml_node();
 
-        for (xml_node node = first_child(); node;
-             node = node.next_sibling())
+        for (xml_node node = first_child(); node; node = node.next_sibling())
             if (pred(node))
                 return node;
 
@@ -778,9 +760,8 @@ public:
 #ifndef PUGIXML_NO_XPATH
     // Select single node by evaluating XPath query. Returns first
     // node from the resulting node set.
-    xpath_node
-    select_node(const char_t *query,
-                xpath_variable_set *variables = PUGIXML_NULL) const;
+    xpath_node select_node(const char_t *query,
+                           xpath_variable_set *variables = PUGIXML_NULL) const;
     xpath_node select_node(const xpath_query &query) const;
 
     // Select node set by evaluating XPath query
@@ -791,9 +772,9 @@ public:
 
     // (deprecated: use select_node instead) Select single node by
     // evaluating XPath query.
-    PUGIXML_DEPRECATED xpath_node select_single_node(
-        const char_t *query,
-        xpath_variable_set *variables = PUGIXML_NULL) const;
+    PUGIXML_DEPRECATED xpath_node
+    select_single_node(const char_t *query,
+                       xpath_variable_set *variables = PUGIXML_NULL) const;
     PUGIXML_DEPRECATED xpath_node
     select_single_node(const xpath_query &query) const;
 
@@ -813,11 +794,10 @@ public:
                unsigned int flags = format_default,
                xml_encoding encoding = encoding_auto,
                unsigned int depth = 0) const;
-    void
-    print(std::basic_ostream<wchar_t, std::char_traits<wchar_t>> &os,
-          const char_t *indent = PUGIXML_TEXT("\t"),
-          unsigned int flags = format_default,
-          unsigned int depth = 0) const;
+    void print(std::basic_ostream<wchar_t, std::char_traits<wchar_t>> &os,
+               const char_t *indent = PUGIXML_TEXT("\t"),
+               unsigned int flags = format_default,
+               unsigned int depth = 0) const;
 #endif
 
     // Child nodes iterators
@@ -885,8 +865,7 @@ public:
     const char_t *get() const;
 
     // Get text, or the default value if object is empty
-    const char_t *
-    as_string(const char_t *def = PUGIXML_TEXT("")) const;
+    const char_t *as_string(const char_t *def = PUGIXML_TEXT("")) const;
 
     // Get text as a number, or the default value if conversion did
     // not succeed or object is empty
@@ -1001,8 +980,7 @@ private:
     mutable xml_attribute _wrap;
     xml_node _parent;
 
-    xml_attribute_iterator(xml_attribute_struct *ref,
-                           xml_node_struct *parent);
+    xml_attribute_iterator(xml_attribute_struct *ref, xml_node_struct *parent);
 
 public:
     // Iterator traits
@@ -1019,8 +997,7 @@ public:
     xml_attribute_iterator();
 
     // Construct an iterator which points to the specified attribute
-    xml_attribute_iterator(const xml_attribute &attr,
-                           const xml_node &parent);
+    xml_attribute_iterator(const xml_attribute &attr, const xml_node &parent);
 
     // Iterator operators
     bool operator==(const xml_attribute_iterator &rhs) const;
@@ -1116,16 +1093,16 @@ enum xml_parse_status {
 
     status_unrecognized_tag,  // Parser could not determine tag type
 
-    status_bad_pi,  // Parsing error occurred while parsing document
-                    // declaration/processing instruction
-    status_bad_comment,  // Parsing error occurred while parsing
-                         // comment
-    status_bad_cdata,    // Parsing error occurred while parsing CDATA
-                         // section
-    status_bad_doctype,  // Parsing error occurred while parsing
-                         // document type declaration
-    status_bad_pcdata,  // Parsing error occurred while parsing PCDATA
-                        // section
+    status_bad_pi,             // Parsing error occurred while parsing document
+                               // declaration/processing instruction
+    status_bad_comment,        // Parsing error occurred while parsing
+                               // comment
+    status_bad_cdata,          // Parsing error occurred while parsing CDATA
+                               // section
+    status_bad_doctype,        // Parsing error occurred while parsing
+                               // document type declaration
+    status_bad_pcdata,         // Parsing error occurred while parsing PCDATA
+                               // section
     status_bad_start_element,  // Parsing error occurred while parsing
                                // start element tag
     status_bad_attribute,      // Parsing error occurred while parsing
@@ -1194,8 +1171,7 @@ public:
 #ifdef PUGIXML_HAS_MOVE
     // Move semantics support
     xml_document(xml_document &&rhs) PUGIXML_NOEXCEPT_IF_NOT_COMPACT;
-    xml_document &
-    operator=(xml_document &&rhs) PUGIXML_NOEXCEPT_IF_NOT_COMPACT;
+    xml_document &operator=(xml_document &&rhs) PUGIXML_NOEXCEPT_IF_NOT_COMPACT;
 #endif
 
     // Removes all nodes, leaving the empty document
@@ -1212,22 +1188,19 @@ public:
          unsigned int options = parse_default,
          xml_encoding encoding = encoding_auto);
     xml_parse_result
-    load(std::basic_istream<wchar_t, std::char_traits<wchar_t>>
-             &stream,
+    load(std::basic_istream<wchar_t, std::char_traits<wchar_t>> &stream,
          unsigned int options = parse_default);
 #endif
 
     // (deprecated: use load_string instead) Load document from
     // zero-terminated string. No encoding conversions are applied.
     PUGIXML_DEPRECATED xml_parse_result
-    load(const char_t *contents,
-         unsigned int options = parse_default);
+    load(const char_t *contents, unsigned int options = parse_default);
 
     // Load document from zero-terminated string. No encoding
     // conversions are applied.
-    xml_parse_result
-    load_string(const char_t *contents,
-                unsigned int options = parse_default);
+    xml_parse_result load_string(const char_t *contents,
+                                 unsigned int options = parse_default);
 
     // Load document from file
     xml_parse_result load_file(const char *path,
@@ -1239,22 +1212,20 @@ public:
 
     // Load document from buffer. Copies/converts the buffer, so it
     // may be deleted or changed after the function returns.
-    xml_parse_result
-    load_buffer(const void *contents,
-                size_t size,
-                unsigned int options = parse_default,
-                xml_encoding encoding = encoding_auto);
+    xml_parse_result load_buffer(const void *contents,
+                                 size_t size,
+                                 unsigned int options = parse_default,
+                                 xml_encoding encoding = encoding_auto);
 
     // Load document from buffer, using the buffer for in-place
     // parsing (the buffer is modified and used for storage of
     // document data). You should ensure that buffer data will persist
     // throughout the document's lifetime, and free the buffer memory
     // manually once document is destroyed.
-    xml_parse_result
-    load_buffer_inplace(void *contents,
-                        size_t size,
-                        unsigned int options = parse_default,
-                        xml_encoding encoding = encoding_auto);
+    xml_parse_result load_buffer_inplace(void *contents,
+                                         size_t size,
+                                         unsigned int options = parse_default,
+                                         xml_encoding encoding = encoding_auto);
 
     // Load document from buffer, using the buffer for in-place
     // parsing (the buffer is modified and used for storage of
@@ -1277,13 +1248,11 @@ public:
 #ifndef PUGIXML_NO_STL
     // Save XML document to stream (semantics is slightly different
     // from xml_node::print, see documentation for details).
-    void
-    save(std::basic_ostream<char, std::char_traits<char>> &stream,
-         const char_t *indent = PUGIXML_TEXT("\t"),
-         unsigned int flags = format_default,
-         xml_encoding encoding = encoding_auto) const;
-    void save(std::basic_ostream<wchar_t, std::char_traits<wchar_t>>
-                  &stream,
+    void save(std::basic_ostream<char, std::char_traits<char>> &stream,
+              const char_t *indent = PUGIXML_TEXT("\t"),
+              unsigned int flags = format_default,
+              xml_encoding encoding = encoding_auto) const;
+    void save(std::basic_ostream<wchar_t, std::char_traits<wchar_t>> &stream,
               const char_t *indent = PUGIXML_TEXT("\t"),
               unsigned int flags = format_default) const;
 #endif
@@ -1377,8 +1346,7 @@ private:
 
     xpath_variable *_find(const char_t *name) const;
 
-    static bool _clone(xpath_variable *var,
-                       xpath_variable **out_result);
+    static bool _clone(xpath_variable *var, xpath_variable **out_result);
     static void _destroy(xpath_variable *var);
 
 public:
@@ -1393,8 +1361,7 @@ public:
 #ifdef PUGIXML_HAS_MOVE
     // Move semantics support
     xpath_variable_set(xpath_variable_set &&rhs) PUGIXML_NOEXCEPT;
-    xpath_variable_set &
-    operator=(xpath_variable_set &&rhs) PUGIXML_NOEXCEPT;
+    xpath_variable_set &operator=(xpath_variable_set &&rhs) PUGIXML_NOEXCEPT;
 #endif
 
     // Add a new variable or get the existing one, if the types match
@@ -1429,9 +1396,8 @@ public:
     // Construct a compiled object from XPath expression.
     // If PUGIXML_NO_EXCEPTIONS is not defined, throws xpath_exception
     // on compilation errors.
-    explicit xpath_query(
-        const char_t *query,
-        xpath_variable_set *variables = PUGIXML_NULL);
+    explicit xpath_query(const char_t *query,
+                         xpath_variable_set *variables = PUGIXML_NULL);
 
     // Constructor
     xpath_query();
@@ -1472,9 +1438,8 @@ public:
     // PUGIXML_NO_EXCEPTIONS is not defined, throws std::bad_alloc on
     // out of memory errors. If PUGIXML_NO_EXCEPTIONS is defined,
     // returns empty  set instead.
-    size_t evaluate_string(char_t *buffer,
-                           size_t capacity,
-                           const xpath_node &n) const;
+    size_t
+    evaluate_string(char_t *buffer, size_t capacity, const xpath_node &n) const;
 
     // Evaluate expression as node set in the specified context.
     // If PUGIXML_NO_EXCEPTIONS is not defined, throws xpath_exception
@@ -1543,8 +1508,7 @@ public:
 
     // Construct XPath node from XML node/attribute
     xpath_node(const xml_node &node);
-    xpath_node(const xml_attribute &attribute,
-               const xml_node &parent);
+    xpath_node(const xml_attribute &attribute, const xml_node &parent);
 
     // Get node/attribute, if any
     xml_node node() const;
@@ -1642,8 +1606,7 @@ private:
     xpath_node *_begin;
     xpath_node *_end;
 
-    void
-    _assign(const_iterator begin, const_iterator end, type_t type);
+    void _assign(const_iterator begin, const_iterator end, type_t type);
     void _move(xpath_node_set &rhs) PUGIXML_NOEXCEPT;
 };
 #endif
@@ -1659,13 +1622,9 @@ std::basic_string<char, std::char_traits<char>, std::allocator<char>>
                                     std::allocator<wchar_t>> &str);
 
 // Convert UTF8 to wide string
-std::basic_string<wchar_t,
-                  std::char_traits<wchar_t>,
-                  std::allocator<wchar_t>>
+std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>
     PUGIXML_FUNCTION as_wide(const char *str);
-std::basic_string<wchar_t,
-                  std::char_traits<wchar_t>,
-                  std::allocator<wchar_t>>
+std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>
     PUGIXML_FUNCTION
     as_wide(const std::basic_string<char,
                                     std::char_traits<char>,
@@ -1687,8 +1646,7 @@ set_memory_management_functions(allocation_function allocate,
 
 // Get current memory management functions
 allocation_function PUGIXML_FUNCTION get_memory_allocation_function();
-deallocation_function PUGIXML_FUNCTION
-get_memory_deallocation_function();
+deallocation_function PUGIXML_FUNCTION get_memory_deallocation_function();
 }  // namespace pugi
 
 #if !defined(PUGIXML_NO_STL) && (defined(_MSC_VER) || defined(__ICC))
