@@ -22,13 +22,13 @@ void Parser::parse_class(Node &node, GCDR &gcdr) {
                   << std::endl;
         auto e = edge(node_map[cur], node_map[father], gcdr);
         gcdr[e.first].relation = Relation::Inheritance;
-        std::cout << "exists? " << gcdr[e.first].relation << std::endl;
+        std::cout << "relation: " << gcdr[e.first].relation << std::endl;
     }
 }
 
-int Parser::parse() {
+int Parser::parse(const char *file_path) {
     pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file("../adapter3.xmi");
+    pugi::xml_parse_result result = doc.load_file(file_path);
 
     std::cout << "Load result: " << result.description() << std::endl;
     std::cout << "XMI version: "

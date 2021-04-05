@@ -4,8 +4,9 @@
 #include "gcdr.hpp"
 #include "parser.hpp"
 
-int main() {
+int main(int argc, char **argv) {
     Parser parser;
-    parser.parse();
+    const char *file = argc > 1 ? argv[1] : "../adapter3.xmi";
+    parser.parse(file);
     return 0;
 }

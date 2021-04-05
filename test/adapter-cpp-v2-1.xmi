@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_01EAA054_04A8_4483_81FB_647ADAF7A61B" name="cpp" visibility="public">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_034C7D57_297E_45dc_B7EC_BC74740FA24A" name="Adaptee" visibility="public">
+				<ownedOperation xmi:id="EAID_5787C22B_8B21_4aa6_AE3F_7677D43C7D19" name="specificRequest" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_8B21_4aa6_AE3F_7677D43C7D19" name="return" direction="return" type="EAC___void"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_5BF21CFB_8B04_4551_8CBC_94F08B1133F1" visibility="public">
+				<memberEnd xmi:idref="EAID_dstF21CFB_8B04_4551_8CBC_94F08B1133F1"/>
+				<memberEnd xmi:idref="EAID_srcF21CFB_8B04_4551_8CBC_94F08B1133F1"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_srcF21CFB_8B04_4551_8CBC_94F08B1133F1" visibility="public" association="EAID_5BF21CFB_8B04_4551_8CBC_94F08B1133F1" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_1BE845EF_ADE3_4036_B399_C2C3FBFB97F2"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_1BE845EF_ADE3_4036_B399_C2C3FBFB97F2" name="Adapter" visibility="public">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_23958E90_CF34_4e1d_9F5A_54D6E58FB2F8" name="adaptee" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000001_CF34_4e1d_9F5A_54D6E58FB2F8" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000002_CF34_4e1d_9F5A_54D6E58FB2F8" value="1"/>
+					<type xmi:idref="EAC___Adaptee_"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_DF34549E_BACA_4a32_82D4_DF42F495F886" name="Adapter" visibility="public" concurrency="sequential"/>
+				<ownedOperation xmi:id="EAID_5AEB8643_50BC_4e0f_A372_3ACB5FB1C0EB" name="~Adapter" visibility="public" concurrency="sequential"/>
+				<ownedOperation xmi:id="EAID_1E939A72_740A_448b_953F_AF182FBEFEDB" name="request" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_740A_448b_953F_AF182FBEFEDB" name="return" direction="return" type="EAC___void"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_01967454_DC37_4b74_934F_D53883F6E16F" general="EAID_E0EB5444_8290_412d_A851_BA44D8EC4E10"/>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dstF21CFB_8B04_4551_8CBC_94F08B1133F1" name="adaptee" visibility="private" association="EAID_5BF21CFB_8B04_4551_8CBC_94F08B1133F1" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_034C7D57_297E_45dc_B7EC_BC74740FA24A"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_E0EB5444_8290_412d_A851_BA44D8EC4E10" name="Target" visibility="public">
+				<ownedOperation xmi:id="EAID_F216A68B_BA49_455f_A052_D32337EE82F4" name="request" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_RT000000_BA49_455f_A052_D32337EE82F4" name="return" direction="return" type="EAC___void"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_F4DE44B4_D493_4f87_8B9A_D26747625594" name="~Target" visibility="public" concurrency="sequential" isAbstract="true"/>
+			</packagedElement>
+		</packagedElement>
+		<thecustomprofile:bodyLocation base_Operation="EAID_5787C22B_8B21_4aa6_AE3F_7677D43C7D19" bodyLocation="classDec"/>
+		<thecustomprofile:initializer base_Operation="EAID_DF34549E_BACA_4a32_82D4_DF42F495F886" initializer="adaptee()"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_DF34549E_BACA_4a32_82D4_DF42F495F886" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_5AEB8643_50BC_4e0f_A372_3ACB5FB1C0EB" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_1E939A72_740A_448b_953F_AF182FBEFEDB" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_F4DE44B4_D493_4f87_8B9A_D26747625594" bodyLocation="classDec"/>
+	</uml:Model>
+</xmi:XMI>
