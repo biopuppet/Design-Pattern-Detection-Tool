@@ -4,12 +4,38 @@
 #include <boost/graph/properties.hpp>
 #include <boost/property_map/property_map.hpp>
 #include <unordered_map>
+#include <map>
+#include <string>
 
 #include "pugixml.hpp"
 #include "gcdr.hpp"
 #include "parser.hpp"
 
 std::map<pugi::xml_node, vertex_descriptor_t> node_map;
+std::unordered_map<std::string, pugi::xml_node> xml_nodes;
+
+struct simple_walker: pugi::xml_tree_walker
+{
+    virtual bool for_each(pugi::xml_node& node)
+    {
+        // for (int i = 0; i < depth(); ++i) std::cout << "  "; // indentation
+        // std::cout << "name='" << node.name() << "', value='" << node.value() << "'\n";
+
+        if (!node.attribute("xmi:id").empty()) {
+            xml_nodes[node.attribute("xmi:id").value()] = node;
+        }
+
+        return true; // continue traversal
+    }
+};
+
+void prepare(pugi::xml_document &doc) {
+    simple_walker walker;
+    doc.traverse(walker);
+    for (auto it : xml_nodes) {
+        std::cout << it.first << " -- " << it.second.name() << std::endl;
+    }
+}
 
 void Parser::parse_class(Node &node, GCDR &gcdr) {
     // multi inheritance ignored
@@ -37,6 +63,8 @@ int Parser::parse(const char *file_path) {
 
     auto model = doc.child("xmi:XMI").child("uml:Model");
 
+    prepare(doc);
+
     /**
      * Find specific package in nested packages.
      */
@@ -52,40 +80,55 @@ int Parser::parse(const char *file_path) {
 
     int class_num = 0;
     for (auto child : package.children()) {
-        if (child.attribute("name").empty())
-            continue;
-        ++class_num;
+        auto type = child.attribute("xmi:type").value();
+        if (!strcmp(type, "uml:Class") || !strcmp(type, "uml:Interface"))
+            ++class_num;
     }
     GCDR gcdr_system(class_num);
 
     int i = 0;
     for (auto child : package.children()) {
-        if (child.attribute("name").empty())
+        auto type = child.attribute("xmi:type").value();
+        if (strcmp(type, "uml:Class") && strcmp(type, "uml:Interface"))
             continue;
-        std::cout << "class : " << child.attribute("name").value() << "\n";
+        std::cout << "node : " << child.attribute("name").value() << "\n";
         // auto node = boost::add_vertex(Node(child), gcdr_system);
         Node::adapt_node(gcdr_system[i], child);
+        
+        // Keep a handle of xml_node in every graph node
         gcdr_system[i].xnode = child;
-        node_map[child] = i;
 
-        std::cout << gcdr_system[i].id << std::endl;
-        std::cout << gcdr_system[i].name << std::endl;
-        std::cout << gcdr_system[i].isAbstract << std::endl;
-        std::cout << "\n";
+        node_map[child] = i;
         ++i;
     }
 
     // std::cout << gcdr_system.get_edge(3, 2).second.relation << std::endl;
     std::cout << "vertex num: " << num_vertices(gcdr_system) << std::endl;
-    std::cout << "edge num: " << num_edges(gcdr_system) << std::endl;
 
-        // Edge ed();
+    // Complete the graph
     for (int i = 0; i < class_num; ++i) {
         for (int j = 0; j < class_num; ++j) {
             add_edge(i, j, Relation::None, gcdr_system);
         }
     }
 
+    // out-class relation
+    for (auto child : package.children()) {
+        auto type = child.attribute("xmi:type").value();
+        std::cout << type << std::endl;
+        if (!strcmp(type, "uml:Realization")) {
+            auto client = child.attribute("client").value();
+            auto supplier = child.attribute("supplier").value();
+            std::cout << client << std::endl;
+            std::cout << supplier << std::endl;
+            std::cout << xml_nodes[client].empty() << xml_nodes[supplier].name() <<std::endl;
+            auto e = edge(node_map[xml_nodes[client]], node_map[xml_nodes[supplier]], gcdr_system);
+            gcdr_system[e.first].relation = Relation::Inheritance;
+        }
+        // Association ? Currently, not here.
+    }
+
+    // in-class property relations
     for (int i = 0; i < class_num; ++i) {
         std::cout << "ver: " << gcdr_system[i].name << std::endl;
         parse_class(gcdr_system[i], gcdr_system);
