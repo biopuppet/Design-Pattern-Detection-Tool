@@ -1,8 +1,6 @@
 #include "gcdr.hpp"
 
-int test()
+int gcdr_test()
 {
-    Graph graph(1);
-    graph.m_property.id;
-    
+    return 0;
 }

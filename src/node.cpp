@@ -6,4 +6,3 @@
 
 using namespace boost;
 
-int test() {}
