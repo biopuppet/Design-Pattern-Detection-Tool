@@ -31,10 +31,14 @@ public:
     }
 
     static Visibility get_vis(const char *s) {
-        if (!strcmp(s, "public")) return Visibility::PUBLIC;
-        else if (!strcmp(s, "protected")) return Visibility::PROTECTED;
-        else if (!strcmp(s, "private")) return Visibility::PRIVATE;
-        else return Visibility::PRIVATE;
+        if (!strcmp(s, "public"))
+            return Visibility::PUBLIC;
+        else if (!strcmp(s, "protected"))
+            return Visibility::PROTECTED;
+        else if (!strcmp(s, "private"))
+            return Visibility::PRIVATE;
+        else
+            return Visibility::PRIVATE;
     }
 
     static void adapt_node(Node &node, pugi::xml_node &_node) {
@@ -43,7 +47,6 @@ public:
         node.visibility = Node::get_vis(_node.attribute("visibility").value());
         node.isAbstract = _node.attribute("isAbstract") ? true : false;
     }
-
 };
 
 #endif  // !DPDS_NODE_H

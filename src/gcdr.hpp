@@ -13,11 +13,9 @@ class Graph {
 public:
     const std::string id;
     std::string name;
-    
 };
-
 
 typedef boost::adjacency_matrix<boost::directedS, Node, Edge, Graph> GCDR;
 typedef boost::graph_traits<GCDR>::vertex_descriptor vertex_descriptor_t;
 
-#endif // !DPDS_GCDR_H
+#endif  // !DPDS_GCDR_H

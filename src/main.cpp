@@ -4,8 +4,7 @@
 #include "gcdr.hpp"
 #include "parser.hpp"
 
-int main()
-{
+int main() {
     Parser parser;
     parser.parse();
     return 0;

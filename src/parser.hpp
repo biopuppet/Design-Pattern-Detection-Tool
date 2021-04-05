@@ -6,9 +6,8 @@
 
 class Parser {
 public:
-void parse_class(Node &node, GCDR &gcdr);
+    void parse_class(Node &node, GCDR &gcdr);
     int parse();
 };
 
-
-#endif // !DPDS_PARSER_H
+#endif  // !DPDS_PARSER_H

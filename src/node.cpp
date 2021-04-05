@@ -5,4 +5,3 @@
 #include <boost/graph/adjacency_matrix.hpp>
 
 using namespace boost;
-

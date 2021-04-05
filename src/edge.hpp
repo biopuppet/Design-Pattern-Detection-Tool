@@ -16,4 +16,4 @@ public:
     Edge(Relation rel = None) : relation(rel) {}
 };
 
-#endif // !DPDS_EDGE_H
+#endif  // !DPDS_EDGE_H
