@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_104AF731_16B9_44f5_B965_E3427C04404D" name="visitor" visibility="public">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_2041C089_2574_4c91_8008_D68CFF669029" name="ConcreteElementA" visibility="package">
+				<ownedOperation xmi:id="EAID_7913F731_1884_401c_BC3D_140510054DE4" name="accept" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_E11C5FCE_8879_4ca0_B76E_64C2D34E48DA" name="visitor" type="EAID_12C49946_D8D0_4eb8_AD41_C9E434F3878F" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_1884_401c_BC3D_140510054DE4" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_A255047B_E906_48b3_A5D7_1B7E49FF67BB" general="EAID_DFF82312_14F9_4268_A425_92F371BF8733"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_B996F245_A972_49f4_9066_D35CF1540FB8" name="ConcreteElementB" visibility="package">
+				<ownedOperation xmi:id="EAID_BC72C9D5_5914_45ad_9806_82787FCAF0C2" name="accept" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_878057B3_AFE8_4bdc_AA84_5773AD067A16" name="visitor" type="EAID_12C49946_D8D0_4eb8_AD41_C9E434F3878F" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_5914_45ad_9806_82787FCAF0C2" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_A5394854_882D_49a0_AA41_4396B84714DB" general="EAID_DFF82312_14F9_4268_A425_92F371BF8733"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_6ECDB48A_6311_46c0_8C27_12D9D098FF1C" name="ConcreteVisitor1" visibility="package">
+				<ownedOperation xmi:id="EAID_14CB73E7_C7A0_4a89_901E_38E0D2954343" name="visitConcreteElementA" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_6FD0E546_8C10_4466_9308_FF47722562CC" name="concreteElementA" type="EAID_2041C089_2574_4c91_8008_D68CFF669029" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_C7A0_4a89_901E_38E0D2954343" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_3BAF5145_59B7_4a0c_806A_742FDDFB1E1C" general="EAID_12C49946_D8D0_4eb8_AD41_C9E434F3878F"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_4BF8675C_2775_4f26_BA2D_B692E2EBD4D2" name="ConcreteVisitor2" visibility="package">
+				<ownedOperation xmi:id="EAID_B84B03C0_5D54_47a8_B244_A02EDF5CE9A7" name="visitConcreteElementA" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_372802E3_FC80_4c5e_A3E1_DECDF0EBD971" name="concreteElementA" type="EAID_2041C089_2574_4c91_8008_D68CFF669029" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_5D54_47a8_B244_A02EDF5CE9A7" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_D4B400D5_15D5_4348_802E_C964044C8CB0" general="EAID_12C49946_D8D0_4eb8_AD41_C9E434F3878F"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_DFF82312_14F9_4268_A425_92F371BF8733" name="Element" visibility="public" isAbstract="true">
+				<ownedOperation xmi:id="EAID_1A7FB861_31B7_4753_B17A_9DCCF435E4C7" name="accept" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_DDE00938_853B_46e4_B615_0EBF6F9958A6" name="visitor" type="EAID_12C49946_D8D0_4eb8_AD41_C9E434F3878F" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_31B7_4753_B17A_9DCCF435E4C7" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_E99AD88E_B453_41d4_A2E2_353FCF403288" visibility="public">
+				<memberEnd xmi:idref="EAID_dst9AD88E_B453_41d4_A2E2_353FCF403288"/>
+				<memberEnd xmi:idref="EAID_src9AD88E_B453_41d4_A2E2_353FCF403288"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_src9AD88E_B453_41d4_A2E2_353FCF403288" visibility="public" association="EAID_E99AD88E_B453_41d4_A2E2_353FCF403288" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_90B8BCEA_3A03_4a07_963D_CD4B0139933B"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_90B8BCEA_3A03_4a07_963D_CD4B0139933B" name="ObjectStructure" visibility="public">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_9E5204C4_F684_4807_B43C_A3B3CFD54C4A" name="elements" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000001_F684_4807_B43C_A3B3CFD54C4A" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000002_F684_4807_B43C_A3B3CFD54C4A" value="1"/>
+					<defaultValue xmi:type="uml:LiteralString" xmi:id="EAID_LI000003_F684_4807_B43C_A3B3CFD54C4A" value="new ArrayList&lt;Element&gt;()"/>
+					<type xmi:idref="EAJava_List_Element_"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_A7289BF3_E42C_4f41_8AE7_9E836933BB12" name="accept" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_E3C3C616_8F90_4e15_94C9_B6B23165A159" name="visitor" type="EAID_12C49946_D8D0_4eb8_AD41_C9E434F3878F" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_E42C_4f41_8AE7_9E836933BB12" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_D25EC283_0FAC_4bad_968E_7442103E6A6C" name="attach" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_DCB89DCE_EA39_4a47_8013_B2B3318F9320" name="element" type="EAID_DFF82312_14F9_4268_A425_92F371BF8733" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_0FAC_4bad_968E_7442103E6A6C" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_B4DF9F06_24F4_4569_AE64_65804B1984E3" name="detach" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_2E6CF96A_2095_44cc_9941_4C546BD25188" name="element" type="EAID_DFF82312_14F9_4268_A425_92F371BF8733" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_24F4_4569_AE64_65804B1984E3" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dst9AD88E_B453_41d4_A2E2_353FCF403288" name="elements" visibility="private" association="EAID_E99AD88E_B453_41d4_A2E2_353FCF403288" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_DFF82312_14F9_4268_A425_92F371BF8733"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000003__B453_41d4_A2E2_353FCF403288" value="0"/>
+					<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI000004__B453_41d4_A2E2_353FCF403288" value="-1"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_12C49946_D8D0_4eb8_AD41_C9E434F3878F" name="Visitor" visibility="public" isAbstract="true">
+				<ownedOperation xmi:id="EAID_BC5C9F62_852D_474e_8E87_0158CE6538DB" name="visitConcreteElementA" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_BB6EF3B4_88D9_4b48_BCEE_F13AD87C5CC7" name="concreteElementA" type="EAID_2041C089_2574_4c91_8008_D68CFF669029" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_852D_474e_8E87_0158CE6538DB" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_4D3ED9EF_CFC5_49b9_9A88_A60B809DC0BE" name="visitConcreteElementB" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_FB92073E_1261_4c77_812F_B6C468A9F71D" name="concreteElementB" type="EAID_B996F245_A972_49f4_9066_D35CF1540FB8" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_CFC5_49b9_9A88_A60B809DC0BE" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_6B3A23FE_99F9_4733_A5F7_D014D05219C7" name="VisitorClient" visibility="public">
+				<ownedOperation xmi:id="EAID_2A111DFE_0E25_464c_B858_E5AE0F99A155" name="main" visibility="public" concurrency="sequential" isStatic="true">
+					<ownedParameter xmi:id="EAID_AD38F9F7_66B5_4301_AA42_E8E4ED828EBB" name="args" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true" type="EAJava_String__"/>
+					<ownedParameter xmi:id="EAID_RT000000_0E25_464c_B858_E5AE0F99A155" name="return" direction="return" type="EAJava_void"/>
+				</ownedOperation>
+			</packagedElement>
+		</packagedElement>
+		<thecustomprofile:annotations base_Operation="EAID_7913F731_1884_401c_BC3D_140510054DE4" annotations="@Override"/>
+		<thecustomprofile:annotations base_Operation="EAID_BC72C9D5_5914_45ad_9806_82787FCAF0C2" annotations="@Override"/>
+		<thecustomprofile:annotations base_Operation="EAID_14CB73E7_C7A0_4a89_901E_38E0D2954343" annotations="@Override"/>
+		<thecustomprofile:annotations base_Operation="EAID_B84B03C0_5D54_47a8_B244_A02EDF5CE9A7" annotations="@Override"/>
+	</uml:Model>
+</xmi:XMI>
