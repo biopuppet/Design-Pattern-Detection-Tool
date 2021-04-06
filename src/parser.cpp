@@ -32,24 +32,37 @@ struct simple_walker: pugi::xml_tree_walker
 void prepare(pugi::xml_document &doc) {
     simple_walker walker;
     doc.traverse(walker);
-    for (auto it : xml_nodes) {
-        std::cout << it.first << " -- " << it.second.name() << std::endl;
-    }
+    // for (auto it : xml_nodes) {
+    //     std::cout << it.first << " -- " << it.second.name() << std::endl;
+    // }
 }
 
 void Parser::parse_class(Node &node, GCDR &gcdr) {
-    // multi inheritance ignored
     auto cur = node.xnode;
-    auto gen = cur.child("generalization");
-    if (!gen.empty()) {
-        auto father_id = gen.attribute("general").value();
-        auto father = cur.parent().find_child_by_attribute("xmi:id", father_id);
-        std::cout << "General--> " << father.attribute("name").value()
-                  << std::endl;
-        auto e = edge(node_map[cur], node_map[father], gcdr);
-        gcdr[e.first].relation = Relation::Inheritance;
-        std::cout << "relation: " << gcdr[e.first].relation << std::endl;
+    std::cout << cur.attribute("name").value() << std::endl;
+    // multi inheritance ignored
+    for (auto child : cur.children()) {
+        if (!strcmp(child.name(), "generalization")) {
+            auto father_id = child.attribute("general").value();
+            auto father = xml_nodes[father_id];
+            std::cout << "General--> " << father.attribute("name").value()
+                    << std::endl;
+            auto e = edge(node_map[cur], node_map[father], gcdr);
+            gcdr[e.first].relation *= Relation::Inheritance;
+            std::cout << "relation: " << gcdr[e.first].relation << std::endl;
+        }
+        else if (!child.attribute("association").empty()) {
+            auto ass = child.child("type").attribute("xmi:idref").value();
+            // TODO: Add Aggregation and Dependency
+            auto e = edge(node_map[cur], node_map[xml_nodes[ass]], gcdr);
+            gcdr[e.first].relation *= Relation::Association;
+            std::cout << "relation: " << gcdr[e.first].relation << std::endl;
+        }
     }
+    // auto gen = cur.child("generalization");
+    // if (!gen.empty()) {
+        
+    // }
 }
 
 int Parser::parse(const char *file_path) {
@@ -115,22 +128,17 @@ int Parser::parse(const char *file_path) {
     // out-class relation
     for (auto child : package.children()) {
         auto type = child.attribute("xmi:type").value();
-        std::cout << type << std::endl;
         if (!strcmp(type, "uml:Realization")) {
             auto client = child.attribute("client").value();
             auto supplier = child.attribute("supplier").value();
-            std::cout << client << std::endl;
-            std::cout << supplier << std::endl;
-            std::cout << xml_nodes[client].empty() << xml_nodes[supplier].name() <<std::endl;
             auto e = edge(node_map[xml_nodes[client]], node_map[xml_nodes[supplier]], gcdr_system);
-            gcdr_system[e.first].relation = Relation::Inheritance;
+            gcdr_system[e.first].relation *= Relation::Inheritance;
         }
         // Association ? Currently, not here.
     }
 
     // in-class property relations
     for (int i = 0; i < class_num; ++i) {
-        std::cout << "ver: " << gcdr_system[i].name << std::endl;
         parse_class(gcdr_system[i], gcdr_system);
     }
 

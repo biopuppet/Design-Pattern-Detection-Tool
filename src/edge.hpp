@@ -11,7 +11,7 @@ enum Relation {
 
 struct Edge {
 public:
-    Relation relation = None;
+    size_t relation = None;
 
     Edge(Relation rel = None) : relation(rel) {}
 };
