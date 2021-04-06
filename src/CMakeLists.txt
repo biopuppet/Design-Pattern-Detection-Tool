@@ -32,6 +32,7 @@ add_executable(dpds
     node.cpp
     edge.cpp
     gcdr.cpp
+    sp_detector.cpp
     main.cpp
 )
 
