@@ -6,9 +6,8 @@
 #include "pugixml.hpp"
 #include "gcdr.hpp"
 
-enum class SubPattern {
-    UNKNOWN = -1,
-    ICA,
+enum SubPattern {
+    ICA = 0,
     CI,
     IAGG,
     IPAG,
@@ -28,14 +27,17 @@ enum class SubPattern {
 
 class SubPatternDetector {
 public:
-    std::vector<GCDR> subpatterns;
 
     int init();
     void createICA();
+    void createCI();
+    void createSASS();
 
     int detect_all(GCDR &system);
 
     int detect_sp_instances(GCDR &system, GCDR &sp);
+
+    std::vector<GCDR> sps;
 };
 
 #endif  // !DPDS_SP_DETECTOR_H
