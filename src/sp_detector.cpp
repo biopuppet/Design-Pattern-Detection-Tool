@@ -96,7 +96,7 @@ int SubPatternDetector::detect_sp_instances(GCDR &system, GCDR &sp) {
         {
 
             // since there are no self-loops in 3-vertex-sub-patterns
-            // we can presume i, j are different.
+            // we can presume vd1, vd2, vd3 are different.
             edge_descriptor_t sp_es[] = {edge(0, 1, sp).first,
             edge(0, 2, sp).first,
             edge(1, 0, sp).first,
@@ -107,6 +107,9 @@ int SubPatternDetector::detect_sp_instances(GCDR &system, GCDR &sp) {
             for (auto vd1 : cvs[0]) {
                 for (auto vd2 : cvs[1]) {
                     for (auto vd3 : cvs[2]) {
+                        if (vd1 == vd2 || vd2 == vd3 || vd1 == vd3) {
+                            continue;
+                        }
                         edge_descriptor_t sys_es[] = {edge(vd1, vd2, system).first,
                             edge(vd1, vd3, system).first,
                             edge(vd2, vd1, system).first,
@@ -122,7 +125,8 @@ int SubPatternDetector::detect_sp_instances(GCDR &system, GCDR &sp) {
                             }
                         }
                         if (continue_flag) continue;
-                        std::cout << "here3\n";
+                        std::cout << "here3: ";
+                        printf("%lu %lu %lu\n", vd1, vd2, vd3);
                     }
                 }
             }
@@ -132,9 +136,9 @@ int SubPatternDetector::detect_sp_instances(GCDR &system, GCDR &sp) {
             break;
     }
 
-    for (auto cv : cvs) {
-        std::cout << "cvs:\n";
-        for (auto v : cv) {
+    for (int i = 0; i < cvs.size(); ++i) {
+        std::cout << "cvs_" << i << ": ";
+        for (auto v : cvs[i]) {
             std::cout << v << "  ";
         }
         std::cout << "\n";
