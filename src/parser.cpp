@@ -14,18 +14,17 @@
 std::map<pugi::xml_node, vertex_descriptor_t> node_map;
 std::unordered_map<std::string, pugi::xml_node> xml_nodes;
 
-struct simple_walker: pugi::xml_tree_walker
-{
-    virtual bool for_each(pugi::xml_node& node)
-    {
+struct simple_walker : pugi::xml_tree_walker {
+    virtual bool for_each(pugi::xml_node &node) {
         // for (int i = 0; i < depth(); ++i) std::cout << "  "; // indentation
-        // std::cout << "name='" << node.name() << "', value='" << node.value() << "'\n";
+        // std::cout << "name='" << node.name() << "', value='" << node.value()
+        // << "'\n";
 
         if (!node.attribute("xmi:id").empty()) {
             xml_nodes[node.attribute("xmi:id").value()] = node;
         }
 
-        return true; // continue traversal
+        return true;  // continue traversal
     }
 };
 
@@ -46,7 +45,7 @@ void Parser::parse_class(Node &node, GCDR &gcdr) {
             auto father_id = child.attribute("general").value();
             auto father = xml_nodes[father_id];
             std::cout << "General--> " << father.attribute("name").value()
-                    << std::endl;
+                      << std::endl;
             auto e = edge(node_map[cur], node_map[father], gcdr);
             gcdr[e.first].relation *= Relation::Inheritance;
             std::cout << "relation: " << gcdr[e.first].relation << std::endl;
@@ -61,7 +60,7 @@ void Parser::parse_class(Node &node, GCDR &gcdr) {
     }
     // auto gen = cur.child("generalization");
     // if (!gen.empty()) {
-        
+
     // }
 }
 
@@ -107,7 +106,7 @@ GCDR Parser::parse(const char *file_path) {
         std::cout << "node : " << child.attribute("name").value() << "\n";
         // auto node = boost::add_vertex(Node(child), gcdr_system);
         Node::adapt_node(gcdr_system[i], child);
-        
+
         // Keep a handle of xml_node in every graph node
         gcdr_system[i].xnode = child;
 
@@ -131,7 +130,8 @@ GCDR Parser::parse(const char *file_path) {
         if (!strcmp(type, "uml:Realization")) {
             auto client = child.attribute("client").value();
             auto supplier = child.attribute("supplier").value();
-            auto e = edge(node_map[xml_nodes[client]], node_map[xml_nodes[supplier]], gcdr_system);
+            auto e = edge(node_map[xml_nodes[client]],
+                          node_map[xml_nodes[supplier]], gcdr_system);
             gcdr_system[e.first].relation *= Relation::Inheritance;
         }
         // Association ? Currently, not here.
@@ -152,13 +152,12 @@ GCDR Parser::parse(const char *file_path) {
     std::cout << "out-edges: " << std::endl;
     print_graph(gcdr_system, name);
 
-
-    typedef boost::graph_traits<GCDR>::edge_iterator edge_iter ;
+    typedef boost::graph_traits<GCDR>::edge_iterator edge_iter;
     std::pair<edge_iter, edge_iter> eip = edges(gcdr_system);
-    for(edge_iter ei = eip.first; ei != eip.second; ++ei) {
-        std::cout<< source(*ei, gcdr_system) << " ---> " 
-        << target(*ei, gcdr_system) << " relation: "
-        << gcdr_system[*ei].relation << std::endl;
+    for (edge_iter ei = eip.first; ei != eip.second; ++ei) {
+        std::cout << source(*ei, gcdr_system) << " ---> "
+                  << target(*ei, gcdr_system)
+                  << " relation: " << gcdr_system[*ei].relation << std::endl;
     }
 
     // for (auto child : package.children()) {

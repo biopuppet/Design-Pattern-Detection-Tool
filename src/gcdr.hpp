@@ -21,5 +21,4 @@ typedef boost::graph_traits<GCDR>::vertex_descriptor vertex_descriptor_t;
 size_t gcdr_cw_in(const GCDR &g, vertex_descriptor_t v);
 size_t gcdr_cw_out(const GCDR &g, vertex_descriptor_t v);
 
-
 #endif  // !DPDS_GCDR_H
