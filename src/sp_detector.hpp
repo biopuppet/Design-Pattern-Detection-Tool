@@ -33,7 +33,9 @@ public:
     int init();
     void createICA();
 
-    int detect_sp_instances(GCDR &sp);
+    int detect_all(GCDR &system);
+
+    int detect_sp_instances(GCDR &system, GCDR &sp);
 };
 
 #endif  // !DPDS_SP_DETECTOR_H

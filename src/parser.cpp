@@ -65,7 +65,7 @@ void Parser::parse_class(Node &node, GCDR &gcdr) {
     // }
 }
 
-int Parser::parse(const char *file_path) {
+GCDR Parser::parse(const char *file_path) {
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(file_path);
 
@@ -165,5 +165,5 @@ int Parser::parse(const char *file_path) {
     //     if (child.attribute("name").empty()) continue;
     //     ++i;
     // }
-    return 0;
+    return gcdr_system;
 }

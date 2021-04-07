@@ -7,7 +7,7 @@
 class Parser {
 public:
     void parse_class(Node &node, GCDR &gcdr);
-    int parse(const char *file_path);
+    GCDR parse(const char *file_path);
 };
 
 #endif  // !DPDS_PARSER_H

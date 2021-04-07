@@ -8,9 +8,10 @@
 int main(int argc, char **argv) {
     Parser parser;
     const char *file = argc > 1 ? argv[1] : "../adapter3.xmi";
-    parser.parse(file);
+    GCDR system = parser.parse(file);
     
     SubPatternDetector spd;
     spd.init();
+    spd.detect_all(system);
     return 0;
 }

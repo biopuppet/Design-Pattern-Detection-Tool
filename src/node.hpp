@@ -2,6 +2,8 @@
 #define DPDS_NODE_H
 
 #include <string>
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_matrix.hpp>
 
 #include "pugixml.hpp"
 
