@@ -26,7 +26,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/include
 )
 
-add_executable(dpds
+add_executable(dpdt
     pugixml.cpp
     parser.cpp
     node.cpp
@@ -39,7 +39,7 @@ add_executable(dpds
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-install(TARGETS dpds
+install(TARGETS dpdt
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
 )

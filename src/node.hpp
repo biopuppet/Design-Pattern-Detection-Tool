@@ -1,5 +1,5 @@
-#ifndef DPDS_NODE_H
-#define DPDS_NODE_H
+#ifndef DPDT_NODE_H
+#define DPDT_NODE_H
 
 #include <string>
 #include <boost/graph/graph_traits.hpp>
@@ -51,4 +51,4 @@ public:
     }
 };
 
-#endif  // !DPDS_NODE_H
+#endif  // !DPDT_NODE_H

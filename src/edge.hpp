@@ -1,5 +1,5 @@
-#ifndef DPDS_EDGE_H
-#define DPDS_EDGE_H
+#ifndef DPDT_EDGE_H
+#define DPDT_EDGE_H
 
 enum Relation {
     None = 1,
@@ -16,4 +16,4 @@ public:
     Edge(Relation rel = None) : relation(rel) {}
 };
 
-#endif  // !DPDS_EDGE_H
+#endif  // !DPDT_EDGE_H

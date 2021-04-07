@@ -1,5 +1,5 @@
-#ifndef DPDS_SP_DETECTOR_H
-#define DPDS_SP_DETECTOR_H
+#ifndef DPDT_SP_DETECTOR_H
+#define DPDT_SP_DETECTOR_H
 
 #include <vector>
 
@@ -27,7 +27,6 @@ enum SubPattern {
 
 class SubPatternDetector {
 public:
-
     int init();
     void createICA();
     void createCI();
@@ -40,4 +39,4 @@ public:
     std::vector<GCDR> sps;
 };
 
-#endif  // !DPDS_SP_DETECTOR_H
+#endif  // !DPDT_SP_DETECTOR_H

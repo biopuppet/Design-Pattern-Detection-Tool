@@ -1,5 +1,5 @@
-#ifndef DPDS_GCDR_H
-#define DPDS_GCDR_H
+#ifndef DPDT_GCDR_H
+#define DPDT_GCDR_H
 
 #include <boost/graph/adjacency_matrix.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -22,4 +22,4 @@ typedef boost::graph_traits<GCDR>::edge_descriptor edge_descriptor_t;
 size_t gcdr_cw_in(const GCDR &g, vertex_descriptor_t v);
 size_t gcdr_cw_out(const GCDR &g, vertex_descriptor_t v);
 
-#endif  // !DPDS_GCDR_H
+#endif  // !DPDT_GCDR_H

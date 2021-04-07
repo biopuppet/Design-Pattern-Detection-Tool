@@ -36,7 +36,7 @@ void prepare(pugi::xml_document &doc) {
     // }
 }
 
-void Parser::parse_class(Node &node, GCDR &gcdr) {
+void XMIParser::parse_class(Node &node, GCDR &gcdr) {
     auto cur = node.xnode;
     std::cout << cur.attribute("name").value() << std::endl;
     // multi inheritance ignored
@@ -64,7 +64,7 @@ void Parser::parse_class(Node &node, GCDR &gcdr) {
     // }
 }
 
-GCDR Parser::parse(const char *file_path) {
+GCDR XMIParser::parse(const char *file_path) {
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(file_path);
 
