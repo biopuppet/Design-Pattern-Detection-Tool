@@ -14,6 +14,7 @@ public:
     size_t relation = None;
 
     Edge(Relation rel = None) : relation(rel) {}
+    Edge(size_t rel) : relation(rel) {}
 };
 
 #endif  // !DPDT_EDGE_H

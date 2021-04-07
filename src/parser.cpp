@@ -142,24 +142,7 @@ GCDR XMIParser::parse(const char *file_path) {
         parse_class(gcdr_system[i], gcdr_system);
     }
 
-    const char *name = "ABCDEFGHIJKLMNOPQ";
-    std::cout << "vertex set: ";
-    print_vertices(gcdr_system, name);
-
-    std::cout << "edge set: ";
-    print_edges(gcdr_system, name);
-
-    std::cout << "out-edges: " << std::endl;
-    print_graph(gcdr_system, name);
-
-    typedef boost::graph_traits<GCDR>::edge_iterator edge_iter;
-    std::pair<edge_iter, edge_iter> eip = edges(gcdr_system);
-    for (edge_iter ei = eip.first; ei != eip.second; ++ei) {
-        std::cout << source(*ei, gcdr_system) << " ---> "
-                  << target(*ei, gcdr_system)
-                  << " relation: " << gcdr_system[*ei].relation << std::endl;
-    }
-
+    print_gcdr(gcdr_system);
     // for (auto child : package.children()) {
     //     if (child.attribute("name").empty()) continue;
     //     ++i;

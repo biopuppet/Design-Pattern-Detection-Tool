@@ -36,7 +36,18 @@ public:
 
     int detect_sp_instances(GCDR &system, GCDR &sp);
 
+    void combine_cv_3(GCDR &system,
+                      GCDR &sp,
+                      std::vector<std::vector<vertex_descriptor_t>> &cvs);
+    void combine_cv_2(GCDR &system,
+                      GCDR &sp,
+                      std::vector<std::vector<vertex_descriptor_t>> &cvs);
+    void combine_cv_1(GCDR &system,
+                      GCDR &sp,
+                      std::vector<std::vector<vertex_descriptor_t>> &cvs);
+
     std::vector<GCDR> sps;
+    std::vector<GCDR> identified_sps;
 };
 
 #endif  // !DPDT_SP_DETECTOR_H

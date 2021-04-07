@@ -8,11 +8,12 @@
 
 static void print_usage(const char *argv0) {
     printf("Usage: %s [option...] [XMI file]\n"
-         "Options:\n"
-         " -p <adapter/...>  Select which design pattern to be matched.\n"
-         " --dump-gcdr       Dump GCDR graph.\n"
-         " -h, --help        Display this information.\n"
-         " --version         Display version.\n", argv0);
+           "Options:\n"
+           " -p <adapter/...>  Select which design pattern to be matched.\n"
+           " --dump-gcdr       Dump GCDR graph.\n"
+           " -h, --help        Display this information.\n"
+           " --version         Display version.\n",
+           argv0);
 }
 
 static void print_version() {
@@ -38,7 +39,7 @@ static int parse(int argc, char *argv[]) {
         case 'p':
             // Add pattern support
             break;
-        default: // 'help'
+        default:  // 'help'
             print_usage(argv[0]);
             return 1;
         }
@@ -49,7 +50,7 @@ static int parse(int argc, char *argv[]) {
 int main(int argc, char **argv) {
     const char *xmi_file = nullptr;
     if (argc > 1)
-      xmi_file = argv[argc - 1];
+        xmi_file = argv[argc - 1];
     else {
         std::cerr << "No XMI file!\n";
     }
