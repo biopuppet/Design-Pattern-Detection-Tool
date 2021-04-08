@@ -61,8 +61,8 @@ int main(int argc, char **argv) {
     XMIParser parser;
     GCDR system = parser.parse(xmi_file);
 
-    SubPatternDetector spd;
-    spd.detect_all(system);
+    SubPatternDetector spd(system);
+    spd.detect_all();
 
     return 0;
 }
