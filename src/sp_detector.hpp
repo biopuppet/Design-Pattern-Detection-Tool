@@ -23,7 +23,7 @@ enum class SubPatternType {
     AGPI,
     IPD,
     DPI,
-    ALL,
+    SPT_NUM,
 };
 
 class SubPatternDetector {
@@ -42,8 +42,8 @@ public:
                       const GCDR &sp,
                       std::vector<std::vector<vertex_descriptor_t>> &cvs);
 
-    std::vector<GCDR> identified_sps;
-    static const SubPattern sps[];
+    std::vector<std::vector<SubPattern>> identified_sps(SPT_NUM);
+    static const std::vector<SubPattern> sps;
 };
 
 #endif  // !DPDT_SP_DETECTOR_H

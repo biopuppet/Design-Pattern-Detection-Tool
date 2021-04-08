@@ -3,73 +3,83 @@
 
 #include <boost/graph/graph_utility.hpp>
 #include <boost/graph/adjacency_matrix.hpp>
+#include <memory>
 
 #include "gcdr.hpp"
-
-using namespace boost;
 
 class SubPattern {
 public:
     const std::string name;
+    GCDR *g;
 
-    SubPattern(const std::string &n) : name(n) {}
-    SubPattern(const char *n) : name(n) {}
-    virtual ~SubPattern() {}
+    SubPattern(size_t n, const std::string &s) : name(s) {
+        g = new GCDR(n);
+    }
 
-    virtual const GCDR &gcdr() const = 0;
+    SubPattern(size_t n, const char *s) : name(s) {
+        g = new GCDR(n);
+    }
+
+    SubPattern(const GCDR &gcdr) {
+        g = new GCDR(gcdr);
+    }
+
+    virtual ~SubPattern() {
+    }
+
+    const GCDR &gcdr() const {
+        return *g; 
+    };
 };
 
 class ICA : public SubPattern {
 public:
-    GCDR g{3};
-    ICA() : SubPattern("ICA") {
-        add_edge(1, 0, Relation::Inheritance, g);
-        add_edge(1, 2, Relation::Association, g);
-    }
-
-    virtual const GCDR &gcdr() const override {
-        return g;
+    ICA() : SubPattern(3, "ICA") {
+        add_edge(0, 0, Relation::None, *g);
+        add_edge(0, 1, Relation::None, *g);
+        add_edge(0, 2, Relation::None, *g);
+        add_edge(1, 0, Relation::Inheritance, *g);
+        add_edge(1, 1, Relation::None, *g);
+        add_edge(1, 2, Relation::Association, *g);
+        add_edge(2, 0, Relation::None, *g);
+        add_edge(2, 1, Relation::None, *g);
+        add_edge(2, 2, Relation::None, *g);
     }
 };
 
 
 class CI : public SubPattern {
 public:
-    GCDR g{3};
-    CI() : SubPattern("CI") {
-        add_edge(1, 0, Relation::Inheritance, g);
-        add_edge(2, 0, Relation::Inheritance, g);
-    }
-    
-    virtual const GCDR &gcdr() const override {
-        return g;
+    CI() : SubPattern(3, "CI") {
+        add_edge(0, 0, Relation::None, *g);
+        add_edge(0, 1, Relation::None, *g);
+        add_edge(0, 2, Relation::None, *g);
+        add_edge(1, 0, Relation::Inheritance, *g);
+        add_edge(1, 1, Relation::None, *g);
+        add_edge(1, 2, Relation::None, *g);
+        add_edge(2, 0, Relation::Inheritance, *g);
+        add_edge(2, 1, Relation::None, *g);
+        add_edge(2, 2, Relation::None, *g);
+
     }
 };
 
 
 class IAGG : public SubPattern {
 public:
-    GCDR g{2};
-    IAGG() : SubPattern("IAGG") {
-        add_edge(1, 0, Relation::Inheritance, g);
-        add_edge(0, 1, Relation::Aggregation, g);
-    }
-    
-    virtual const GCDR &gcdr() const {
-        return g;
+    IAGG() : SubPattern(2, "IAGG") {
+        add_edge(0, 0, Relation::None, *g);
+        add_edge(0, 1, Relation::Aggregation, *g);
+        add_edge(1, 0, Relation::Inheritance, *g);
+        add_edge(1, 1, Relation::None, *g);
     }
 };
 
 
 class SASS : public SubPattern {
 public:
-    GCDR g{1};
-    SASS() : SubPattern("SASS") {
-        add_edge(0, 0, Relation::Association, g);
-    }
-    
-    virtual const GCDR &gcdr() const {
-        return g;
+    SASS() : SubPattern(1, "SASS") {
+        add_edge(0, 0, Relation::Association, *g);
     }
 };
 

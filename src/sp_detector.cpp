@@ -7,10 +7,10 @@
 #include "sp_detector.hpp"
 #include "sub_pattern.hpp"
 
-const SubPattern SubPatternDetector::sps[] = {
+const std::vector<SubPattern> SubPatternDetector::sps = {
     ICA{},
     CI{},
-    // IAGG{},
+    IAGG{},
     // IPAG{},
     // MLI{},
     // IASS{},
@@ -43,7 +43,7 @@ void SubPatternDetector::combine_cv_1(
         if (system[sys_e].relation % sp[sp_e].relation) {
             continue;
         }
-        std::cout << "here\n";
+            std::cout << "identified sub-pattern(1): ";
     }
 }
 
@@ -61,7 +61,7 @@ void SubPatternDetector::combine_cv_2(
                 system[sys_e2].relation % sp[sp_e2].relation) {
                 continue;
             }
-            std::cout << "identified sub-pattern(3): ";
+            std::cout << "identified sub-pattern(2): ";
         }
     }
 }
@@ -95,24 +95,24 @@ void SubPatternDetector::combine_cv_3(
                 if (continue_flag)
                     continue;
                 std::cout << "identified sub-pattern(3): ";
-                GCDR sys_ksub(3);
-                std::unordered_map<vertex_descriptor_t, vertex_descriptor_t>
-                    vm = {{vd1, 0}, {vd2, 1}, {vd3, 2}};
+                auto sys_ksub = new SubPattern(sp);
+                // std::unordered_map<vertex_descriptor_t, vertex_descriptor_t>
+                //     vm = {{vd1, 0}, {vd2, 1}, {vd3, 2}};
 
-                auto eip = edges(system);
-                for (auto es = eip.first; es != eip.second; ++es) {
-                    auto e = *es;
-                    auto src = source(e, system);
-                    auto dst = target(e, system);
-                    if ((src == vd1 || src == vd2 || src == vd3) &&
-                        (dst == vd1 || dst == vd2 || dst == vd3)) {
-                        add_edge(vm[src], vm[dst], system[e].relation,
-                                 sys_ksub);
-                    }
-                }
+                // auto eip = edges(system);
+                // for (auto es = eip.first; es != eip.second; ++es) {
+                //     auto e = *es;
+                //     auto src = source(e, system);
+                //     auto dst = target(e, system);
+                //     if ((src == vd1 || src == vd2 || src == vd3) &&
+                //         (dst == vd1 || dst == vd2 || dst == vd3)) {
+                //         add_edge(vm[src], vm[dst], system[e].relation,
+                //                  sys_ksub);
+                //     }
+                // }
                 printf("%lu %lu %lu\n", vd1, vd2, vd3);
-                print_gcdr(sys_ksub);
-                identified_sps.emplace_back(sys_ksub);
+                // print_gcdr(sys_ksub);
+                identified_sps.emplace_back(*sys_ksub);
             }
         }
     }
@@ -122,6 +122,7 @@ int SubPatternDetector::detect_sp_instances(GCDR &system, const SubPattern &sp) 
     int sys_num = num_vertices(system);
     int sp_num = num_vertices(sp.gcdr());
     std::vector<std::vector<vertex_descriptor_t>> cvs(sp_num);
+        std::cout << sp.name << std::endl;
 
     for (int i = 0; i < sp_num; ++i) {
         for (int j = 0; j < sys_num; ++j) {
