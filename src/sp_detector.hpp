@@ -24,16 +24,19 @@ public:
     void combine_cv_1(const SubPattern &sp,
                       std::vector<std::vector<vertex_descriptor_t>> &cvs);
 
+    SubPattern *extract_subgraph(vertex_descriptor_t vm[],
+                                 const SubPattern &mold);
+
     std::vector<SubPattern *> identified_sps[SPT_NUM];
     static const std::vector<const SubPattern *> sps;
     static const ICA ica;
     static const CI ci;
     static const IAGG iagg;
-    // IPAG{},
-    // MLI{},
-    // IASS{},
-    // SAGG{},
-    // IIAGG{},
+    // static const IPAG ipag;
+    // static const MLI mli;
+    // static const IASS iass;
+    // static const SAGG sagg;
+    // static const IIAGG iiagg;
     static const SASS sass;
 };
 

@@ -6,6 +6,10 @@ SubPattern *SubPattern::createSubPattern(const SubPattern &src) {
         return new ICA();
     case SPT_CI:
         return new CI();
+    case SPT_IAGG:
+        return new IAGG();
+    case SPT_SASS:
+        return new SASS();
     case SPT_NONE:
     default:
         return nullptr;

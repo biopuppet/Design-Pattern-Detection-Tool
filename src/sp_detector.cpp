@@ -15,15 +15,18 @@ const IAGG SubPatternDetector::iagg;
 // const SAGG SubPatternDetector::sagg;
 // const IIAGG SubPatternDetector::iiagg;
 const SASS SubPatternDetector::sass;
-    // ICD{};
-    // DCI{};
-    // IPAS{};
-    // AGPI{};
-    // IPD{};
-    // DPI{};
+// ICD;
+// DCI;
+// IPAS;
+// AGPI;
+// IPD;
+// DPI;
 
 const std::vector<const SubPattern *> SubPatternDetector::sps = {
-    &ica, &ci, &iagg, &sass,
+    &ica,
+    &ci,
+    &iagg,
+    &sass,
 };
 
 int SubPatternDetector::detect_all() {
@@ -44,6 +47,8 @@ void SubPatternDetector::combine_cv_1(
             continue;
         }
         std::cout << "identified sub-pattern(1): ";
+        auto subg = extract_subgraph(&vd, subp);
+        identified_sps[subp.type()].emplace_back(subg);
     }
 }
 
@@ -62,6 +67,9 @@ void SubPatternDetector::combine_cv_2(
                 continue;
             }
             std::cout << "identified sub-pattern(2): ";
+            vertex_descriptor_t vm[] = {vd1, vd2};
+            auto subg = extract_subgraph(vm, subp);
+            identified_sps[subp.type()].emplace_back(subg);
         }
     }
 }
@@ -96,23 +104,27 @@ void SubPatternDetector::combine_cv_3(
                     continue;
                 std::cout << "identified sub-pattern(3): ";
                 vertex_descriptor_t vm[] = {vd1, vd2, vd3};
-
-                auto sys_ksub = SubPattern::createSubPattern(subp);
-                GCDR &sys_kg = sys_ksub->gcdr();
-                auto eip = edges(sys_kg);
-                for (auto es = eip.first; es != eip.second; ++es) {
-                    auto e = *es;
-                    auto src = source(e, sys_kg);
-                    auto dst = target(e, sys_kg);
-                    auto se = edge(vm[src], vm[dst], system).first;
-                    sys_kg[e].relation = system[se].relation;
-                }
-                printf("%lu %lu %lu\n", vd1, vd2, vd3);
-                print_gcdr(sys_kg);
-                identified_sps[subp.type()].emplace_back(sys_ksub);
+                auto subg = extract_subgraph(vm, subp);
+                identified_sps[subp.type()].emplace_back(subg);
             }
         }
     }
+}
+
+SubPattern *SubPatternDetector::extract_subgraph(vertex_descriptor_t vm[],
+                                                 const SubPattern &mold) {
+    auto sys_ksub = SubPattern::createSubPattern(mold);
+    GCDR &sys_kg = sys_ksub->gcdr();
+    auto eip = edges(sys_kg);
+    for (auto es = eip.first; es != eip.second; ++es) {
+        auto e = *es;
+        auto src = source(e, sys_kg);
+        auto dst = target(e, sys_kg);
+        auto se = edge(vm[src], vm[dst], system).first;
+        sys_kg[e].relation = system[se].relation;
+    }
+    print_gcdr(sys_kg);
+    return sys_ksub;
 }
 
 int SubPatternDetector::detect_sp_instances(const SubPattern &sp) {

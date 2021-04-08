@@ -60,13 +60,9 @@ public:
         add_edge(2, 2, Relation::None, g);
     }
 
-    const GCDR &gcdr() const override {
-        return g;
-    }
+    const GCDR &gcdr() const override { return g; }
 
-    GCDR &gcdr() override {
-        return g;
-    }
+    GCDR &gcdr() override { return g; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_ICA;
@@ -89,13 +85,9 @@ public:
         add_edge(2, 2, Relation::None, g);
     }
 
-    const GCDR &gcdr() const override {
-        return g;
-    }
+    const GCDR &gcdr() const override { return g; }
 
-    GCDR &gcdr() override {
-        return g;
-    }
+    GCDR &gcdr() override { return g; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_CI;
@@ -113,13 +105,9 @@ public:
         add_edge(1, 1, Relation::None, g);
     }
 
-    const GCDR &gcdr() const override {
-        return g;
-    }
+    const GCDR &gcdr() const override { return g; }
 
-    GCDR &gcdr() override {
-        return g;
-    }
+    GCDR &gcdr() override { return g; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_IAGG;
@@ -130,17 +118,11 @@ class SASS : public SubPattern {
 public:
     GCDR g{1};
 
-    SASS() : SubPattern("SASS") {
-        add_edge(0, 0, Relation::Association, g);
-    }
+    SASS() : SubPattern("SASS") { add_edge(0, 0, Relation::Association, g); }
 
-    const GCDR &gcdr() const override {
-        return g;
-    }
+    const GCDR &gcdr() const override { return g; }
 
-    GCDR &gcdr() override {
-        return g;
-    }
+    GCDR &gcdr() override { return g; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_SASS;
