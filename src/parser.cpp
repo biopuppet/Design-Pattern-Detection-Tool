@@ -58,10 +58,6 @@ void XMIParser::parse_class(Node &node, GCDR &gcdr) {
             std::cout << "relation: " << gcdr[e.first].relation << std::endl;
         }
     }
-    // auto gen = cur.child("generalization");
-    // if (!gen.empty()) {
-
-    // }
 }
 
 GCDR XMIParser::parse(const char *file_path) {
