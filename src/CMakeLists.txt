@@ -33,6 +33,7 @@ add_executable(dpdt
     edge.cpp
     gcdr.cpp
     sp_detector.cpp
+    sub_pattern.cpp
     main.cpp
 )
 

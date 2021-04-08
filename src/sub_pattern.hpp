@@ -7,113 +7,141 @@
 
 #include "gcdr.hpp"
 
+enum SubPatternType {
+    SPT_NONE = -1,
+    SPT_ICA = 0,
+    SPT_CI,
+    SPT_IAGG,
+    SPT_IPAG,
+    SPT_MLI,
+    SPT_IASS,
+    SPT_SAGG,
+    SPT_IIAGG,
+    SPT_SASS,
+    SPT_ICD,
+    SPT_DCI,
+    SPT_IPAS,
+    SPT_AGPI,
+    SPT_IPD,
+    SPT_DPI,
+    SPT_NUM,
+};
+
 class SubPattern {
 public:
     const std::string name;
-    GCDR *g;
 
-    SubPattern(size_t n, const std::string &s) : name(s) {
-        g = new GCDR(n);
-    }
+    SubPattern(const char *s) : name(s) {}
 
-    SubPattern(size_t n, const char *s) : name(s) {
-        g = new GCDR(n);
-    }
+    virtual ~SubPattern() {}
 
-    // SubPattern(const G) {
-        // g = new GCDR(gcdr);
-    // }
+    virtual const GCDR &gcdr() const = 0;
 
-    virtual ~SubPattern() {
-    }
+    virtual GCDR &gcdr() = 0;
 
-    const GCDR &gcdr() const {
-        return *g; 
-    };
+    virtual const SubPatternType type() const = 0;
 
-    GCDR &gcdr() {
-        return *g; 
-    };
-
-    virtual const SubPatternType type() const {
-        return SubPatternType::SPT_NONE;
-    }
-
-    static SubPattern *createSubPattern(const SubPattern &src) {
-        switch (src.type())
-        {
-        case SPT_ICA:
-            return new ICA(src);
-        case SPT_CI:
-            return new CI(src);
-        case SPT_NONE:
-        default:
-            return new SubPattern(src);
-        }
-    }
+    static SubPattern *createSubPattern(const SubPattern &src);
 };
 
 class ICA : public SubPattern {
 public:
-    ICA() : SubPattern(3, "ICA") {
-        add_edge(0, 0, Relation::None, *g);
-        add_edge(0, 1, Relation::None, *g);
-        add_edge(0, 2, Relation::None, *g);
-        add_edge(1, 0, Relation::Inheritance, *g);
-        add_edge(1, 1, Relation::None, *g);
-        add_edge(1, 2, Relation::Association, *g);
-        add_edge(2, 0, Relation::None, *g);
-        add_edge(2, 1, Relation::None, *g);
-        add_edge(2, 2, Relation::None, *g);
+    GCDR g{3};
+
+    ICA() : SubPattern("ICA") {
+        add_edge(0, 0, Relation::None, g);
+        add_edge(0, 1, Relation::None, g);
+        add_edge(0, 2, Relation::None, g);
+        add_edge(1, 0, Relation::Inheritance, g);
+        add_edge(1, 1, Relation::None, g);
+        add_edge(1, 2, Relation::Association, g);
+        add_edge(2, 0, Relation::None, g);
+        add_edge(2, 1, Relation::None, g);
+        add_edge(2, 2, Relation::None, g);
     }
-    
+
+    const GCDR &gcdr() const override {
+        return g;
+    }
+
+    GCDR &gcdr() override {
+        return g;
+    }
+
     const SubPatternType type() const override {
         return SubPatternType::SPT_ICA;
     }
 };
 
-
 class CI : public SubPattern {
 public:
-    CI() : SubPattern(3, "CI") {
-        add_edge(0, 0, Relation::None, *g);
-        add_edge(0, 1, Relation::None, *g);
-        add_edge(0, 2, Relation::None, *g);
-        add_edge(1, 0, Relation::Inheritance, *g);
-        add_edge(1, 1, Relation::None, *g);
-        add_edge(1, 2, Relation::None, *g);
-        add_edge(2, 0, Relation::Inheritance, *g);
-        add_edge(2, 1, Relation::None, *g);
-        add_edge(2, 2, Relation::None, *g);
+    GCDR g{3};
+
+    CI() : SubPattern("CI") {
+        add_edge(0, 0, Relation::None, g);
+        add_edge(0, 1, Relation::None, g);
+        add_edge(0, 2, Relation::None, g);
+        add_edge(1, 0, Relation::Inheritance, g);
+        add_edge(1, 1, Relation::None, g);
+        add_edge(1, 2, Relation::None, g);
+        add_edge(2, 0, Relation::Inheritance, g);
+        add_edge(2, 1, Relation::None, g);
+        add_edge(2, 2, Relation::None, g);
     }
-    
+
+    const GCDR &gcdr() const override {
+        return g;
+    }
+
+    GCDR &gcdr() override {
+        return g;
+    }
+
     const SubPatternType type() const override {
         return SubPatternType::SPT_CI;
     }
 };
 
-
 class IAGG : public SubPattern {
 public:
-    IAGG() : SubPattern(2, "IAGG") {
-        add_edge(0, 0, Relation::None, *g);
-        add_edge(0, 1, Relation::Aggregation, *g);
-        add_edge(1, 0, Relation::Inheritance, *g);
-        add_edge(1, 1, Relation::None, *g);
+    GCDR g{2};
+
+    IAGG() : SubPattern("IAGG") {
+        add_edge(0, 0, Relation::None, g);
+        add_edge(0, 1, Relation::Aggregation, g);
+        add_edge(1, 0, Relation::Inheritance, g);
+        add_edge(1, 1, Relation::None, g);
     }
-    
+
+    const GCDR &gcdr() const override {
+        return g;
+    }
+
+    GCDR &gcdr() override {
+        return g;
+    }
+
     const SubPatternType type() const override {
         return SubPatternType::SPT_IAGG;
     }
 };
 
-
 class SASS : public SubPattern {
 public:
-    SASS() : SubPattern(1, "SASS") {
-        add_edge(0, 0, Relation::Association, *g);
+    GCDR g{1};
+
+    SASS() : SubPattern("SASS") {
+        add_edge(0, 0, Relation::Association, g);
     }
-    
+
+    const GCDR &gcdr() const override {
+        return g;
+    }
+
+    GCDR &gcdr() override {
+        return g;
+    }
+
     const SubPatternType type() const override {
         return SubPatternType::SPT_SASS;
     }

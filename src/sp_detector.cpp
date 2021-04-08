@@ -2,33 +2,33 @@
 #include <boost/graph/graph_utility.hpp>
 #include <boost/graph/adjacency_matrix.hpp>
 
-#include "pugixml.hpp"
 #include "gcdr.hpp"
 #include "sp_detector.hpp"
 #include "sub_pattern.hpp"
 
-const std::vector<SubPattern> SubPatternDetector::sps = {
-    ICA{},
-    CI{},
-    IAGG{},
-    // IPAG{},
-    // MLI{},
-    // IASS{},
-    // SAGG{},
-    // IIAGG{},
-    SASS{},
-    // ICD{},
-    // DCI{},
-    // IPAS{},
-    // AGPI{},
-    // IPD{},
-    // DPI{},
+const ICA SubPatternDetector::ica;
+const CI SubPatternDetector::ci;
+const IAGG SubPatternDetector::iagg;
+// const IPAG SubPatternDetector::ipag;
+// const MLI SubPatternDetector::mli;
+// const IASS SubPatternDetector::iass;
+// const SAGG SubPatternDetector::sagg;
+// const IIAGG SubPatternDetector::iiagg;
+const SASS SubPatternDetector::sass;
+    // ICD{};
+    // DCI{};
+    // IPAS{};
+    // AGPI{};
+    // IPD{};
+    // DPI{};
+
+const std::vector<const SubPattern *> SubPatternDetector::sps = {
+    &ica, &ci, &iagg, &sass,
 };
 
-
 int SubPatternDetector::detect_all() {
-    for (const auto &sp : sps) {
-        detect_sp_instances(sp);
+    for (const auto sp : sps) {
+        detect_sp_instances(*sp);
     }
     return 0;
 }
@@ -43,7 +43,7 @@ void SubPatternDetector::combine_cv_1(
         if (system[sys_e].relation % sp[sp_e].relation) {
             continue;
         }
-            std::cout << "identified sub-pattern(1): ";
+        std::cout << "identified sub-pattern(1): ";
     }
 }
 
@@ -95,28 +95,21 @@ void SubPatternDetector::combine_cv_3(
                 if (continue_flag)
                     continue;
                 std::cout << "identified sub-pattern(3): ";
-                std::unordered_map<vertex_descriptor_t, vertex_descriptor_t>
-                    vm = {{vd1, 0}, {vd2, 1}, {vd3, 2}};
+                vertex_descriptor_t vm[] = {vd1, vd2, vd3};
 
-                size_t sp_type = subp.type();
-                SubPattern *sys_ksub = createSubPattern(subp);
+                auto sys_ksub = SubPattern::createSubPattern(subp);
                 GCDR &sys_kg = sys_ksub->gcdr();
-                auto eip = edges(system);
+                auto eip = edges(sys_kg);
                 for (auto es = eip.first; es != eip.second; ++es) {
                     auto e = *es;
-                    auto src = source(e, system);
-                    auto dst = target(e, system);
-                    if ((src == vd1 || src == vd2 || src == vd3) &&
-                        (dst == vd1 || dst == vd2 || dst == vd3)) {
-                        
-                        auto ke = edge(vm[src], vm[dst], sys_kg).first;
-                        sys_kg[ke].relation *= system[e].relation;
-                        
-                    }
+                    auto src = source(e, sys_kg);
+                    auto dst = target(e, sys_kg);
+                    auto se = edge(vm[src], vm[dst], system).first;
+                    sys_kg[e].relation = system[se].relation;
                 }
                 printf("%lu %lu %lu\n", vd1, vd2, vd3);
                 print_gcdr(sys_kg);
-                identified_sps[sp_type].emplace_back(*sys_ksub);
+                identified_sps[subp.type()].emplace_back(sys_ksub);
             }
         }
     }

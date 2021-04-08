@@ -7,26 +7,6 @@
 #include "gcdr.hpp"
 #include "sub_pattern.hpp"
 
-enum SubPatternType {
-    SPT_NONE = -1,
-    SPT_ICA = 0,
-    SPT_CI,
-    SPT_IAGG,
-    SPT_IPAG,
-    SPT_MLI,
-    SPT_IASS,
-    SPT_SAGG,
-    SPT_IIAGG,
-    SPT_SASS,
-    SPT_ICD,
-    SPT_DCI,
-    SPT_IPAS,
-    SPT_AGPI,
-    SPT_IPD,
-    SPT_DPI,
-    SPT_NUM,
-};
-
 class SubPatternDetector {
 public:
     GCDR &system;
@@ -44,8 +24,17 @@ public:
     void combine_cv_1(const SubPattern &sp,
                       std::vector<std::vector<vertex_descriptor_t>> &cvs);
 
-    std::vector<SubPattern> identified_sps[SPT_NUM];
-    static const std::vector<SubPattern> sps;
+    std::vector<SubPattern *> identified_sps[SPT_NUM];
+    static const std::vector<const SubPattern *> sps;
+    static const ICA ica;
+    static const CI ci;
+    static const IAGG iagg;
+    // IPAG{},
+    // MLI{},
+    // IASS{},
+    // SAGG{},
+    // IIAGG{},
+    static const SASS sass;
 };
 
 #endif  // !DPDT_SP_DETECTOR_H

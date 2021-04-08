@@ -11,7 +11,7 @@ enum class Visibility {
     PRIVATE,
     PROTECTED,
     PUBLIC,
-    PACKAGE, // Java
+    PACKAGE,  // Java
 };
 
 class Node {
