@@ -69,7 +69,7 @@ void SubPatternDetector::combine_cv_2(
                 system[sys_e2].relation % sp[sp_e2].relation) {
                 continue;
             }
-            std::cout << "here2\n";
+            std::cout << "identified sub-pattern(3): ";
         }
     }
 }
