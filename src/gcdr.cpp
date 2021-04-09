@@ -3,7 +3,7 @@
 
 #include "gcdr.hpp"
 
-size_t GCDR::gcdr_cw_in(size_t v) {
+size_t GCDR::cw_in(size_t v) const {
     size_t ret = 1;
     for (int i = 0; i < num_nodes(); ++i) {
         ret *= matrix[i][v];
@@ -11,7 +11,7 @@ size_t GCDR::gcdr_cw_in(size_t v) {
     return ret;
 }
 
-size_t GCDR::gcdr_cw_out(size_t v) {
+size_t GCDR::cw_out(size_t v) const {
     size_t ret = 1;
     for (int i = 0; i < num_nodes(); ++i) {
         ret *= matrix[v][i];
@@ -19,7 +19,7 @@ size_t GCDR::gcdr_cw_out(size_t v) {
     return ret;
 }
 
-void GCDR::print_gcdr() {
+void GCDR::print_gcdr() const {
     // const char *name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     // std::cout << "vertex set: ";
     // print_vertices(g, name);

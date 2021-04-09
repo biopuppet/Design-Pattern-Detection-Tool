@@ -1,8 +1,6 @@
 #ifndef DPDT_SUB_PATTERN_H
 #define DPDT_SUB_PATTERN_H
 
-#include <boost/graph/graph_utility.hpp>
-
 #include "gcdr.hpp"
 
 enum SubPatternType {
@@ -39,7 +37,6 @@ public:
 
     virtual const SubPatternType type() const = 0;
 
-    virtual void add(size_t e, const size_t r) = 0;
     virtual void
     add(size_t u, size_t v, const size_t r) = 0;
 
@@ -51,15 +48,8 @@ class ICA : public SubPattern {
 
 public:
     ICA() : SubPattern("ICA") {
-        add_edge(0, 0, Relation::None, g);
-        add_edge(0, 1, Relation::None, g);
-        add_edge(0, 2, Relation::None, g);
-        add_edge(1, 0, Relation::Inheritance, g);
-        add_edge(1, 1, Relation::None, g);
-        add_edge(1, 2, Relation::Association, g);
-        add_edge(2, 0, Relation::None, g);
-        add_edge(2, 1, Relation::None, g);
-        add_edge(2, 2, Relation::None, g);
+        g.edge(1, 0) = Relation::Inheritance;
+        g.edge(1, 2) = Relation::Association;
     }
 
     const GCDR &gcdr() const override { return g; }
@@ -70,16 +60,9 @@ public:
         return SubPatternType::SPT_ICA;
     }
 
-    void add(size_t e, const size_t r) override {
-        auto &sp_r = g[e].relation;
-        if (r % sp_r)
-            return;
-        sp_r = r;
-    }
-
     void
     add(size_t u, size_t v, const size_t r) override {
-        auto &e = g.get_edge(u, v).second.relation;
+        auto &e = g.edge(u, v);
         if (r % e)
             return;
         e = r;
@@ -91,15 +74,8 @@ class CI : public SubPattern {
 
 public:
     CI() : SubPattern("CI") {
-        add_edge(0, 0, Relation::None, g);
-        add_edge(0, 1, Relation::None, g);
-        add_edge(0, 2, Relation::None, g);
-        add_edge(1, 0, Relation::Inheritance, g);
-        add_edge(1, 1, Relation::None, g);
-        add_edge(1, 2, Relation::None, g);
-        add_edge(2, 0, Relation::Inheritance, g);
-        add_edge(2, 1, Relation::None, g);
-        add_edge(2, 2, Relation::None, g);
+        g.edge(1, 0) = Relation::Inheritance;
+        g.edge(2, 0) = Relation::Inheritance;
     }
 
     const GCDR &gcdr() const override { return g; }
@@ -110,16 +86,9 @@ public:
         return SubPatternType::SPT_CI;
     }
 
-    void add(size_t e, const size_t r) override {
-        auto &sp_r = g[e].relation;
-        if (r % sp_r)
-            return;
-        sp_r = r;
-    }
-
     void
     add(size_t u, size_t v, const size_t r) override {
-        auto &e = g.get_edge(u, v).second.relation;
+        auto &e = g.edge(u, v);
         if (r % e)
             return;
         e = r;
@@ -131,10 +100,10 @@ class IAGG : public SubPattern {
 
 public:
     IAGG() : SubPattern("IAGG") {
-        add_edge(0, 0, Relation::None, g);
-        add_edge(0, 1, Relation::Aggregation, g);
-        add_edge(1, 0, Relation::Inheritance, g);
-        add_edge(1, 1, Relation::None, g);
+        g.edge(0, 0) = Relation::None;
+        g.edge(0, 1) = Relation::Aggregation;
+        g.edge(1, 0) = Relation::Inheritance;
+        g.edge(1, 1) = Relation::None;
     }
 
     const GCDR &gcdr() const override { return g; }
@@ -145,16 +114,9 @@ public:
         return SubPatternType::SPT_IAGG;
     }
 
-    void add(size_t e, const size_t r) override {
-        auto &sp_r = g[e].relation;
-        if (r % sp_r)
-            return;
-        sp_r = r;
-    }
-
     void
     add(size_t u, size_t v, const size_t r) override {
-        auto &e = g.get_edge(u, v).second.relation;
+        auto &e = g.edge(u, v);
         if (r % e)
             return;
         e = r;
@@ -165,7 +127,7 @@ class SASS : public SubPattern {
     GCDR g{1};
 
 public:
-    SASS() : SubPattern("SASS") { add_edge(0, 0, Relation::Association, g); }
+    SASS() : SubPattern("SASS") { g.edge(0, 0) = Relation::Association; }
 
     const GCDR &gcdr() const override { return g; }
 
@@ -175,16 +137,9 @@ public:
         return SubPatternType::SPT_SASS;
     }
 
-    void add(size_t e, const size_t r) override {
-        auto &sp_r = g[e].relation;
-        if (r % sp_r)
-            return;
-        sp_r = r;
-    }
-
     void
     add(size_t u, size_t v, const size_t r) override {
-        auto &e = g.get_edge(u, v).second.relation;
+        auto &e = g.edge(u, v);
         if (r % e)
             return;
         e = r;

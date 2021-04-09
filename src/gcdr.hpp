@@ -95,9 +95,9 @@ public:
         return n * n;
     }
     
-    size_t gcdr_cw_in(size_t v);
-    size_t gcdr_cw_out(size_t v);
-    void print_gcdr();
+    size_t cw_in(size_t v) const;
+    size_t cw_out(size_t v) const;
+    void print_gcdr() const;
 
 
 };

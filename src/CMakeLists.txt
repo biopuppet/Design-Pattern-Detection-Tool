@@ -30,8 +30,8 @@ add_executable(dpdt
     pugixml.cpp
     gcdr.cpp
     parser.cpp
-    # sub_pattern.cpp
-    # sp_detector.cpp
+    sub_pattern.cpp
+    sp_detector.cpp
     # sfm_analyzer.cpp
 
     main.cpp
