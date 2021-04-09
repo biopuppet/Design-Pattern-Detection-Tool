@@ -1,43 +1,59 @@
 #include <iostream>
-#include <boost/graph/graph_utility.hpp>
-#include <boost/graph/adjacency_matrix.hpp>
+#include <cstring>
 
 #include "gcdr.hpp"
 
-using namespace boost;
-
-size_t gcdr_cw_in(const GCDR &g, vertex_descriptor_t v) {
-    auto eip = in_edges(v, g);
+size_t GCDR::gcdr_cw_in(size_t v) {
     size_t ret = 1;
-    for (auto ei = eip.first; ei != eip.second; ++ei) {
-        ret *= g[*ei].relation;
+    for (int i = 0; i < num_nodes(); ++i) {
+        ret *= matrix[i][v];
     }
     return ret;
 }
 
-size_t gcdr_cw_out(const GCDR &g, vertex_descriptor_t v) {
-    auto eip = out_edges(v, g);
+size_t GCDR::gcdr_cw_out(size_t v) {
     size_t ret = 1;
-    for (auto ei = eip.first; ei != eip.second; ++ei) {
-        ret *= g[*ei].relation;
+    for (int i = 0; i < num_nodes(); ++i) {
+        ret *= matrix[v][i];
     }
     return ret;
 }
 
-void print_gcdr(const GCDR &g) {
-    const char *name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    std::cout << "vertex set: ";
-    print_vertices(g, name);
+void GCDR::print_gcdr() {
+    // const char *name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // std::cout << "vertex set: ";
+    // print_vertices(g, name);
 
-    std::cout << "edge set: ";
-    print_edges(g, name);
+    // std::cout << "edge set: ";
+    // print_edges(g, name);
 
-    std::cout << "out-edges: " << std::endl;
-    print_graph(g, name);
+    // std::cout << "out-edges: " << std::endl;
+    // print_graph(g, name);
 
-    auto eip = edges(g);
-    for (auto ei = eip.first; ei != eip.second; ++ei) {
-        std::cout << source(*ei, g) << " --" << g[*ei].relation << "--> "
-                  << target(*ei, g) << std::endl;
+    auto n = size();
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+        std::cout << i << " --" << matrix[i][j] << "--> "
+                  << j << std::endl;
+        }
     }
+}
+
+
+// Node::Node(pugi::xml_node &node) {
+//     id = node.attribute("xmi:id").value();
+//     name = node.attribute("name").value();
+//     visibility = Node::get_vis(node.attribute("visibility").value());
+//     isAbstract = node.attribute("isAbstract") ? true : false;
+// }
+
+Visibility Node::get_vis(const char *s) {
+    if (!strcmp(s, "public"))
+        return Visibility::PUBLIC;
+    else if (!strcmp(s, "protected"))
+        return Visibility::PROTECTED;
+    else if (!strcmp(s, "private"))
+        return Visibility::PRIVATE;
+    else
+        return Visibility::PRIVATE;
 }

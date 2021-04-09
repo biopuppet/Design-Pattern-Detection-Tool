@@ -28,13 +28,11 @@ include_directories(
 
 add_executable(dpdt
     pugixml.cpp
-    parser.cpp
-    node.cpp
-    edge.cpp
     gcdr.cpp
-    sub_pattern.cpp
-    sp_detector.cpp
-    sfm_analyzer.cpp
+    parser.cpp
+    # sub_pattern.cpp
+    # sp_detector.cpp
+    # sfm_analyzer.cpp
 
     main.cpp
 )

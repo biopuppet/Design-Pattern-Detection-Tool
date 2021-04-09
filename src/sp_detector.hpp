@@ -17,13 +17,13 @@ public:
     int detect_sp_instances(const SubPattern &sp);
 
     void combine_cv_3(const SubPattern &sp,
-                      std::vector<std::vector<vertex_descriptor_t>> &cvs);
+                      std::vector<std::vector<size_t>> &cvs);
     void combine_cv_2(const SubPattern &sp,
-                      std::vector<std::vector<vertex_descriptor_t>> &cvs);
+                      std::vector<std::vector<size_t>> &cvs);
     void combine_cv_1(const SubPattern &sp,
-                      std::vector<std::vector<vertex_descriptor_t>> &cvs);
+                      std::vector<std::vector<size_t>> &cvs);
 
-    SubPattern *extract_subgraph(vertex_descriptor_t vm[],
+    SubPattern *extract_subgraph(size_t vm[],
                                  const SubPattern &mold);
 
     std::vector<std::vector<SubPattern *>> identified_sps{SPT_NUM};

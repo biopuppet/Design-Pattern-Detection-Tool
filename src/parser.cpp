@@ -2,12 +2,13 @@
 #include <unordered_map>
 #include <map>
 #include <string>
-#include <boost/graph/adjacency_matrix.hpp>
+#include <cstring>
+// #include <boost/graph/adjacency_matrix.hpp>
 
 #include "pugixml.hpp"
 #include "parser.hpp"
 
-std::map<pugi::xml_node, vertex_descriptor_t> node_map;
+std::map<pugi::xml_node, size_t> node_map;
 std::unordered_map<std::string, pugi::xml_node> xml_nodes;
 
 /**
@@ -32,14 +33,14 @@ void XMIParser::parse_class(pugi::xml_node &cur, GCDR &gcdr) {
         if (!strcmp(child.name(), "generalization")) {
             auto father_id = child.attribute("general").value();
             auto father = xml_nodes[father_id];
-            auto e = edge(node_map[cur], node_map[father], gcdr);
-            gcdr[e.first].relation *= Relation::Inheritance;
+            auto &e = gcdr.edge(node_map[cur], node_map[father]);
+            e *= Relation::Inheritance;
         }
         else if (!child.attribute("association").empty()) {
             auto ass = child.child("type").attribute("xmi:idref").value();
             // TODO: Add Aggregation and Dependency
-            auto e = edge(node_map[cur], node_map[xml_nodes[ass]], gcdr);
-            gcdr[e.first].relation *= Relation::Association;
+            auto &e = gcdr.edge(node_map[cur], node_map[xml_nodes[ass]]);
+            e *= Relation::Association;
         }
     }
 }
@@ -89,17 +90,15 @@ GCDR XMIParser::parse(const char *file_path) {
         if (strcmp(type, "uml:Class") && strcmp(type, "uml:Interface"))
             continue;
         std::cout << "node : " << child.attribute("name").value() << "\n";
-        Node::adapt_node(gcdr_system[i], child);
-
+        
+        auto &node = gcdr_system.node(i);
+        node.id = child.attribute("xmi:id").value();
+        node.name = child.attribute("name").value();
+        node.visibility = Node::get_vis(child.attribute("visibility").value());
+        node.isAbstract = child.attribute("isAbstract") ? true : false;
+        
         node_map[child] = i;
         ++i;
-    }
-
-    // Complete the graph
-    for (int i = 0; i < class_num; ++i) {
-        for (int j = 0; j < class_num; ++j) {
-            add_edge(i, j, Relation::None, gcdr_system);
-        }
     }
 
     // out-class relation
@@ -108,16 +107,16 @@ GCDR XMIParser::parse(const char *file_path) {
         if (!strcmp(type, "uml:Realization")) {
             auto client = child.attribute("client").value();
             auto supplier = child.attribute("supplier").value();
-            auto e = edge(node_map[xml_nodes[client]],
-                          node_map[xml_nodes[supplier]], gcdr_system);
-            gcdr_system[e.first].relation *= Relation::Inheritance;
+            auto &e = gcdr_system.edge(node_map[xml_nodes[client]],
+                          node_map[xml_nodes[supplier]]);
+            e *= Relation::Inheritance;
         }
         // Association ? Currently, not here.
         // in-class property relations
         parse_class(child, gcdr_system);
     }
 
-    print_gcdr(gcdr_system);
+    gcdr_system.print_gcdr();
 
     return gcdr_system;
 }

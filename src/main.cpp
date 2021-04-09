@@ -4,8 +4,8 @@
 #include "pugixml.hpp"
 #include "gcdr.hpp"
 #include "parser.hpp"
-#include "sp_detector.hpp"
-#include "sfm_analyzer.hpp"
+// #include "sp_detector.hpp"
+// #include "sfm_analyzer.hpp"
 
 static void print_usage(const char *argv0) {
     printf("Usage: %s [option...] [XMI file]\n"
@@ -62,11 +62,11 @@ int main(int argc, char **argv) {
     XMIParser parser;
     GCDR system = parser.parse(xmi_file);
 
-    SubPatternDetector spd{system};
-    spd.detect_all();
+    // SubPatternDetector spd{system};
+    // spd.detect_all();
 
-    SFMAnalyzer sfm_analyzer{spd.identified_sps};
-    sfm_analyzer.analyze();
+    // SFMAnalyzer sfm_analyzer{spd.identified_sps};
+    // sfm_analyzer.analyze();
 
 
     return 0;

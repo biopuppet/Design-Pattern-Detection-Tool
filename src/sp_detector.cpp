@@ -38,7 +38,7 @@ int SubPatternDetector::detect_all() {
 
 void SubPatternDetector::combine_cv_1(
     const SubPattern &subp,
-    std::vector<std::vector<vertex_descriptor_t>> &cvs) {
+    std::vector<std::vector<size_t>> &cvs) {
     auto sp = subp.gcdr();
     auto sp_e = edge(0, 0, sp).first;
     for (auto vd : cvs[0]) {
@@ -54,7 +54,7 @@ void SubPatternDetector::combine_cv_1(
 
 void SubPatternDetector::combine_cv_2(
     const SubPattern &subp,
-    std::vector<std::vector<vertex_descriptor_t>> &cvs) {
+    std::vector<std::vector<size_t>> &cvs) {
     auto sp = subp.gcdr();
     auto sp_e1 = edge(0, 1, sp).first;
     auto sp_e2 = edge(1, 0, sp).first;
@@ -67,7 +67,7 @@ void SubPatternDetector::combine_cv_2(
                 continue;
             }
             std::cout << "identified sub-pattern(2): ";
-            vertex_descriptor_t vm[] = {vd1, vd2};
+            size_t vm[] = {vd1, vd2};
             auto subg = extract_subgraph(vm, subp);
             identified_sps[subp.type()].emplace_back(subg);
         }
@@ -76,9 +76,9 @@ void SubPatternDetector::combine_cv_2(
 
 void SubPatternDetector::combine_cv_3(
     const SubPattern &subp,
-    std::vector<std::vector<vertex_descriptor_t>> &cvs) {
+    std::vector<std::vector<size_t>> &cvs) {
     auto sp = subp.gcdr();
-    edge_descriptor_t sp_es[] = {edge(0, 1, sp).first, edge(0, 2, sp).first,
+    size_t sp_es[] = {edge(0, 1, sp).first, edge(0, 2, sp).first,
                                  edge(1, 0, sp).first, edge(1, 2, sp).first,
                                  edge(2, 0, sp).first, edge(2, 1, sp).first};
     for (auto vd1 : cvs[0]) {
@@ -89,7 +89,7 @@ void SubPatternDetector::combine_cv_3(
                 if (vd1 == vd2 || vd2 == vd3 || vd1 == vd3) {
                     continue;
                 }
-                edge_descriptor_t sys_es[] = {
+                size_t sys_es[] = {
                     edge(vd1, vd2, system).first, edge(vd1, vd3, system).first,
                     edge(vd2, vd1, system).first, edge(vd2, vd3, system).first,
                     edge(vd3, vd1, system).first, edge(vd3, vd2, system).first};
@@ -103,7 +103,7 @@ void SubPatternDetector::combine_cv_3(
                 if (continue_flag)
                     continue;
                 std::cout << "identified sub-pattern(3): ";
-                vertex_descriptor_t vm[] = {vd1, vd2, vd3};
+                size_t vm[] = {vd1, vd2, vd3};
                 auto subg = extract_subgraph(vm, subp);
                 identified_sps[subp.type()].emplace_back(subg);
             }
@@ -111,7 +111,7 @@ void SubPatternDetector::combine_cv_3(
     }
 }
 
-SubPattern *SubPatternDetector::extract_subgraph(vertex_descriptor_t vm[],
+SubPattern *SubPatternDetector::extract_subgraph(size_t vm[],
                                                  const SubPattern &mold) {
     auto sys_ksub = SubPattern::createSubPattern(mold);
     GCDR &sys_kg = sys_ksub->gcdr();
@@ -131,7 +131,7 @@ SubPattern *SubPatternDetector::extract_subgraph(vertex_descriptor_t vm[],
 int SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
     int sys_num = num_vertices(system);
     int sp_num = num_vertices(sp.gcdr());
-    std::vector<std::vector<vertex_descriptor_t>> cvs(sp_num);
+    std::vector<std::vector<size_t>> cvs(sp_num);
     std::cout << sp.name << std::endl;
 
     for (int i = 0; i < sp_num; ++i) {
