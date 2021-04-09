@@ -2,8 +2,6 @@
 #define DPDT_SUB_PATTERN_H
 
 #include <boost/graph/graph_utility.hpp>
-#include <boost/graph/adjacency_matrix.hpp>
-#include <memory>
 
 #include "gcdr.hpp"
 

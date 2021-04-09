@@ -1,6 +1,9 @@
 #ifndef DPDT_EDGE_H
 #define DPDT_EDGE_H
 
+/**
+ * Use prime number for composite relation factoring
+ */
 enum Relation {
     None = 1,
     Association = 2,

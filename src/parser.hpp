@@ -1,12 +1,12 @@
 #ifndef DPDT_PARSER_H
 #define DPDT_PARSER_H
 
-#include "pugixml.hpp"
 #include "gcdr.hpp"
+#include "pugixml.hpp"
 
 class XMIParser {
 public:
-    void parse_class(Node &node, GCDR &gcdr);
+    void parse_class(pugi::xml_node &node, GCDR &gcdr);
     GCDR parse(const char *file_path);
 };
 

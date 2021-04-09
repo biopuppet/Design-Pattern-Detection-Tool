@@ -1,9 +1,9 @@
 #ifndef DPDT_GCDR_H
 #define DPDT_GCDR_H
 
+#include <string>
+#include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_matrix.hpp>
-#include <boost/graph/properties.hpp>
-#include <boost/property_map/property_map.hpp>
 
 #include "node.hpp"
 #include "edge.hpp"
@@ -11,7 +11,6 @@
 class Graph {
 public:
     const std::string id;
-    std::string name;
 };
 
 typedef boost::adjacency_matrix<boost::directedS, Node, Edge, Graph> GCDR;

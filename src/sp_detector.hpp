@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "pugixml.hpp"
 #include "gcdr.hpp"
 #include "sub_pattern.hpp"
 

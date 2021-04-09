@@ -3,8 +3,8 @@
 #include <boost/graph/adjacency_matrix.hpp>
 
 #include "gcdr.hpp"
-#include "sp_detector.hpp"
 #include "sub_pattern.hpp"
+#include "sp_detector.hpp"
 
 const ICA SubPatternDetector::ica;
 const CI SubPatternDetector::ci;
