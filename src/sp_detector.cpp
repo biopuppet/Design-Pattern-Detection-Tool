@@ -121,7 +121,8 @@ SubPattern *SubPatternDetector::extract_subgraph(vertex_descriptor_t vm[],
         auto src = source(e, sys_kg);
         auto dst = target(e, sys_kg);
         auto se = edge(vm[src], vm[dst], system).first;
-        sys_kg[e].relation = system[se].relation;
+        // sys_kg[e].relation = system[se].relation;
+        sys_ksub->add(e, system[se].relation);
     }
     print_gcdr(sys_kg);
     return sys_ksub;
@@ -162,7 +163,7 @@ int SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
     for (int i = 0; i < cvs.size(); ++i) {
         std::cout << "cvs[" << i << "]: ";
         for (auto v : cvs[i]) {
-            std::cout << v << "  ";
+            std::cout << v << " ";
         }
         std::cout << "\n";
     }

@@ -39,6 +39,10 @@ public:
 
     virtual const SubPatternType type() const = 0;
 
+    virtual void add(edge_descriptor_t e, const size_t r) = 0;
+    virtual void
+    add(vertex_descriptor_t u, vertex_descriptor_t v, const size_t r) = 0;
+
     static SubPattern *createSubPattern(const SubPattern &src);
 };
 
@@ -65,6 +69,21 @@ public:
     const SubPatternType type() const override {
         return SubPatternType::SPT_ICA;
     }
+
+    void add(edge_descriptor_t e, const size_t r) override {
+        auto &sp_r = g[e].relation;
+        if (r % sp_r)
+            return;
+        sp_r = r;
+    }
+
+    void
+    add(vertex_descriptor_t u, vertex_descriptor_t v, const size_t r) override {
+        auto &e = g.get_edge(u, v).second.relation;
+        if (r % e)
+            return;
+        e = r;
+    }
 };
 
 class CI : public SubPattern {
@@ -90,6 +109,21 @@ public:
     const SubPatternType type() const override {
         return SubPatternType::SPT_CI;
     }
+
+    void add(edge_descriptor_t e, const size_t r) override {
+        auto &sp_r = g[e].relation;
+        if (r % sp_r)
+            return;
+        sp_r = r;
+    }
+
+    void
+    add(vertex_descriptor_t u, vertex_descriptor_t v, const size_t r) override {
+        auto &e = g.get_edge(u, v).second.relation;
+        if (r % e)
+            return;
+        e = r;
+    }
 };
 
 class IAGG : public SubPattern {
@@ -110,6 +144,20 @@ public:
     const SubPatternType type() const override {
         return SubPatternType::SPT_IAGG;
     }
+    void add(edge_descriptor_t e, const size_t r) override {
+        auto &sp_r = g[e].relation;
+        if (r % sp_r)
+            return;
+        sp_r = r;
+    }
+
+    void
+    add(vertex_descriptor_t u, vertex_descriptor_t v, const size_t r) override {
+        auto &e = g.get_edge(u, v).second.relation;
+        if (r % e)
+            return;
+        e = r;
+    }
 };
 
 class SASS : public SubPattern {
@@ -124,6 +172,20 @@ public:
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_SASS;
+    }
+    void add(edge_descriptor_t e, const size_t r) override {
+        auto &sp_r = g[e].relation;
+        if (r % sp_r)
+            return;
+        sp_r = r;
+    }
+
+    void
+    add(vertex_descriptor_t u, vertex_descriptor_t v, const size_t r) override {
+        auto &e = g.get_edge(u, v).second.relation;
+        if (r % e)
+            return;
+        e = r;
     }
 };
 

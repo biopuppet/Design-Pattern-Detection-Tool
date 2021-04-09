@@ -37,7 +37,7 @@ void print_gcdr(const GCDR &g) {
 
     auto eip = edges(g);
     for (auto ei = eip.first; ei != eip.second; ++ei) {
-        std::cout << source(*ei, g) << " ---> " << target(*ei, g)
-                  << " relation: " << g[*ei].relation << std::endl;
+        std::cout << source(*ei, g) << " --" << g[*ei].relation << "--> "
+                  << target(*ei, g) << std::endl;
     }
 }
