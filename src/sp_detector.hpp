@@ -26,7 +26,7 @@ public:
     SubPattern *extract_subgraph(vertex_descriptor_t vm[],
                                  const SubPattern &mold);
 
-    std::vector<SubPattern *> identified_sps[SPT_NUM];
+    std::vector<std::vector<SubPattern *>> identified_sps{SPT_NUM};
     static const std::vector<const SubPattern *> sps;
     static const ICA ica;
     static const CI ci;

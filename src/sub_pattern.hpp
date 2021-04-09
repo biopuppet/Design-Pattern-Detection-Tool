@@ -47,9 +47,9 @@ public:
 };
 
 class ICA : public SubPattern {
-public:
     GCDR g{3};
 
+public:
     ICA() : SubPattern("ICA") {
         add_edge(0, 0, Relation::None, g);
         add_edge(0, 1, Relation::None, g);
@@ -87,9 +87,9 @@ public:
 };
 
 class CI : public SubPattern {
-public:
     GCDR g{3};
 
+public:
     CI() : SubPattern("CI") {
         add_edge(0, 0, Relation::None, g);
         add_edge(0, 1, Relation::None, g);
@@ -127,9 +127,9 @@ public:
 };
 
 class IAGG : public SubPattern {
-public:
     GCDR g{2};
 
+public:
     IAGG() : SubPattern("IAGG") {
         add_edge(0, 0, Relation::None, g);
         add_edge(0, 1, Relation::Aggregation, g);
@@ -144,6 +144,7 @@ public:
     const SubPatternType type() const override {
         return SubPatternType::SPT_IAGG;
     }
+
     void add(edge_descriptor_t e, const size_t r) override {
         auto &sp_r = g[e].relation;
         if (r % sp_r)
@@ -161,9 +162,9 @@ public:
 };
 
 class SASS : public SubPattern {
-public:
     GCDR g{1};
 
+public:
     SASS() : SubPattern("SASS") { add_edge(0, 0, Relation::Association, g); }
 
     const GCDR &gcdr() const override { return g; }
@@ -173,6 +174,7 @@ public:
     const SubPatternType type() const override {
         return SubPatternType::SPT_SASS;
     }
+
     void add(edge_descriptor_t e, const size_t r) override {
         auto &sp_r = g[e].relation;
         if (r % sp_r)
