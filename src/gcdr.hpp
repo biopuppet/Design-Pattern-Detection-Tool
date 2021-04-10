@@ -61,24 +61,24 @@ class GCDR {
     // Optional property
     std::vector<Node> nodes;
 
-    std::vector<std::vector<size_t>> matrix;
+    std::vector<size_t> matrix;
 
 public:
-    GCDR(size_t n) : n(n), nodes(n), matrix(n, std::vector<size_t>(n, 1)) {}
+    GCDR(size_t n) : n(n), nodes(n), matrix(n * n, 1) {}
 
-    const size_t edge(size_t u, size_t v) const { return matrix[u][v]; }
+    const size_t edge(size_t u, size_t v) const { return matrix[u * n + v]; }
 
-    size_t &edge(size_t u, size_t v) { return matrix[u][v]; }
+    size_t &edge(size_t u, size_t v) { return matrix[u * n + v]; }
 
     Node &node(size_t index) { return nodes[index]; }
 
     const Node &node(size_t index) const { return nodes[index]; }
 
-    const size_t size() const { return n; }
+    size_t size() const { return n; }
 
-    const size_t num_nodes() const { return nodes.size(); }
+    size_t num_nodes() const { return nodes.size(); }
 
-    const size_t num_edges() const { return n * n; }
+    size_t num_edges() const { return n * n; }
 
     size_t cw_in(size_t v) const;
     size_t cw_out(size_t v) const;

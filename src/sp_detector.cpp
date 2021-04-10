@@ -1,7 +1,6 @@
 #include <vector>
 #include <array>
-#include <boost/graph/graph_utility.hpp>
-#include <boost/graph/adjacency_matrix.hpp>
+#include <iostream>
 
 #include "gcdr.hpp"
 #include "sub_pattern.hpp"
