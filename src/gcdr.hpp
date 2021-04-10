@@ -16,14 +16,6 @@ enum Relation {
     Dependency = 7,
 };
 
-// struct Edge {
-// public:
-//     size_t relation = None;
-
-//     Edge(Relation rel = None) : relation(rel) {}
-//     Edge(size_t rel) : relation(rel) {}
-// };
-
 enum class Visibility {
     PRIVATE,
     PROTECTED,
@@ -41,13 +33,11 @@ public:
     // Method
 
     Node() {}
-
-    Node(const char *id, const char *name, Visibility v = Visibility::PRIVATE)
-        : id(id), name(name), visibility(v) {}
+    Node(const char *id, const char *name = "", 
+    Visibility v = Visibility::PRIVATE, bool isabstract = false)
+        : id(id), name(name), visibility(v), isAbstract(isabstract) {}
 
     static Visibility get_vis(const char *s);
-
-    // static void adapt_node(Node &node, pugi::xml_node &_node);
 };
 
 /**
@@ -66,13 +56,13 @@ class GCDR {
 public:
     GCDR(size_t n) : n(n), nodes(n), matrix(n * n, 1) {}
 
-    const size_t edge(size_t u, size_t v) const { return matrix[u * n + v]; }
+    const size_t edge(size_t u, size_t v) const { return matrix.at(u * n + v); }
 
-    size_t &edge(size_t u, size_t v) { return matrix[u * n + v]; }
+    size_t &edge(size_t u, size_t v) { return matrix.at(u * n + v); }
 
-    Node &node(size_t index) { return nodes[index]; }
+    Node &node(size_t index) { return nodes.at(index); }
 
-    const Node &node(size_t index) const { return nodes[index]; }
+    const Node &node(size_t index) const { return nodes.at(index); }
 
     size_t size() const { return n; }
 
@@ -81,7 +71,9 @@ public:
     size_t num_edges() const { return n * n; }
 
     size_t cw_in(size_t v) const;
+
     size_t cw_out(size_t v) const;
+
     void print_gcdr() const;
 };
 

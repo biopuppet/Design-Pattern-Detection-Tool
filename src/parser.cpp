@@ -89,7 +89,7 @@ GCDR XMIParser::parse(const char *file_path) {
         auto type = child.attribute("xmi:type").value();
         if (strcmp(type, "uml:Class") && strcmp(type, "uml:Interface"))
             continue;
-        std::cout << "node : " << child.attribute("name").value() << "\n";
+        // std::cout << "node : " << child.attribute("name").value() << "\n";
 
         auto &node = gcdr_system.node(i);
         node.id = child.attribute("xmi:id").value();

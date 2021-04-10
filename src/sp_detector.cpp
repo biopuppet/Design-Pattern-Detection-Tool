@@ -40,7 +40,7 @@ void SubPatternDetector::combine_cv_1(const SubPattern &subp,
             continue;
         }
         // std::cout << "identified sub-pattern(1):\n";
-        printf("identified sub-pattern(%d)\n", vd);
+        printf("identified sub-pattern(%lu)\n", vd);
         spt2list(subp.type()).push_back({vd});
     }
 }
@@ -58,7 +58,7 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
                 continue;
             }
             // std::cout << "identified sub-pattern(2):\n";
-            printf("identified sub-pattern(%d %d)\n", vd1, vd2);
+            printf("identified sub-pattern(%lu %lu)\n", vd1, vd2);
             spt2list(subp.type()).push_back({vd1, vd2});
         }
     }
@@ -90,7 +90,7 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                 }
                 if (continue_flag)
                     continue;
-                printf("identified sub-pattern(%d %d %d)\n", vd1, vd2, vd3);
+                printf("identified sub-pattern(%lu %lu %lu)\n", vd1, vd2, vd3);
                 spt2list(subp.type()).push_back({vd1, vd2, vd3});
             }
         }
