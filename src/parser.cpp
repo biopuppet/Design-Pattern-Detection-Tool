@@ -27,7 +27,7 @@ struct simple_walker : pugi::xml_tree_walker {
     }
 };
 
-void XMIParser::parse_class(pugi::xml_node &cur, GCDR &gcdr) {
+void XMIParser::parse_class(pugi::xml_node &cur, Graph &gcdr) {
     // multi inheritance ignored
     for (auto child : cur.children()) {
         if (!strcmp(child.name(), "generalization")) {
@@ -45,7 +45,7 @@ void XMIParser::parse_class(pugi::xml_node &cur, GCDR &gcdr) {
     }
 }
 
-GCDR XMIParser::parse(const char *file_path) {
+Graph XMIParser::parse(const char *file_path) {
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(file_path);
 
@@ -82,7 +82,7 @@ GCDR XMIParser::parse(const char *file_path) {
             ++class_num;
     }
 
-    GCDR gcdr_system(class_num);
+    Graph gcdr_system(class_num);
 
     int i = 0;
     for (auto child : package.children()) {

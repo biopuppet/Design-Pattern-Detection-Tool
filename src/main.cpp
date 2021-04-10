@@ -11,7 +11,7 @@ static void print_usage(const char *argv0) {
     printf("Usage: %s [option...] [XMI file]\n"
            "Options:\n"
            " -p <adapter/...>  Select which design pattern to be matched.\n"
-           " --dump-gcdr       Dump GCDR graph.\n"
+           " --dump-gcdr       Dump Graph graph.\n"
            " -h, --help        Display this information.\n"
            " --version         Display version.\n",
            argv0);
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
         return 0;
 
     XMIParser parser;
-    GCDR system = parser.parse(xmi_file);
+    Graph system = parser.parse(xmi_file);
 
     SubPatternDetector spd{system};
     spd.detect_all();

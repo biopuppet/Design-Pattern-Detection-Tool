@@ -10,10 +10,10 @@ class SFMAnalyzer;
 class SubPatternDetector {
     friend class SFMAnalyzer;
 
-    GCDR &system;
+    Graph &system;
 public:
 
-    SubPatternDetector(GCDR &sys) : system(sys) {}
+    SubPatternDetector(Graph &sys) : system(sys) {}
 
     void detect_all();
 

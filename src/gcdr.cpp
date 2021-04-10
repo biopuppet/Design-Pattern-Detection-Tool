@@ -3,7 +3,7 @@
 
 #include "gcdr.hpp"
 
-size_t GCDR::cw_in(size_t v) const {
+size_t Graph::cw_in(size_t v) const {
     size_t ret = 1;
     for (int i = 0; i < size(); ++i) {
         ret *= edge(i, v);
@@ -11,7 +11,7 @@ size_t GCDR::cw_in(size_t v) const {
     return ret;
 }
 
-size_t GCDR::cw_out(size_t v) const {
+size_t Graph::cw_out(size_t v) const {
     size_t ret = 1;
     for (int i = 0; i < size(); ++i) {
         ret *= edge(v, i);
@@ -19,7 +19,7 @@ size_t GCDR::cw_out(size_t v) const {
     return ret;
 }
 
-void GCDR::print_gcdr() const {
+void Graph::print_gcdr() const {
     auto n = size();
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {

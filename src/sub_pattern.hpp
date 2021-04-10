@@ -31,9 +31,9 @@ public:
 
     virtual ~SubPattern() {}
 
-    virtual const GCDR &gcdr() const = 0;
+    virtual const Graph &gcdr() const = 0;
 
-    virtual GCDR &gcdr() = 0;
+    virtual Graph &gcdr() = 0;
 
     virtual const SubPatternType type() const = 0;
 
@@ -43,7 +43,7 @@ public:
 };
 
 class ICA : public SubPattern {
-    GCDR g{3};
+    Graph g{3};
 
 public:
     ICA() : SubPattern("ICA") {
@@ -51,9 +51,9 @@ public:
         g.edge(1, 2) = Relation::Association;
     }
 
-    const GCDR &gcdr() const override { return g; }
+    const Graph &gcdr() const override { return g; }
 
-    GCDR &gcdr() override { return g; }
+    Graph &gcdr() override { return g; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_ICA;
@@ -68,7 +68,7 @@ public:
 };
 
 class CI : public SubPattern {
-    GCDR g{3};
+    Graph g{3};
 
 public:
     CI() : SubPattern("CI") {
@@ -76,9 +76,9 @@ public:
         g.edge(2, 0) = Relation::Inheritance;
     }
 
-    const GCDR &gcdr() const override { return g; }
+    const Graph &gcdr() const override { return g; }
 
-    GCDR &gcdr() override { return g; }
+    Graph &gcdr() override { return g; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_CI;
@@ -93,7 +93,7 @@ public:
 };
 
 class IAGG : public SubPattern {
-    GCDR g{2};
+    Graph g{2};
 
 public:
     IAGG() : SubPattern("IAGG") {
@@ -101,9 +101,9 @@ public:
         g.edge(1, 0) = Relation::Inheritance;
     }
 
-    const GCDR &gcdr() const override { return g; }
+    const Graph &gcdr() const override { return g; }
 
-    GCDR &gcdr() override { return g; }
+    Graph &gcdr() override { return g; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_IAGG;
@@ -118,14 +118,14 @@ public:
 };
 
 class SASS : public SubPattern {
-    GCDR g{1};
+    Graph g{1};
 
 public:
     SASS() : SubPattern("SASS") { g.edge(0, 0) = Relation::Association; }
 
-    const GCDR &gcdr() const override { return g; }
+    const Graph &gcdr() const override { return g; }
 
-    GCDR &gcdr() override { return g; }
+    Graph &gcdr() override { return g; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_SASS;

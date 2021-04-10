@@ -1,5 +1,5 @@
-#ifndef DPDT_GCDR_H
-#define DPDT_GCDR_H
+#ifndef DPDT_GRAPH_H
+#define DPDT_GRAPH_H
 
 #include <string>
 #include <vector>
@@ -41,9 +41,9 @@ public:
 };
 
 /**
- * GCDR is a complete directed graph.
+ * Graph is a complete directed graph.
  */
-class GCDR {
+class Graph {
     const std::string id;
 
     size_t n;
@@ -54,7 +54,7 @@ class GCDR {
     std::vector<size_t> matrix;
 
 public:
-    GCDR(size_t n) : n(n), nodes(n), matrix(n * n, 1) {}
+    Graph(size_t n) : n(n), nodes(n), matrix(n * n, 1) {}
 
     const size_t edge(size_t u, size_t v) const { return matrix.at(u * n + v); }
 
@@ -77,4 +77,4 @@ public:
     void print_gcdr() const;
 };
 
-#endif  // !DPDT_GCDR_H
+#endif  // !DPDT_GRAPH_H
