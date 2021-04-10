@@ -22,9 +22,9 @@ class Proxy : public SFM {
     Node *subject;
     Node *real_subject;
     Node *proxy;
-    size_t subject_request;
-    size_t real_subject_request;
-    size_t proxy_request;
+    Method *subject_request;
+    Method *real_subject_request;
+    Method *proxy_request;
 };
 
 #endif  // !DPDT_SFM_H

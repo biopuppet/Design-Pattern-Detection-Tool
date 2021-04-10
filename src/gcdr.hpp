@@ -23,6 +23,23 @@ enum class Visibility {
     PACKAGE,  // Java
 };
 
+class Attribute {
+
+};
+
+class Parameter {
+    std::string name;
+    enum Direction {IN, RETURN} direction;
+    bool isUnique;
+};
+
+class Method {
+    std::string name;
+    Visibility visibility;
+    bool isAbstract;  // bit-mask?
+    std::vector<Parameter> params; // including return value
+};
+
 class Node {
 public:
     std::string id;
