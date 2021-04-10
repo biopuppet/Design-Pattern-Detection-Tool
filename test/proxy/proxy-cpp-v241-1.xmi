@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmlns:uml="http://www.omg.org/spec/UML/20101101" xmlns:xmi="http://www.omg.org/spec/XMI/20101101" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_8D997243_6C28_4fe7_8636_6A09CD8806FE" name="cpp">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_72387F48_8F5C_44ab_B342_8531F553CBB0" name="Proxy">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_1283B27F_1B96_448e_A45D_972832E54FD2" name="subject" visibility="private">
+					<type xmi:idref="EAC___RealSubject_"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000001_1B96_448e_A45D_972832E54FD2" value="1"/>
+					<upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="EAID_LI000002_1B96_448e_A45D_972832E54FD2" value="1"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_2E260146_859A_43ab_A67E_721444BFD610" name="Proxy"/>
+				<ownedOperation xmi:id="EAID_FC2D9C74_BF4B_443d_99D2_D74B820909CE" name="~Proxy"/>
+				<ownedOperation xmi:id="EAID_87B0CF11_7C88_48b1_9B9A_3B18AEFC2B0C" name="request">
+					<ownedParameter xmi:id="EAID_RT000000_7C88_48b1_9B9A_3B18AEFC2B0C" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_6EBF05CB_A510_4d6d_89F6_DF70DAA8B925" general="EAID_FD1E9434_F7D0_4810_A0AE_87CCC341CCE0"/>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dst365AAF_BC0D_4487_9CC2_75D50888716F" name="subject" visibility="private" association="EAID_C9365AAF_BC0D_4487_9CC2_75D50888716F">
+					<type xmi:idref="EAID_1DA9D60E_A785_4d89_A437_93903B43BB39"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_C9365AAF_BC0D_4487_9CC2_75D50888716F">
+				<memberEnd xmi:idref="EAID_dst365AAF_BC0D_4487_9CC2_75D50888716F"/>
+				<memberEnd xmi:idref="EAID_src365AAF_BC0D_4487_9CC2_75D50888716F"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_src365AAF_BC0D_4487_9CC2_75D50888716F" association="EAID_C9365AAF_BC0D_4487_9CC2_75D50888716F">
+					<type xmi:idref="EAID_72387F48_8F5C_44ab_B342_8531F553CBB0"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_1DA9D60E_A785_4d89_A437_93903B43BB39" name="RealSubject">
+				<ownedOperation xmi:id="EAID_E57E6BCE_0DA8_4b40_B209_1E524E598DE3" name="request">
+					<ownedParameter xmi:id="EAID_RT000000_0DA8_4b40_B209_1E524E598DE3" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_146BC3F6_13CD_4a02_ADBC_73A53B344578" general="EAID_FD1E9434_F7D0_4810_A0AE_87CCC341CCE0"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_FD1E9434_F7D0_4810_A0AE_87CCC341CCE0" name="Subject">
+				<ownedOperation xmi:id="EAID_0CA7926F_D2BC_4144_B936_BF145E9B0C0B" name="request" isAbstract="true">
+					<ownedParameter xmi:id="EAID_RT000000_D2BC_4144_B936_BF145E9B0C0B" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_EF6D2F85_E158_4ca1_8348_D5E1556F33FD" name="~Subject" isAbstract="true"/>
+			</packagedElement>
+		</packagedElement>
+		<profileApplication xmi:type="uml:ProfileApplication" xmi:id="profileap_thecustomprofile">
+			<appliedProfile xmi:type="uml:Profile" href="http://www.sparxsystems.com/profiles/thecustomprofile/1.0#thecustomprofile"/>
+		</profileApplication>
+	</uml:Model>
+	<thecustomprofile:bodyLocation base_Operation="EAID_2E260146_859A_43ab_A67E_721444BFD610" bodyLocation="classDec"/>
+	<thecustomprofile:bodyLocation base_Operation="EAID_FC2D9C74_BF4B_443d_99D2_D74B820909CE" bodyLocation="classDec"/>
+	<thecustomprofile:bodyLocation base_Operation="EAID_87B0CF11_7C88_48b1_9B9A_3B18AEFC2B0C" bodyLocation="classDec"/>
+	<thecustomprofile:bodyLocation base_Operation="EAID_E57E6BCE_0DA8_4b40_B209_1E524E598DE3" bodyLocation="classDec"/>
+	<thecustomprofile:bodyLocation base_Operation="EAID_EF6D2F85_E158_4ca1_8348_D5E1556F33FD" bodyLocation="classDec"/>
+</xmi:XMI>

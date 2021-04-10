@@ -8,7 +8,6 @@
 
 class SFM {
 public:
-
 };
 
 #endif  // !DPDT_SFM_H

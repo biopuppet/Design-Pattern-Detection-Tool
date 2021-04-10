@@ -90,13 +90,13 @@ GCDR XMIParser::parse(const char *file_path) {
         if (strcmp(type, "uml:Class") && strcmp(type, "uml:Interface"))
             continue;
         std::cout << "node : " << child.attribute("name").value() << "\n";
-        
+
         auto &node = gcdr_system.node(i);
         node.id = child.attribute("xmi:id").value();
         node.name = child.attribute("name").value();
         node.visibility = Node::get_vis(child.attribute("visibility").value());
         node.isAbstract = child.attribute("isAbstract") ? true : false;
-        
+
         node_map[child] = i;
         ++i;
     }
@@ -108,7 +108,7 @@ GCDR XMIParser::parse(const char *file_path) {
             auto client = child.attribute("client").value();
             auto supplier = child.attribute("supplier").value();
             auto &e = gcdr_system.edge(node_map[xml_nodes[client]],
-                          node_map[xml_nodes[supplier]]);
+                                       node_map[xml_nodes[supplier]]);
             e *= Relation::Inheritance;
         }
         // Association ? Currently, not here.

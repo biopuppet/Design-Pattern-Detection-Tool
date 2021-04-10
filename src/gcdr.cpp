@@ -33,12 +33,10 @@ void GCDR::print_gcdr() const {
     auto n = size();
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-        std::cout << i << " --" << matrix[i][j] << "--> "
-                  << j << std::endl;
+            std::cout << nodes[i].name << " --" << matrix[i][j] << "--> " << nodes[j].name << std::endl;
         }
     }
 }
-
 
 // Node::Node(pugi::xml_node &node) {
 //     id = node.attribute("xmi:id").value();

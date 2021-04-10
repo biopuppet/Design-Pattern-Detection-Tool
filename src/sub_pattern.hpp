@@ -37,8 +37,7 @@ public:
 
     virtual const SubPatternType type() const = 0;
 
-    virtual void
-    add(size_t u, size_t v, const size_t r) = 0;
+    virtual void add(size_t u, size_t v, const size_t r) = 0;
 
     static SubPattern *createSubPattern(const SubPattern &src);
 };
@@ -60,8 +59,7 @@ public:
         return SubPatternType::SPT_ICA;
     }
 
-    void
-    add(size_t u, size_t v, const size_t r) override {
+    void add(size_t u, size_t v, const size_t r) override {
         auto &e = g.edge(u, v);
         if (r % e)
             return;
@@ -86,8 +84,7 @@ public:
         return SubPatternType::SPT_CI;
     }
 
-    void
-    add(size_t u, size_t v, const size_t r) override {
+    void add(size_t u, size_t v, const size_t r) override {
         auto &e = g.edge(u, v);
         if (r % e)
             return;
@@ -100,10 +97,8 @@ class IAGG : public SubPattern {
 
 public:
     IAGG() : SubPattern("IAGG") {
-        g.edge(0, 0) = Relation::None;
         g.edge(0, 1) = Relation::Aggregation;
         g.edge(1, 0) = Relation::Inheritance;
-        g.edge(1, 1) = Relation::None;
     }
 
     const GCDR &gcdr() const override { return g; }
@@ -114,8 +109,7 @@ public:
         return SubPatternType::SPT_IAGG;
     }
 
-    void
-    add(size_t u, size_t v, const size_t r) override {
+    void add(size_t u, size_t v, const size_t r) override {
         auto &e = g.edge(u, v);
         if (r % e)
             return;
@@ -137,8 +131,7 @@ public:
         return SubPatternType::SPT_SASS;
     }
 
-    void
-    add(size_t u, size_t v, const size_t r) override {
+    void add(size_t u, size_t v, const size_t r) override {
         auto &e = g.edge(u, v);
         if (r % e)
             return;

@@ -1,4 +1,5 @@
 #include <vector>
+#include <array>
 #include <boost/graph/graph_utility.hpp>
 #include <boost/graph/adjacency_matrix.hpp>
 
@@ -22,23 +23,16 @@ const SASS SubPatternDetector::sass;
 // IPD;
 // DPI;
 
-const std::vector<const SubPattern *> SubPatternDetector::sps = {
-    &ica,
-    &ci,
-    &iagg,
-    &sass,
-};
+void SubPatternDetector::detect_all() {
+    detect_sp_instances(ica);
+    detect_sp_instances(ci);
+    detect_sp_instances(iagg);
 
-int SubPatternDetector::detect_all() {
-    for (const auto sp : sps) {
-        detect_sp_instances(*sp);
-    }
-    return 0;
+    detect_sp_instances(sass);
 }
 
-void SubPatternDetector::combine_cv_1(
-    const SubPattern &subp,
-    std::vector<std::vector<size_t>> &cvs) {
+void SubPatternDetector::combine_cv_1(const SubPattern &subp,
+                                      std::vector<std::vector<size_t>> &cvs) {
     auto sp = subp.gcdr();
     auto sp_e = sp.edge(0, 0);
     for (auto vd : cvs[0]) {
@@ -46,15 +40,14 @@ void SubPatternDetector::combine_cv_1(
         if (sys_e % sp_e) {
             continue;
         }
-        std::cout << "identified sub-pattern(1): ";
-        auto subg = extract_subgraph(&vd, subp);
-        identified_sps[subp.type()].emplace_back(subg);
+        // std::cout << "identified sub-pattern(1):\n";
+        printf("identified sub-pattern(%d)\n", vd);
+        spt2list(subp.type()).push_back({vd});
     }
 }
 
-void SubPatternDetector::combine_cv_2(
-    const SubPattern &subp,
-    std::vector<std::vector<size_t>> &cvs) {
+void SubPatternDetector::combine_cv_2(const SubPattern &subp,
+                                      std::vector<std::vector<size_t>> &cvs) {
     auto sp = subp.gcdr();
     auto sp_e1 = sp.edge(0, 1);
     auto sp_e2 = sp.edge(1, 0);
@@ -62,25 +55,21 @@ void SubPatternDetector::combine_cv_2(
         for (auto vd2 : cvs[1]) {
             auto sys_e1 = system.edge(vd1, vd2);
             auto sys_e2 = system.edge(vd2, vd1);
-            if (sys_e1 % sp_e1 ||
-                sys_e2 % sp_e2) {
+            if (sys_e1 % sp_e1 || sys_e2 % sp_e2) {
                 continue;
             }
-            std::cout << "identified sub-pattern(2): ";
-            size_t vm[] = {vd1, vd2};
-            auto subg = extract_subgraph(vm, subp);
-            identified_sps[subp.type()].emplace_back(subg);
+            // std::cout << "identified sub-pattern(2):\n";
+            printf("identified sub-pattern(%d %d)\n", vd1, vd2);
+            spt2list(subp.type()).push_back({vd1, vd2});
         }
     }
 }
 
-void SubPatternDetector::combine_cv_3(
-    const SubPattern &subp,
-    std::vector<std::vector<size_t>> &cvs) {
+void SubPatternDetector::combine_cv_3(const SubPattern &subp,
+                                      std::vector<std::vector<size_t>> &cvs) {
     auto sp = subp.gcdr();
-    size_t sp_es[] = {sp.edge(0, 1), sp.edge(0, 2),
-                                 sp.edge(1, 0), sp.edge(1, 2),
-                                 sp.edge(2, 0), sp.edge(2, 1)};
+    size_t sp_es[] = {sp.edge(0, 1), sp.edge(0, 2), sp.edge(1, 0),
+                      sp.edge(1, 2), sp.edge(2, 0), sp.edge(2, 1)};
     for (auto vd1 : cvs[0]) {
         for (auto vd2 : cvs[1]) {
             for (auto vd3 : cvs[2]) {
@@ -102,33 +91,14 @@ void SubPatternDetector::combine_cv_3(
                 }
                 if (continue_flag)
                     continue;
-                std::cout << "identified sub-pattern(3): ";
-                size_t vm[] = {vd1, vd2, vd3};
-                auto subg = extract_subgraph(vm, subp);
-                identified_sps[subp.type()].emplace_back(subg);
+                printf("identified sub-pattern(%d %d %d)\n", vd1, vd2, vd3);
+                spt2list(subp.type()).push_back({vd1, vd2, vd3});
             }
         }
     }
 }
 
-SubPattern *SubPatternDetector::extract_subgraph(size_t vm[],
-                                                 const SubPattern &mold) {
-    auto sys_ksub = SubPattern::createSubPattern(mold);
-    GCDR &sys_kg = sys_ksub->gcdr();
-    // auto eip = edges(sys_kg);
-    // for (auto es = eip; es != eip.second; ++es) {
-    //     auto e = *es;
-    //     auto src = source(e, sys_kg);
-    //     auto dst = target(e, sys_kg);
-    //     auto se = edge(vm[src], vm[dst], system);
-    //     // sys_kg[e = system[se;
-    //     sys_ksub->add(e, se);
-    // }
-    sys_kg.print_gcdr();
-    return sys_ksub;
-}
-
-int SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
+void SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
     int sys_num = system.size();
     int sp_num = sp.gcdr().size();
     std::vector<std::vector<size_t>> cvs(sp_num);
@@ -168,6 +138,4 @@ int SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
         std::cout << "\n";
     }
     std::cout << "\n";
-
-    return 0;
 }

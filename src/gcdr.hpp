@@ -42,8 +42,8 @@ public:
 
     Node() {}
 
-    Node(const char *id, const char *name, 
-    Visibility v = Visibility::PRIVATE) : id(id), name(name), visibility(v) {}
+    Node(const char *id, const char *name, Visibility v = Visibility::PRIVATE)
+        : id(id), name(name), visibility(v) {}
 
     static Visibility get_vis(const char *s);
 
@@ -64,44 +64,25 @@ class GCDR {
     std::vector<std::vector<size_t>> matrix;
 
 public:
-    GCDR(size_t n) : n(n), nodes(n), matrix(n, std::vector<size_t>(n, 1)) {
-    }
+    GCDR(size_t n) : n(n), nodes(n), matrix(n, std::vector<size_t>(n, 1)) {}
 
-    const size_t edge(size_t u, size_t v) const {
-        return matrix[u][v];
-    }
-    
-    size_t &edge(size_t u, size_t v) {
-        return matrix[u][v];
-    }
+    const size_t edge(size_t u, size_t v) const { return matrix[u][v]; }
 
-    Node &node(size_t index) {
-        return nodes[index];
-    }
+    size_t &edge(size_t u, size_t v) { return matrix[u][v]; }
 
-    const Node &node(size_t index) const {
-        return nodes[index];
-    }
+    Node &node(size_t index) { return nodes[index]; }
 
-    const size_t size() const {
-        return n;
-    }
+    const Node &node(size_t index) const { return nodes[index]; }
 
-    const size_t num_nodes() const {
-        return nodes.size();
-    }
+    const size_t size() const { return n; }
 
-    const size_t num_edges() const {
-        return n * n;
-    }
-    
+    const size_t num_nodes() const { return nodes.size(); }
+
+    const size_t num_edges() const { return n * n; }
+
     size_t cw_in(size_t v) const;
     size_t cw_out(size_t v) const;
     void print_gcdr() const;
-
-
 };
-
-
 
 #endif  // !DPDT_GCDR_H

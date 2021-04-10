@@ -5,15 +5,15 @@
 
 #include "gcdr.hpp"
 #include "sub_pattern.hpp"
+#include "sp_detector.hpp"
 
 class SFMAnalyzer {
-    // sub-pattern instance set
-    std::vector<std::vector<SubPattern *>> &spis;
-
+    SubPatternDetector &spd;
 public:
-    SFMAnalyzer(std::vector<std::vector<SubPattern *>> &s) : spis(s) {}
+    SFMAnalyzer(SubPatternDetector &spd) : spd(spd) {}
 
     void analyze();
+    void analyze_proxy();
 };
 
 #endif  // !DPDT_SFM_ANALYZER_H

@@ -32,7 +32,7 @@ add_executable(dpdt
     parser.cpp
     sub_pattern.cpp
     sp_detector.cpp
-    # sfm_analyzer.cpp
+    sfm_analyzer.cpp
 
     main.cpp
 )
