@@ -23,29 +23,39 @@ enum class Visibility {
     PACKAGE,  // Java
 };
 
-class Attribute {};
+struct Attribute {};
 
-class Parameter {
+struct Node;
+struct Parameter {
+    std::string id;
     std::string name;
+    enum Type {
+        Void,
+        Int,
+        Double,
+        Class,
+    } type;
+    Node *class_type;
     enum Direction { IN, RETURN } direction;
     bool isUnique;
 };
 
-class Method {
+struct Method {
+    std::string id;
     std::string name;
     Visibility visibility;
     bool isAbstract;                // bit-mask?
     std::vector<Parameter> params;  // including return value
 };
 
-class Node {
-public:
+struct Node {
     std::string id;
     std::string name;
     Visibility visibility;
     bool isAbstract;  // bit-mask?
-    // Property
-    // Method
+
+    std::vector<Attribute> attrs;
+    std::vector<Method> methods;
 
     Node() {}
     Node(const char *id,

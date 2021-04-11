@@ -32,20 +32,48 @@ struct simple_walker : pugi::xml_tree_walker {
     }
 };
 
-void XMIParser::parse_class(pugi::xml_node &cur, Graph &gcdr) {
-    // multi inheritance ignored
+Parameter XMIParser::parse_parameter(pugi::xml_node cur) {
+    Parameter node;
+    node.id = cur.attribute("xmi:id").value();
+    node.name = cur.attribute("name").value();
+    node.direction =
+        cur.attribute("direction").value() ? Parameter::IN : Parameter::RETURN;
+
+    return node;
+}
+
+Method XMIParser::parse_operation(pugi::xml_node cur) {
+    Method node;
+    node.id = cur.attribute("xmi:id").value();
+    node.name = cur.attribute("name").value();
+    node.visibility = Node::get_vis(cur.attribute("visibility").value());
+    node.isAbstract = cur.attribute("isAbstract") ? true : false;
     for (auto child : cur.children()) {
-        if (!strcmp(child.name(), "generalization")) {
+        parse_parameter(child);
+    }
+    return node;
+}
+
+void XMIParser::parse_class(pugi::xml_node cur, Graph &gcdr) {
+    // multi inheritance ignored
+    auto &node = gcdr.node(node_map[cur]);
+    for (auto &child : cur.children()) {
+        if (!strcmp(child.name(), "ownedOperation")) {
+            node.methods.emplace_back(parse_operation(child));
+        }
+        else if (!strcmp(child.name(), "ownedAttribute")) {
+            if (!child.attribute("association").empty()) {
+                auto ass = child.child("type").attribute("xmi:idref").value();
+                // TODO: Add Aggregation and Dependency
+                auto &e = gcdr.edge(node_map[cur], node_map[xml_nodes[ass]]);
+                e *= Relation::Association;
+            }
+        }
+        else if (!strcmp(child.name(), "generalization")) {
             auto father_id = child.attribute("general").value();
             auto father = xml_nodes[father_id];
             auto &e = gcdr.edge(node_map[cur], node_map[father]);
             e *= Relation::Inheritance;
-        }
-        else if (!child.attribute("association").empty()) {
-            auto ass = child.child("type").attribute("xmi:idref").value();
-            // TODO: Add Aggregation and Dependency
-            auto &e = gcdr.edge(node_map[cur], node_map[xml_nodes[ass]]);
-            e *= Relation::Association;
         }
     }
 }
@@ -58,8 +86,6 @@ Graph XMIParser::parse(const char *file_path) {
     std::cout << "XMI version: "
               << doc.child("xmi:XMI").attribute("xmi:version").value()
               << std::endl;
-
-    auto model = doc.child("xmi:XMI").child("uml:Model");
 
     simple_walker walker;
     doc.traverse(walker);
@@ -91,7 +117,6 @@ Graph XMIParser::parse(const char *file_path) {
                                        node_map[xml_nodes[supplier]]);
             e *= Relation::Inheritance;
         }
-        // Association ? Currently, not here.
         // in-class property relations
         parse_class(child, gcdr_system);
     }
