@@ -9,6 +9,7 @@
 
 class SFMAnalyzer {
     SubPatternDetector &spd;
+
 public:
     SFMAnalyzer(SubPatternDetector &spd) : spd(spd) {}
 

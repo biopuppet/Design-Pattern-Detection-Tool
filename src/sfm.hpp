@@ -8,12 +8,11 @@
 
 class SFM {
 public:
-    
 };
 
 class Proxy : public SFM {
     // CI && IASS   CI && ICA
-    enum Type {RefSubject, RefRealSubject} type;
+    enum Type { RefSubject, RefRealSubject } type;
 
     // Q: Why not Graph/size_t/...?
     // A: On this level(Behavorial Analysis and further), we care nothing but

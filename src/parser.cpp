@@ -8,8 +8,9 @@
 #include "pugixml.hpp"
 #include "parser.hpp"
 
-std::map<pugi::xml_node, size_t> node_map;
-std::unordered_map<std::string, pugi::xml_node> xml_nodes;
+static std::map<pugi::xml_node, size_t> node_map;
+static std::unordered_map<std::string, pugi::xml_node> xml_nodes;
+static std::vector<pugi::xml_node> nodes;
 
 /**
  * Map all xmi id to the corresponding xml_node for later references.
@@ -21,6 +22,10 @@ struct simple_walker : pugi::xml_tree_walker {
 
         if (!node.attribute("xmi:id").empty()) {
             xml_nodes[node.attribute("xmi:id").value()] = node;
+        }
+        auto type = node.attribute("xmi:type").value();
+        if (!strcmp(type, "uml:Class") || !strcmp(type, "uml:Interface")) {
+            nodes.emplace_back(node);
         }
 
         return true;  // continue traversal
@@ -62,35 +67,10 @@ Graph XMIParser::parse(const char *file_path) {
     //     std::cout << it.first << " -- " << it.second.name() << std::endl;
     // }
 
-    /**
-     * Find specific package in nested packages.
-     */
-    // for (auto pkg = model;
-    //     pkg.find_child_by_attribute("xmi:type", "uml:Class");
-    //     pkg = pkg.first_child()) {
-    // }
-    auto package = model.child("packagedElement");
-    std::cout << "package: " << package.attribute("name").value() << std::endl;
-
-    // auto class_node = package.find_child_by_attribute("xmi:type",
-    // "uml:Class");
-
-    int class_num = 0;
-    for (auto child : package.children()) {
-        auto type = child.attribute("xmi:type").value();
-        if (!strcmp(type, "uml:Class") || !strcmp(type, "uml:Interface"))
-            ++class_num;
-    }
-
-    Graph gcdr_system(class_num);
+    Graph gcdr_system(nodes.size());
 
     int i = 0;
-    for (auto child : package.children()) {
-        auto type = child.attribute("xmi:type").value();
-        if (strcmp(type, "uml:Class") && strcmp(type, "uml:Interface"))
-            continue;
-        // std::cout << "node : " << child.attribute("name").value() << "\n";
-
+    for (auto child : nodes) {
         auto &node = gcdr_system.node(i);
         node.id = child.attribute("xmi:id").value();
         node.name = child.attribute("name").value();
@@ -102,7 +82,7 @@ Graph XMIParser::parse(const char *file_path) {
     }
 
     // out-class relation
-    for (auto child : package.children()) {
+    for (auto child : nodes) {
         auto type = child.attribute("xmi:type").value();
         if (!strcmp(type, "uml:Realization")) {
             auto client = child.attribute("client").value();

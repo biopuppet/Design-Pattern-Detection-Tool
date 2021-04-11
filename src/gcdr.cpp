@@ -23,7 +23,8 @@ void Graph::print_gcdr() const {
     auto n = size();
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-            std::cout << nodes[i].name << " --" << edge(i, j) << "--> " << nodes[j].name << std::endl;
+            std::cout << nodes[i].name << " --" << edge(i, j) << "--> "
+                      << nodes[j].name << std::endl;
         }
     }
 }

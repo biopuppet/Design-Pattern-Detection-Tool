@@ -1,6 +1,8 @@
 #ifndef DPDT_PARSER_H
 #define DPDT_PARSER_H
 
+#include <vector>
+
 #include "gcdr.hpp"
 #include "pugixml.hpp"
 

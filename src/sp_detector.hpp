@@ -11,8 +11,8 @@ class SubPatternDetector {
     friend class SFMAnalyzer;
 
     Graph &system;
-public:
 
+public:
     SubPatternDetector(Graph &sys) : system(sys) {}
 
     void detect_all();
@@ -27,14 +27,19 @@ public:
                       std::vector<std::vector<size_t>> &cvs);
 
     typedef std::vector<std::vector<size_t>> SPRefList;
-    
+
     SPRefList &spt2list(SubPatternType spt) {
         switch (spt) {
-            case SubPatternType::SPT_ICA: return icas;
-            case SubPatternType::SPT_CI: return cis;
-            case SubPatternType::SPT_IAGG: return iaggs;
-            case SubPatternType::SPT_SASS: return sasss;
-            default: return nones;
+        case SubPatternType::SPT_ICA:
+            return icas;
+        case SubPatternType::SPT_CI:
+            return cis;
+        case SubPatternType::SPT_IAGG:
+            return iaggs;
+        case SubPatternType::SPT_SASS:
+            return sasss;
+        default:
+            return nones;
         }
     }
 

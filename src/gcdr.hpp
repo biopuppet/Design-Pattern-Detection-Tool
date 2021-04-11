@@ -23,21 +23,19 @@ enum class Visibility {
     PACKAGE,  // Java
 };
 
-class Attribute {
-
-};
+class Attribute {};
 
 class Parameter {
     std::string name;
-    enum Direction {IN, RETURN} direction;
+    enum Direction { IN, RETURN } direction;
     bool isUnique;
 };
 
 class Method {
     std::string name;
     Visibility visibility;
-    bool isAbstract;  // bit-mask?
-    std::vector<Parameter> params; // including return value
+    bool isAbstract;                // bit-mask?
+    std::vector<Parameter> params;  // including return value
 };
 
 class Node {
@@ -50,8 +48,10 @@ public:
     // Method
 
     Node() {}
-    Node(const char *id, const char *name = "", 
-    Visibility v = Visibility::PRIVATE, bool isabstract = false)
+    Node(const char *id,
+         const char *name = "",
+         Visibility v = Visibility::PRIVATE,
+         bool isabstract = false)
         : id(id), name(name), visibility(v), isAbstract(isabstract) {}
 
     static Visibility get_vis(const char *s);
