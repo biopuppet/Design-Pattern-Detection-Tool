@@ -6,9 +6,9 @@
 #include "gcdr.hpp"
 #include "sub_pattern.hpp"
 
-class SFMAnalyzer;
+class PatternAnalyzer;
 class SubPatternDetector {
-    friend class SFMAnalyzer;
+    friend class PatternAnalyzer;
 
     Graph &system;
 

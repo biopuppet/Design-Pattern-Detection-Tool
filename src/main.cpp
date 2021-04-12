@@ -5,7 +5,7 @@
 #include "gcdr.hpp"
 #include "parser.hpp"
 #include "sp_detector.hpp"
-#include "sfm_analyzer.hpp"
+#include "pattern_analyzer.hpp"
 
 static void print_usage(const char *argv0) {
     printf("Usage: %s [option...] [XMI file]\n"
@@ -65,8 +65,8 @@ int main(int argc, char **argv) {
     SubPatternDetector spd{system};
     spd.detect_all();
 
-    SFMAnalyzer sfm_analyzer{spd};
-    sfm_analyzer.analyze();
+    PatternAnalyzer pattern_analyzer{spd};
+    pattern_analyzer.analyze();
 
     return 0;
 }

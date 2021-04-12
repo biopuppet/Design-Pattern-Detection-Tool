@@ -3,14 +3,14 @@
 #include "gcdr.hpp"
 #include "sp_detector.hpp"
 #include "sfm.hpp"
-#include "sfm_analyzer.hpp"
+#include "pattern_analyzer.hpp"
 
-void SFMAnalyzer::analyze() {
+void PatternAnalyzer::analyze() {
     analyze_proxy();
     // std::cout << proxys.size() << std::endl;
 }
 
-void SFMAnalyzer::analyze_proxy() {
+void PatternAnalyzer::analyze_proxy() {
     for (const auto &ica : spd.icas) {
         for (const auto &ci : spd.cis) {
             if (ica[0] == ci[0] && ica[1] == ci[1] && ica[2] == ci[2]) {
