@@ -13,6 +13,10 @@ bin/
 # ctags
 tags
 
+# EA
+*.DTD
+*.exp[x]
+
 # Other
 *.exe
 *.elf

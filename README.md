@@ -25,3 +25,6 @@ written in C++11.
     ```
     The XMI file does not contain any behavoiral info inside a method.
     Only method signature and relations if set manually.
+    
+- Redefined Operation
+  - Mannually alter UML or it is my job?

@@ -96,7 +96,7 @@ Graph XMIParser::parse(const char *file_path) {
     Graph gcdr_system(nodes.size());
 
     int i = 0;
-    for (auto child : nodes) {
+    for (auto &child : nodes) {
         auto &node = gcdr_system.node(i);
         node.id = child.attribute("xmi:id").value();
         node.name = child.attribute("name").value();
@@ -108,7 +108,7 @@ Graph XMIParser::parse(const char *file_path) {
     }
 
     // out-class relation
-    for (auto child : nodes) {
+    for (auto &child : nodes) {
         auto type = child.attribute("xmi:type").value();
         if (!strcmp(type, "uml:Realization")) {
             auto client = child.attribute("client").value();
