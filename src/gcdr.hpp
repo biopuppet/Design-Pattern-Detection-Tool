@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <cassert>
 
 /**
  * Use prime number for composite relation factoring
@@ -54,8 +53,14 @@ struct Node {
     Visibility visibility;
     bool isAbstract;  // bit-mask?
 
+    // Attributes: property, ...
     std::vector<Attribute> attrs;
+
+    // Methods
     std::vector<Method> methods;
+
+    // Explicit construction methods that share the same name with its class.
+    std::vector<Method *> constructors;
 
     Node() {}
     Node(const char *id,
@@ -71,8 +76,6 @@ struct Node {
  * Graph is a complete directed graph.
  */
 class Graph {
-    const std::string id;
-
     size_t n;
 
     // Optional property

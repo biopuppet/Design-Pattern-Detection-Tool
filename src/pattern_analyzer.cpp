@@ -21,3 +21,10 @@ void PatternAnalyzer::analyze_proxy() {
         }
     }
 }
+
+void PatternAnalyzer::behavoiral_check_proxy() {
+    for (const auto &proxy : proxys) {
+        // Looking for 3 identical method signature
+        // union_set *comparator
+    }
+}

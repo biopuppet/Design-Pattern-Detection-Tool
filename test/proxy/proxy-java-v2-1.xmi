@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_60D4C9F4_F857_4c90_9E1C_422CCA1F02F2" name="proxy" visibility="public">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_B3BEE452_40C3_453a_8A62_47154F773A76" name="Proxy" visibility="public">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_A990B39E_3680_49d8_A06D_535613C356A0" name="subject" visibility="package" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAID_F7A60C72_811D_48a2_9D30_93CE48114CEC"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000001_3680_49d8_A06D_535613C356A0" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000002_3680_49d8_A06D_535613C356A0" value="1"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_1C743431_27CB_4d20_A773_AC49884EEB34" name="Proxy" visibility="public" concurrency="sequential"/>
+				<ownedOperation xmi:id="EAID_F1E4F6F7_B2A7_40ec_95D0_9FF5A5A9D4F2" name="request" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_B2A7_40ec_95D0_9FF5A5A9D4F2" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dst43A999_2DB2_4473_87D9_890D47F79EF8" name="subject" visibility="package" association="EAID_2D43A999_2DB2_4473_87D9_890D47F79EF8" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_F7A60C72_811D_48a2_9D30_93CE48114CEC"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_2D43A999_2DB2_4473_87D9_890D47F79EF8" visibility="public">
+				<memberEnd xmi:idref="EAID_dst43A999_2DB2_4473_87D9_890D47F79EF8"/>
+				<memberEnd xmi:idref="EAID_src43A999_2DB2_4473_87D9_890D47F79EF8"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_src43A999_2DB2_4473_87D9_890D47F79EF8" visibility="public" association="EAID_2D43A999_2DB2_4473_87D9_890D47F79EF8" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_B3BEE452_40C3_453a_8A62_47154F773A76"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Realization" xmi:id="EAID_45111CD8_28CE_4172_9E04_3BF66D7CF6D0" visibility="public" supplier="EAID_F7A60C72_811D_48a2_9D30_93CE48114CEC" client="EAID_B3BEE452_40C3_453a_8A62_47154F773A76"/>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_CF18E405_513E_4bc6_9684_514AFF4294E5" name="ProxyClient" visibility="public">
+				<ownedOperation xmi:id="EAID_D46EF5A3_6F44_4412_B5E0_759A15AC53C4" name="main" visibility="public" concurrency="sequential" isStatic="true">
+					<ownedParameter xmi:id="EAID_79E55456_E744_46ee_861E_5F013A7D3F4E" name="args" type="EAJava_String__" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_6F44_4412_B5E0_759A15AC53C4" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_280D2952_A1BA_441f_967A_C4B10F357C69" name="RealSubject" visibility="public">
+				<ownedOperation xmi:id="EAID_0895C45C_A082_4ec4_BAA6_473C7303F01E" name="request" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_A082_4ec4_BAA6_473C7303F01E" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Realization" xmi:id="EAID_CD497F22_8CCB_45e6_A613_59FE7FADFDE3" visibility="public" supplier="EAID_F7A60C72_811D_48a2_9D30_93CE48114CEC" client="EAID_280D2952_A1BA_441f_967A_C4B10F357C69"/>
+			<packagedElement xmi:type="uml:Interface" xmi:id="EAID_F7A60C72_811D_48a2_9D30_93CE48114CEC" name="Subject" visibility="public" isAbstract="true">
+				<ownedOperation xmi:id="EAID_F6650D5D_1277_474d_B98F_0937FB8443F0" name="request" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_1277_474d_B98F_0937FB8443F0" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+		</packagedElement>
+		<thecustomprofile:annotations base_Operation="EAID_F1E4F6F7_B2A7_40ec_95D0_9FF5A5A9D4F2" annotations="@Override"/>
+		<thecustomprofile:annotations base_Operation="EAID_0895C45C_A082_4ec4_BAA6_473C7303F01E" annotations="@Override"/>
+	</uml:Model>
+</xmi:XMI>
