@@ -26,8 +26,13 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/include
 )
 
-add_executable(dpdt
+# LINK_DIRECTORIES(${PROJECT_BINARY_DIR}/lib)
+
+add_library(pugixml STATIC
     pugixml.cpp
+)
+
+add_executable(dpdt
     gcdr.cpp
     parser.cpp
     sub_pattern.cpp
@@ -36,6 +41,8 @@ add_executable(dpdt
 
     main.cpp
 )
+
+TARGET_LINK_LIBRARIES(dpdt pugixml)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
