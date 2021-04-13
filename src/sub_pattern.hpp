@@ -143,8 +143,7 @@ public:
 class IASS : public SubPattern {
 public:
     IASS() : SubPattern("IASS", 2) {
-        g.edge(1, 0) = Relation::Inheritance;
-        g.edge(1, 0) = Relation::Association;
+        g.edge(1, 0) = Relation::Inheritance * Relation::Association;
     }
 
     const SubPatternType type() const override {

@@ -32,12 +32,18 @@ public:
     static const ICA ica;
     static const CI ci;
     static const IAGG iagg;
-    // static const IPAG ipag;
-    // static const MLI mli;
-    // static const IASS iass;
-    // static const SAGG sagg;
-    // static const IIAGG iiagg;
+    static const IPAG ipag;
+    static const IPAS ipas;
     static const SASS sass;
+    static const MLI mli;
+    static const IIAGG iiagg;
+    static const IASS iass;
+    static const ICD icd;
+    static const DCI dci;
+    static const SAGG sagg;
+    static const AGPI agpi;
+    static const IPD ipd;
+    static const DPI dpi;
 };
 
 #endif  // !DPDT_SP_DETECTOR_H
