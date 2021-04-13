@@ -11,6 +11,7 @@
 static std::map<pugi::xml_node, size_t> node_map;
 static std::unordered_map<std::string, pugi::xml_node> xml_nodes;
 static std::vector<pugi::xml_node> nodes;
+static std::vector<pugi::xml_node> realizations;
 
 /**
  * Map all xmi id to the corresponding xml_node for later references.
@@ -27,7 +28,9 @@ struct simple_walker : pugi::xml_tree_walker {
         if (!strcmp(type, "uml:Class") || !strcmp(type, "uml:Interface")) {
             nodes.emplace_back(node);
         }
-
+        else if (!strcmp(type, "uml:Realization")) {
+            realizations.emplace_back(node);
+        }
         return true;  // continue traversal
     }
 };
@@ -108,16 +111,16 @@ Graph XMIParser::parse(const char *file_path) {
     }
 
     // out-class relation
+    for (auto &r : realizations) {
+        auto client = r.attribute("client").value();
+        auto supplier = r.attribute("supplier").value();
+        auto &e = gcdr_system.edge(node_map[xml_nodes[client]],
+                                   node_map[xml_nodes[supplier]]);
+        e *= Relation::Inheritance;
+    }
+
+    // in-class property relations
     for (auto &child : nodes) {
-        auto type = child.attribute("xmi:type").value();
-        if (!strcmp(type, "uml:Realization")) {
-            auto client = child.attribute("client").value();
-            auto supplier = child.attribute("supplier").value();
-            auto &e = gcdr_system.edge(node_map[xml_nodes[client]],
-                                       node_map[xml_nodes[supplier]]);
-            e *= Relation::Inheritance;
-        }
-        // in-class property relations
         parse_class(child, gcdr_system);
     }
 

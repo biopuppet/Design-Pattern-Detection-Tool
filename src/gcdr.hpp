@@ -99,6 +99,8 @@ public:
 
     const Node &node(size_t index) const { return nodes.at(index); }
 
+    Node &operator[](size_t index) { return node(index); }
+
     size_t size() const { return n; }
 
     size_t num_nodes() const { return nodes.size(); }

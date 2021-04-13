@@ -107,8 +107,9 @@ void SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
 
     for (size_t i = 0; i < sp_num; ++i) {
         for (size_t j = 0; j < system.size(); ++j) {
-            // printf("sys[%lu].cw_out=%lu sp[%lu].cw_out=%lu\n", j, system.cw_out(j), i, gcdr.cw_out(i));
-            // printf("sys[%lu].cw_in=%lu sp[%lu].cw_in=%lu\n", j, system.cw_in(j), i, gcdr.cw_in(i));
+            // printf("sys[%lu].cw_out=%lu sp[%lu].cw_out=%lu\n", j,
+            // system.cw_out(j), i, gcdr.cw_out(i)); printf("sys[%lu].cw_in=%lu
+            // sp[%lu].cw_in=%lu\n", j, system.cw_in(j), i, gcdr.cw_in(i));
             if (system.cw_out(j) % gcdr.cw_out(i) == 0 &&
                 system.cw_in(j) % gcdr.cw_in(i) == 0) {
                 cvs[i].push_back(j);
