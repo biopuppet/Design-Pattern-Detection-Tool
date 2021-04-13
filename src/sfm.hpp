@@ -38,4 +38,24 @@ public:
           real_subject_request(rsr), proxy_request(pr) {}
 };
 
+class Adapter : public SFM {
+public:
+    Node *target;
+    Node *adapter;
+    Node *adaptee;
+
+    Method *target_request;
+    Method *adapter_request;
+    Method *adaptee_specific_request;
+
+    Adapter(Node *target,
+          Node *adapter,
+          Node *adaptee,
+          Method *tr = nullptr,
+          Method *ar = nullptr,
+          Method *asr = nullptr)
+        : target(target), adapter(adapter), adaptee(adaptee), target_request(tr),
+          adapter_request(ar), adaptee_specific_request(asr) {}
+};
+
 #endif  // !DPDT_SFM_H

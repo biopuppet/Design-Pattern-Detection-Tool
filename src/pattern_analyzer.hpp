@@ -12,6 +12,7 @@ class PatternAnalyzer {
     std::vector<SPRefList> &spis;
 
     std::vector<Proxy> proxys;
+    std::vector<Adapter> adapters;
 
 public:
     PatternAnalyzer(SubPatternDetector &spd)
@@ -19,6 +20,13 @@ public:
 
     void analyze();
     void analyze_proxy();
+    void analyze_adapter();
+    void analyze_composite();
+    void analyze_singleton();
+    void analyze_command();
+    void analyze_memento();
+    void analyze_visitor();
+
     void behavoiral_check();
     void behavoiral_check_proxy();
 };
