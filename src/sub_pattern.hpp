@@ -80,7 +80,6 @@ public:
     const SubPatternType type() const override {
         return SubPatternType::SPT_IAGG;
     }
-
 };
 
 class SASS : public SubPattern {
@@ -90,7 +89,6 @@ public:
     const SubPatternType type() const override {
         return SubPatternType::SPT_SASS;
     }
-
 };
 
 #endif  // !DPDT_SUB_PATTERN_H

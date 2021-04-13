@@ -18,8 +18,8 @@ void PatternAnalyzer::behavoiral_check() {
 }
 
 void PatternAnalyzer::analyze_proxy() {
-    for (const auto &ica : spd.icas) {
-        for (const auto &ci : spd.cis) {
+    for (const auto &ica : spis[SPT_ICA]) {
+        for (const auto &ci : spis[SPT_CI]) {
             if (ica[0] == ci[0] && ica[1] == ci[1] && ica[2] == ci[2]) {
                 proxys.emplace_back(&sys.node(ci[0]), &sys.node(ci[1]),
                                     &sys.node(ci[2]), Proxy::RefRealSubject);

@@ -6,11 +6,17 @@
 #include "gcdr.hpp"
 #include "sub_pattern.hpp"
 
+typedef std::vector<std::vector<size_t>> SPRefList;
+typedef std::vector<std::vector<size_t>> CandidateVertexList;
+
 class PatternAnalyzer;
 class SubPatternDetector {
     friend class PatternAnalyzer;
 
     Graph &system;
+
+    // Sub-pattern instance set
+    std::vector<SPRefList> spis{SPT_NUM};
 
 public:
     SubPatternDetector(Graph &sys) : system(sys) {}
@@ -19,35 +25,9 @@ public:
 
     void detect_sp_instances(const SubPattern &sp);
 
-    void combine_cv_3(const SubPattern &sp,
-                      std::vector<std::vector<size_t>> &cvs);
-    void combine_cv_2(const SubPattern &sp,
-                      std::vector<std::vector<size_t>> &cvs);
-    void combine_cv_1(const SubPattern &sp,
-                      std::vector<std::vector<size_t>> &cvs);
-
-    typedef std::vector<std::vector<size_t>> SPRefList;
-
-    SPRefList &spt2list(SubPatternType spt) {
-        switch (spt) {
-        case SubPatternType::SPT_ICA:
-            return icas;
-        case SubPatternType::SPT_CI:
-            return cis;
-        case SubPatternType::SPT_IAGG:
-            return iaggs;
-        case SubPatternType::SPT_SASS:
-            return sasss;
-        default:
-            return nones;
-        }
-    }
-
-    SPRefList nones;
-    SPRefList icas;
-    SPRefList cis;
-    SPRefList iaggs;
-    SPRefList sasss;
+    void combine_cv_3(const SubPattern &sp, const CandidateVertexList &cvs);
+    void combine_cv_2(const SubPattern &sp, const CandidateVertexList &cvs);
+    void combine_cv_1(const SubPattern &sp, const CandidateVertexList &cvs);
 
     static const ICA ica;
     static const CI ci;

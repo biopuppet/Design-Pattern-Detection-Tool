@@ -7,13 +7,15 @@
 #include "sfm.hpp"
 
 class PatternAnalyzer {
-    SubPatternDetector &spd;
     Graph &sys;
+
+    std::vector<SPRefList> &spis;
 
     std::vector<Proxy> proxys;
 
 public:
-    PatternAnalyzer(SubPatternDetector &spd) : spd(spd), sys(spd.system) {}
+    PatternAnalyzer(SubPatternDetector &spd)
+        : sys(spd.system), spis(spd.spis) {}
 
     void analyze();
     void analyze_proxy();
