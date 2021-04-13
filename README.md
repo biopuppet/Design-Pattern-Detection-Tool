@@ -28,3 +28,6 @@ written in C++11.
     
 - Redefined Operation
   - Mannually alter UML or it is my job?
+
+- One role, multiple characters?
+  - Visitor pattern: ConcreteElement A, B, C, ... that would lead to recognition of CI. Plus, ObjectStructure is optional.
