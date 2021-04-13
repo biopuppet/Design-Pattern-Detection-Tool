@@ -26,117 +26,71 @@ enum SubPatternType {
 class SubPattern {
 public:
     const std::string name;
+    Graph g;
 
-    SubPattern(const char *s) : name(s) {}
+    SubPattern(const char *s, size_t n) : name(s), g(n) {}
 
     virtual ~SubPattern() {}
 
-    virtual const Graph &gcdr() const = 0;
+    const Graph &gcdr() const { return g; }
 
-    virtual Graph &gcdr() = 0;
+    Graph &gcdr() { return g; }
+
+    void add(size_t u, size_t v, const size_t r) {
+        auto &e = g.edge(u, v);
+        if (r % e)
+            return;
+        e = r;
+    }
 
     virtual const SubPatternType type() const = 0;
-
-    virtual void add(size_t u, size_t v, const size_t r) = 0;
-
-    static SubPattern *createSubPattern(const SubPattern &src);
 };
 
 class ICA : public SubPattern {
-    Graph g{3};
-
 public:
-    ICA() : SubPattern("ICA") {
+    ICA() : SubPattern("ICA", 3) {
         g.edge(1, 0) = Relation::Inheritance;
         g.edge(1, 2) = Relation::Association;
     }
 
-    const Graph &gcdr() const override { return g; }
-
-    Graph &gcdr() override { return g; }
-
     const SubPatternType type() const override {
         return SubPatternType::SPT_ICA;
-    }
-
-    void add(size_t u, size_t v, const size_t r) override {
-        auto &e = g.edge(u, v);
-        if (r % e)
-            return;
-        e = r;
     }
 };
 
 class CI : public SubPattern {
-    Graph g{3};
-
 public:
-    CI() : SubPattern("CI") {
+    CI() : SubPattern("CI", 3) {
         g.edge(1, 0) = Relation::Inheritance;
         g.edge(2, 0) = Relation::Inheritance;
     }
 
-    const Graph &gcdr() const override { return g; }
-
-    Graph &gcdr() override { return g; }
-
     const SubPatternType type() const override {
         return SubPatternType::SPT_CI;
-    }
-
-    void add(size_t u, size_t v, const size_t r) override {
-        auto &e = g.edge(u, v);
-        if (r % e)
-            return;
-        e = r;
     }
 };
 
 class IAGG : public SubPattern {
-    Graph g{2};
-
 public:
-    IAGG() : SubPattern("IAGG") {
+    IAGG() : SubPattern("IAGG", 2) {
         g.edge(0, 1) = Relation::Aggregation;
         g.edge(1, 0) = Relation::Inheritance;
     }
-
-    const Graph &gcdr() const override { return g; }
-
-    Graph &gcdr() override { return g; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_IAGG;
     }
 
-    void add(size_t u, size_t v, const size_t r) override {
-        auto &e = g.edge(u, v);
-        if (r % e)
-            return;
-        e = r;
-    }
 };
 
 class SASS : public SubPattern {
-    Graph g{1};
-
 public:
-    SASS() : SubPattern("SASS") { g.edge(0, 0) = Relation::Association; }
-
-    const Graph &gcdr() const override { return g; }
-
-    Graph &gcdr() override { return g; }
+    SASS() : SubPattern("SASS", 1) { g.edge(0, 0) = Relation::Association; }
 
     const SubPatternType type() const override {
         return SubPatternType::SPT_SASS;
     }
 
-    void add(size_t u, size_t v, const size_t r) override {
-        auto &e = g.edge(u, v);
-        if (r % e)
-            return;
-        e = r;
-    }
 };
 
 #endif  // !DPDT_SUB_PATTERN_H
