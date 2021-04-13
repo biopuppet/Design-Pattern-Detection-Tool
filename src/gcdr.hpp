@@ -45,6 +45,12 @@ struct Method {
     Visibility visibility;
     bool isAbstract;                // bit-mask?
     std::vector<Parameter> params;  // including return value
+
+    bool operator==(Method other) const { return name == other.name; }
+};
+
+struct MethodCmp {
+    bool operator()(Method a, Method b) { return a.name != b.name; }
 };
 
 struct Node {

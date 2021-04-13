@@ -17,6 +17,7 @@ public:
 
     void analyze();
     void analyze_proxy();
+    void behavoiral_check();
     void behavoiral_check_proxy();
 };
 
