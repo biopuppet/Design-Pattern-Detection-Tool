@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_5778B61A_3493_4e36_A11E_CC08C39681F7" name="Domain Model" visibility="public">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_6EC03686_C5FE_4a39_AFF7_428AB8A89C80" name="ConcreteElementA" visibility="public">
+				<ownedOperation xmi:id="EAID_27AB9721_BC4D_45fc_AB1B_C06733707EB2" name="accept" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_8AA08590_DAAF_4e12_906C_D58EEB50238F" name="visitor" type="EAC___Visitor_" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_BC4D_45fc_AB1B_C06733707EB2" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_7CE442E6_A0B3_40a4_BD6F_A6CD95520DC8" name="~ConcreteElementA" visibility="public" concurrency="sequential"/>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_3AEEEA88_6ABC_4f29_B779_F490F17DD06F" general="EAID_260BDC21_B570_455a_86B4_C7398E8245F7"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_E26D7665_EF91_47b9_B722_9391F04C2E66" visibility="public" supplier="EAID_F9F1905B_A3E2_4e81_A027_5B40578762A3" client="EAID_6EC03686_C5FE_4a39_AFF7_428AB8A89C80"/>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_E8AA25F3_EF61_4a34_8FE4_1B45957ED7E5" name="ConcreteElementB" visibility="public">
+				<ownedOperation xmi:id="EAID_215F10AC_98FB_4d52_A922_12EAE1D31C69" name="accept" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_3006D1E9_1463_4507_BF6E_8876D4C4A59A" name="visitor" type="EAC___Visitor_" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_98FB_4d52_A922_12EAE1D31C69" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_797366DB_584F_4cea_9903_E8A253169E26" name="~ConcreteElementB" visibility="public" concurrency="sequential"/>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_23540881_78C2_4463_B929_20B83B774F1F" general="EAID_260BDC21_B570_455a_86B4_C7398E8245F7"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_5F4B538F_C6D4_4384_96BF_667877E45D13" visibility="public" supplier="EAID_F9F1905B_A3E2_4e81_A027_5B40578762A3" client="EAID_E8AA25F3_EF61_4a34_8FE4_1B45957ED7E5"/>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_AAD2AC9E_D542_4e77_BEC3_BE81FAEC8147" name="ConcreteVisitor1" visibility="public">
+				<ownedOperation xmi:id="EAID_52097918_D48F_44e1_9AF2_A1BDB2EA1138" name="~ConcreteVisitor1" visibility="public" concurrency="sequential"/>
+				<ownedOperation xmi:id="EAID_DCA2D532_225E_476c_8ABB_E3A5323BEAFA" name="visitElementA" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_210769D9_CA68_4adb_B425_701C7D983598" name="prm1" type="EAC___ConcreteElementA__const" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_225E_476c_8ABB_E3A5323BEAFA" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_62685410_02B0_41d2_B1F2_BED49B2954B1" name="visitElementB" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_2EA0E385_C722_4edc_9674_8405732FEFE6" name="prm1" type="EAC___ConcreteElementB__const" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_02B0_41d2_B1F2_BED49B2954B1" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_8715B7F7_17D6_451a_8898_E3A26B0B7A90" general="EAID_F9F1905B_A3E2_4e81_A027_5B40578762A3"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_FDDD281A_A512_4c7c_A195_2BC0FE0B3EC5" name="ConcreteVisitor2" visibility="public">
+				<ownedOperation xmi:id="EAID_638D6CD9_6B3F_4155_B6CE_DEC10C97D018" name="~ConcreteVisitor2" visibility="public" concurrency="sequential"/>
+				<ownedOperation xmi:id="EAID_BBF25EE9_B4AE_47bc_A445_616BEB8C0313" name="visitElementA" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_0737111B_A8C6_4a94_B01A_628F81D2C22F" name="prm1" type="EAC___ConcreteElementA__const" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_B4AE_47bc_A445_616BEB8C0313" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_08F2B695_56D6_4e3a_8C0B_C3C506F948DF" name="visitElementB" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_DD724165_BF53_4ba8_B27A_9DE92BC53434" name="prm1" type="EAC___ConcreteElementB__const" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_56D6_4e3a_8C0B_C3C506F948DF" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_B677B598_2BA9_4768_96D4_9CD4684ED312" general="EAID_F9F1905B_A3E2_4e81_A027_5B40578762A3"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_260BDC21_B570_455a_86B4_C7398E8245F7" name="Element" visibility="public">
+				<ownedOperation xmi:id="EAID_250799CF_1FA1_4530_82BD_863910A63C22" name="accept" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_561324A8_F0C1_430f_A734_A4344DCA680C" name="visitor" type="EAC___Visitor_" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_1FA1_4530_82BD_863910A63C22" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_ED2BF35C_F92B_4588_B2F5_68A871C4DC9D" name="~Element" visibility="public" concurrency="sequential" isAbstract="true"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_92FB7F28_4123_49bd_9902_A6FD088BF8E3" visibility="public" supplier="EAID_F9F1905B_A3E2_4e81_A027_5B40578762A3" client="EAID_260BDC21_B570_455a_86B4_C7398E8245F7"/>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_F9F1905B_A3E2_4e81_A027_5B40578762A3" name="Visitor" visibility="public">
+				<ownedOperation xmi:id="EAID_66A9697F_AA2C_484e_9C63_FB280F86D207" name="visitElementA" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_32A560B6_BBD4_4c83_B462_8A9027DE7315" name="element" type="EAC___ConcreteElementA__const" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_AA2C_484e_9C63_FB280F86D207" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_CDD9F412_1084_4fb8_9973_F8582D992648" name="visitElementB" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_264380C6_2001_4172_8933_C6493E6B4448" name="element" type="EAC___ConcreteElementB__const" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_1084_4fb8_9973_F8582D992648" name="return" type="EAC___void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_0AC11611_DD21_45c0_A6DA_457DD524BCE7" name="~Visitor" visibility="public" concurrency="sequential" isAbstract="true"/>
+			</packagedElement>
+		</packagedElement>
+		<thecustomprofile:bodyLocation base_Operation="EAID_27AB9721_BC4D_45fc_AB1B_C06733707EB2" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_7CE442E6_A0B3_40a4_BD6F_A6CD95520DC8" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_215F10AC_98FB_4d52_A922_12EAE1D31C69" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_797366DB_584F_4cea_9903_E8A253169E26" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_52097918_D48F_44e1_9AF2_A1BDB2EA1138" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_DCA2D532_225E_476c_8ABB_E3A5323BEAFA" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_62685410_02B0_41d2_B1F2_BED49B2954B1" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_638D6CD9_6B3F_4155_B6CE_DEC10C97D018" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_BBF25EE9_B4AE_47bc_A445_616BEB8C0313" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_08F2B695_56D6_4e3a_8C0B_C3C506F948DF" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_ED2BF35C_F92B_4588_B2F5_68A871C4DC9D" bodyLocation="classDec"/>
+		<thecustomprofile:bodyLocation base_Operation="EAID_0AC11611_DD21_45c0_A6DA_457DD524BCE7" bodyLocation="classDec"/>
+	</uml:Model>
+</xmi:XMI>
