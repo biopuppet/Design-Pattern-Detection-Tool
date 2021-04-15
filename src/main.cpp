@@ -1,16 +1,20 @@
 #include <iostream>
-#include <getopt.h>
+#include <string>
 
+#include "argh.h"
 #include "pugixml.hpp"
 #include "gcdr.hpp"
 #include "parser.hpp"
 #include "sp_detector.hpp"
 #include "pattern_analyzer.hpp"
 
+static std::string pattern;
+static std::string xmi_file;
+
 static void print_usage(const char *argv0) {
     printf("Usage: %s [option...] [XMI file]\n"
            "Options:\n"
-           " -p <adapter/...>  Select which design pattern to be matched.\n"
+           " -p <adapter/...>  Select which design pattern to match.\n"
            " --dump-gcdr       Dump Graph graph.\n"
            " -h, --help        Display this information.\n"
            " --version         Display version.\n",
@@ -23,50 +27,49 @@ static void print_version() {
 }
 
 static int parse(int argc, char *argv[]) {
-    while (1) {
-        static const struct option long_options[] = {
-            {.name = "version", .has_arg = 0, .flag = nullptr, .val = 'v'},
-            {.name = "help", .has_arg = 0, .flag = nullptr, .val = 'h'},
-            {.name = "pattern", .has_arg = 1, .flag = nullptr, .val = 'p'},
-            {nullptr},
-        };
-        int c = getopt_long(argc, argv, "vhp:", long_options, NULL);
-        if (c == -1)
-            break;
-        switch (c) {
-        case 'v':
-            print_version();
-            return 1;
-        case 'p':
-            // Add pattern support
-            break;
-        default:  // 'help'
-            print_usage(argv[0]);
-            return 1;
-        }
+    argh::parser cmdl({"-v", "--version", "-h", "--help", "-p"});
+    cmdl.parse(argc, argv,
+               argh::parser::PREFER_PARAM_FOR_UNREG_OPTION);
+
+    if (cmdl[{"-v", "--version"}]) {
+        print_version();
+        return 2;
     }
+    else if (cmdl[{"-h", "--help"}]) {
+        print_usage(argv[0]);
+        return 1;
+    }
+
+    else {
+        auto p = cmdl("-p");
+        p >> pattern;
+    }
+
+    if (cmdl.pos_args().size() <= 1) {
+        fputs("No input XMI file.\n", stderr);
+        return -1;
+    }
+
+    /* TODO: Add multi xmi file support? */
+    for (auto &pos_arg : cmdl) {
+        xmi_file = pos_arg;
+    }
+
     return 0;
 }
 
 int main(int argc, char **argv) {
-    const char *xmi_file = nullptr;
-    if (argc > 1)
-        xmi_file = argv[argc - 1];
-    else {
-        std::cerr << "No XMI file!\n";
-    }
-
     if (parse(argc, argv))
         return 0;
 
     XMIParser parser;
-    Graph system = parser.parse(xmi_file);
+    Graph system = parser.parse(xmi_file.c_str());
 
     SubPatternDetector spd{system};
     spd.detect_all();
 
     PatternAnalyzer pattern_analyzer{spd};
-    pattern_analyzer.analyze();
+    pattern_analyzer.analyze(pattern);
 
     return 0;
 }

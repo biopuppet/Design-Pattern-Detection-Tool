@@ -6,8 +6,11 @@
 #include "sfm.hpp"
 #include "pattern_analyzer.hpp"
 
-void PatternAnalyzer::analyze() {
+void PatternAnalyzer::analyze(const std::string &pattern) {
     analyze_proxy();
+    analyze_adapter();
+    // analyze_composite();
+    analyze_visitor();
     // std::cout << proxys.size() << std::endl;
     behavoiral_check();
 }
@@ -45,10 +48,17 @@ void PatternAnalyzer::analyze_adapter() {
             }
         }
         adapters.emplace_back(sys[ica[0]], sys[ica[1]], sys[ica[2]]);
+        std::cout << "adapter!\n";
     }
 }
 
-void PatternAnalyzer::analyze_composite() {}
+void PatternAnalyzer::analyze_composite() {
+    std::cout << "composite!\n";
+}
+
+void PatternAnalyzer::analyze_visitor() {
+    std::cout << "visitor!\n";
+}
 
 void PatternAnalyzer::behavoiral_check_proxy() {
     for (const auto &proxy : proxys) {

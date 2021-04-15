@@ -18,7 +18,7 @@ public:
     PatternAnalyzer(SubPatternDetector &spd)
         : sys(spd.system), spis(spd.spis) {}
 
-    void analyze();
+    void analyze(const std::string &pattern);
     void analyze_proxy();
     void analyze_adapter();
     void analyze_composite();
