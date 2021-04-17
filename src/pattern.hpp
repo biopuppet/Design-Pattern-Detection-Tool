@@ -85,10 +85,12 @@ public:
     Node &concrete_elem;
     Node &concrete_visitor;
 
+    Node *object_struct;
+
     Visitor(Node &e,
           Node &v,
-          Node &ce, Node &cv)
-        : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv) {}
+          Node &ce, Node &cv, Node *os = nullptr)
+        : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv), object_struct(os) {}
 };
 
 #endif  // !DPDT_PATTERN_H

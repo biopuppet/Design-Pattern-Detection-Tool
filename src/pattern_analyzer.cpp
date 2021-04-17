@@ -100,6 +100,24 @@ void PatternAnalyzer::analyze_composite() {
 
 void PatternAnalyzer::analyze_visitor() {
     // std::cout << "visitor!\n";
+    for (const auto &icd : spis[SPT_ICD]) {
+        for (const auto &dpi : spis[SPT_DPI]) {
+            if (icd[0] == dpi[0] && icd[1] == dpi[1] &&
+                icd[2] != dpi[2]
+                // visitor --> concrete element
+                && sys.edge(dpi[0], icd[2]) % Relation::Dependency == 0
+                // concrete element --> visitor
+                && sys.edge(icd[2], dpi[0]) % Relation::Dependency == 0
+                // concrete element --|> element
+                && sys.edge(icd[2], dpi[2]) % Relation::Inheritance == 0) {
+                visitors.emplace_back(sys[dpi[2]], sys[dpi[0]], sys[icd[2]],
+                                      sys[dpi[1]]);
+                printf("visitor: (%s %s %s %s)\n", sys[dpi[2]].name.c_str(),
+                       sys[dpi[0]].name.c_str(), sys[icd[2]].name.c_str(),
+                       sys[dpi[1]].name.c_str());
+            }
+        }
+    }
 }
 
 bool PatternAnalyzer::behavoiral_check(const Proxy &proxy) {
