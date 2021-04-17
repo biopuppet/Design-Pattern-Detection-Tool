@@ -28,8 +28,7 @@ static void print_version() {
 
 static int parse(int argc, char *argv[]) {
     argh::parser cmdl({"-v", "--version", "-h", "--help", "-p"});
-    cmdl.parse(argc, argv,
-               argh::parser::PREFER_PARAM_FOR_UNREG_OPTION);
+    cmdl.parse(argc, argv, argh::parser::PREFER_PARAM_FOR_UNREG_OPTION);
 
     if (cmdl[{"-v", "--version"}]) {
         print_version();

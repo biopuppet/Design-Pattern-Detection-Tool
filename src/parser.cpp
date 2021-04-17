@@ -85,12 +85,12 @@ void XMIParser::parse_class(pugi::xml_node cur, Graph &gcdr) {
     }
 }
 
-static void add_global_relation(pugi::xml_node &node, Graph &gcdr, Relation relation)
-{
+static void
+add_global_relation(pugi::xml_node &node, Graph &gcdr, Relation relation) {
     auto client = node.attribute("client").value();
     auto supplier = node.attribute("supplier").value();
-    auto &e = gcdr.edge(node_map[xml_nodes[client]],
-                                node_map[xml_nodes[supplier]]);
+    auto &e =
+        gcdr.edge(node_map[xml_nodes[client]], node_map[xml_nodes[supplier]]);
     e *= relation;
 }
 

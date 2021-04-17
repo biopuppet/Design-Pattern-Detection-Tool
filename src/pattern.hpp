@@ -1,16 +1,39 @@
-#ifndef DPDT_SFM_H
-#define DPDT_SFM_H
-
-#include <vector>
+#ifndef DPDT_PATTERN_H
+#define DPDT_PATTERN_H
 
 #include "gcdr.hpp"
-#include "sub_pattern.hpp"
 
-class SFM {
+enum PatternType {
+    PT_Adapter = 0,
+    PT_Proxy,
+    PT_Composite,
+    PT_Decorator,
+    PT_Bridge,
+    PT_Flyweight,
+    PT_Facade,
+    PT_AbstractFactory,
+    PT_Builder,
+    PT_Factory,
+    PT_Prototype,
+    PT_Singleton,
+    PT_CoR, // Chain of Responsibility
+    PT_Command,
+    PT_Interpreter,
+    PT_Iterator,
+    PT_Mediator,
+    PT_Memento,
+    PT_Observer,
+    PT_State,
+    PT_Strategy,
+    PT_Template,
+    PT_Visitor,
+};
+
+class Pattern {
 public:
 };
 
-class Proxy : public SFM {
+class Proxy : public Pattern {
 public:
     // Q: Why not Graph/size_t/...?
     // A: On this level(Behavorial Analysis and further), we care nothing but
@@ -38,7 +61,7 @@ public:
           real_subject_request(rsr), proxy_request(pr) {}
 };
 
-class Adapter : public SFM {
+class Adapter : public Pattern {
 public:
     Node &target;
     Node &adapter;
@@ -59,4 +82,4 @@ public:
           adaptee_specific_request(asr) {}
 };
 
-#endif  // !DPDT_SFM_H
+#endif  // !DPDT_PATTERN_H

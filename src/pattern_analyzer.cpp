@@ -2,8 +2,6 @@
 #include <algorithm>
 
 #include "gcdr.hpp"
-#include "sp_detector.hpp"
-#include "sfm.hpp"
 #include "pattern_analyzer.hpp"
 
 void PatternAnalyzer::analyze(const std::string &pattern) {
@@ -52,13 +50,9 @@ void PatternAnalyzer::analyze_adapter() {
     }
 }
 
-void PatternAnalyzer::analyze_composite() {
-    std::cout << "composite!\n";
-}
+void PatternAnalyzer::analyze_composite() { std::cout << "composite!\n"; }
 
-void PatternAnalyzer::analyze_visitor() {
-    std::cout << "visitor!\n";
-}
+void PatternAnalyzer::analyze_visitor() { std::cout << "visitor!\n"; }
 
 void PatternAnalyzer::behavoiral_check_proxy() {
     for (const auto &proxy : proxys) {

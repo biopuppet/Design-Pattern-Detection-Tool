@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "sp_detector.hpp"
-#include "sfm.hpp"
+#include "pattern.hpp"
 
 class PatternAnalyzer {
     Graph &sys;
