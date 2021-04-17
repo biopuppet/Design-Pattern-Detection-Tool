@@ -1,0 +1,33 @@
+/**
+ * Copyright (C) 2020 Liu Fengbo <biopuppet@outlook.com>
+ */
+
+#ifndef PATTERN
+#define PATTERN(X)
+#endif
+
+PATTERN(adapter)
+PATTERN(proxy)
+// PATTERN(composite)
+// PATTERN(decorator)
+// PATTERN(bridge)
+// PATTERN(flyweight)
+// PATTERN(facade)
+// PATTERN(abstract_factory)
+// PATTERN(builder)
+// PATTERN(factory)
+// PATTERN(prototype)
+// PATTERN(singleton)
+// PATTERN(chain_of_responsibility)
+// PATTERN(command)
+// PATTERN(interpreter)
+// PATTERN(iterator)
+// PATTERN(mediator)
+// PATTERN(memento)
+// PATTERN(observer)
+// PATTERN(state)
+// PATTERN(strategy)
+// PATTERN(template)
+PATTERN(visitor)
+
+#undef PATTERN

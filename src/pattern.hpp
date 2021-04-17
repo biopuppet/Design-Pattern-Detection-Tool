@@ -4,29 +4,8 @@
 #include "gcdr.hpp"
 
 enum PatternType {
-    PT_Adapter = 0,
-    PT_Proxy,
-    PT_Composite,
-    PT_Decorator,
-    PT_Bridge,
-    PT_Flyweight,
-    PT_Facade,
-    PT_AbstractFactory,
-    PT_Builder,
-    PT_Factory,
-    PT_Prototype,
-    PT_Singleton,
-    PT_CoR, // Chain of Responsibility
-    PT_Command,
-    PT_Interpreter,
-    PT_Iterator,
-    PT_Mediator,
-    PT_Memento,
-    PT_Observer,
-    PT_State,
-    PT_Strategy,
-    PT_Template,
-    PT_Visitor,
+#define PATTERN(x) PT_##x,
+#include "pattern.def"
 };
 
 class Pattern {
