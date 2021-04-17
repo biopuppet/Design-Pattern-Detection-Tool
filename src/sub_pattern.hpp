@@ -25,10 +25,12 @@ enum SubPatternType {
 
 class SubPattern {
 public:
-    const std::string name;
+    const std::string n;
     Graph g;
 
-    SubPattern(const char *s, size_t n) : name(s), g(n) {}
+    SubPattern(const char *name, size_t size) : n(name), g(size) {}
+
+    const char *name() const { return n.c_str(); }
 
     virtual ~SubPattern() {}
 

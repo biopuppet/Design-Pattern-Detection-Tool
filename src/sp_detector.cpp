@@ -48,7 +48,7 @@ void SubPatternDetector::combine_cv_1(const SubPattern &subp,
         if (system.edge(vd, vd) % sp_e) {
             continue;
         }
-        printf("identified sub-pattern(%lu)\n", vd);
+        printf("identified %s(%lu)\n", subp.name(), vd);
         spis[subp.type()].push_back({vd});
     }
 }
@@ -64,7 +64,7 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
                 system.edge(vd2, vd1) % sp_e2) {
                 continue;
             }
-            printf("identified sub-pattern(%lu %lu)\n", vd1, vd2);
+            printf("identified %s(%lu %lu)\n", subp.name(), vd1, vd2);
             spis[subp.type()].push_back({vd1, vd2});
         }
     }
@@ -91,7 +91,7 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                     system.edge(vd3, vd2) % sp_es[5]) {
                     continue;
                 }
-                printf("identified sub-pattern(%lu %lu %lu)\n", vd1, vd2, vd3);
+                printf("identified %s(%lu %lu %lu)\n", subp.name(), vd1, vd2, vd3);
                 spis[subp.type()].push_back({vd1, vd2, vd3});
             }
         }
@@ -103,7 +103,7 @@ void SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
     auto sp_num = gcdr.size();
     CandidateVertexList cvs(sp_num);
 
-    std::cout << sp.name << std::endl;
+    // std::cout << sp.name() << std::endl;
 
     for (size_t i = 0; i < sp_num; ++i) {
         for (size_t j = 0; j < system.size(); ++j) {
@@ -117,13 +117,13 @@ void SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
         }
     }
 
-    for (int i = 0; i < cvs.size(); ++i) {
-        std::cout << "cvs[" << i << "]: ";
-        for (auto v : cvs[i]) {
-            std::cout << v << " ";
-        }
-        std::cout << "\n";
-    }
+    // for (int i = 0; i < cvs.size(); ++i) {
+    //     std::cout << "cvs[" << i << "]: ";
+    //     for (auto v : cvs[i]) {
+    //         std::cout << v << " ";
+    //     }
+    //     std::cout << "\n";
+    // }
 
     switch (sp_num) {
     case 1:
@@ -140,6 +140,4 @@ void SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
                   << " vertices isn't supported.\n";
         break;
     }
-
-    std::cout << "\n";
 }
