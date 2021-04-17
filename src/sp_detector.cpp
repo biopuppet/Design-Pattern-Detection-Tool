@@ -91,7 +91,8 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                     system.edge(vd3, vd2) % sp_es[5]) {
                     continue;
                 }
-                printf("identified %s(%lu %lu %lu)\n", subp.name(), vd1, vd2, vd3);
+                printf("identified %s(%lu %lu %lu)\n", subp.name(), vd1, vd2,
+                       vd3);
                 spis[subp.type()].push_back({vd1, vd2, vd3});
             }
         }

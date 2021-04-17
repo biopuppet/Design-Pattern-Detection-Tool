@@ -75,7 +75,7 @@ public:
 class IAGG : public SubPattern {
 public:
     IAGG() : SubPattern("IAGG", 2) {
-        g.edge(0, 1) = Relation::Aggregation;
+        g.edge(1, 0) = Relation::Aggregation;
         g.edge(1, 0) = Relation::Inheritance;
     }
 
@@ -88,7 +88,7 @@ class IPAG : public SubPattern {
 public:
     IPAG() : SubPattern("IPAG", 3) {
         g.edge(1, 0) = Relation::Inheritance;
-        g.edge(2, 0) = Relation::Aggregation;
+        g.edge(0, 2) = Relation::Aggregation;
     }
 
     const SubPatternType type() const override {
@@ -134,7 +134,7 @@ public:
     IIAGG() : SubPattern("IIAGG", 3) {
         g.edge(1, 0) = Relation::Inheritance;
         g.edge(2, 1) = Relation::Inheritance;
-        g.edge(0, 2) = Relation::Aggregation;
+        g.edge(2, 0) = Relation::Aggregation;
     }
 
     const SubPatternType type() const override {
@@ -189,7 +189,7 @@ public:
 class AGPI : public SubPattern {
 public:
     AGPI() : SubPattern("AGPI", 3) {
-        g.edge(0, 2) = Relation::Aggregation;
+        g.edge(2, 0) = Relation::Aggregation;
         g.edge(1, 0) = Relation::Inheritance;
     }
 

@@ -71,7 +71,8 @@ void PatternAnalyzer::analyze_adapter() {
                 break;
             }
         }
-        if (proxy_flag) continue;
+        if (proxy_flag)
+            continue;
         adapters.emplace_back(sys[ica[0]], sys[ica[1]], sys[ica[2]]);
         std::cout << "adapter!\n";
     }
@@ -79,7 +80,11 @@ void PatternAnalyzer::analyze_adapter() {
 
 void PatternAnalyzer::analyze_composite() { std::cout << "composite!\n"; }
 
-void PatternAnalyzer::analyze_visitor() { std::cout << "visitor!\n"; }
+void PatternAnalyzer::analyze_visitor() { 
+
+
+    // std::cout << "visitor!\n";
+}
 
 bool PatternAnalyzer::behavoiral_check(const Proxy &proxy) {
     // Looking for 3 identical method signature

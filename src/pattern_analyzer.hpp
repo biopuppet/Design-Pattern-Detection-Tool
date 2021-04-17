@@ -25,9 +25,9 @@ public:
 
     void analyze(const std::string &pattern);
 
-    // typedef void (*analyze_pattern)();
-    #define PATTERN(x) void analyze_##x();
-    #include "pattern.def"
+// typedef void (*analyze_pattern)();
+#define PATTERN(x) void analyze_##x();
+#include "pattern.def"
 
     void behavoiral_check();
     bool behavoiral_check(const Proxy &p);

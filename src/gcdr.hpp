@@ -11,7 +11,7 @@ enum Relation {
     None = 1,
     Association = 2,
     Inheritance = 3,
-    Aggregation = 5,
+    Aggregation = 2,
     Dependency = 7,
 };
 
