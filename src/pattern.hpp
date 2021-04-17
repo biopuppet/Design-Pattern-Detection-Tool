@@ -40,6 +40,22 @@ public:
           real_subject_request(rsr), proxy_request(pr) {}
 };
 
+class Composite : public Pattern {
+public:
+    Node &component;
+    Node &composite;
+    Node &leaf;
+
+    Method *operation;
+    Method *add; // optional
+    Method *remove; // optional
+
+    Composite(Node &s,
+          Node &rs,
+          Node &p)
+        : component(s), composite(rs), leaf(p) {}
+};
+
 class Adapter : public Pattern {
 public:
     Node &target;
@@ -59,6 +75,20 @@ public:
         : target(target), adapter(adapter), adaptee(adaptee),
           target_request(tr), adapter_request(ar),
           adaptee_specific_request(asr) {}
+};
+
+
+class Visitor : public Pattern {
+public:
+    Node &element;
+    Node &visitor;
+    Node &concrete_elem;
+    Node &concrete_visitor;
+
+    Visitor(Node &e,
+          Node &v,
+          Node &ce, Node &cv)
+        : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv) {}
 };
 
 #endif  // !DPDT_PATTERN_H

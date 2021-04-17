@@ -23,6 +23,10 @@ enum SubPatternType {
     SPT_NUM,
 };
 
+/**
+ * Note: If there are multiple edges,
+ *  use multiplication instead of multi assignment, like IAGG, IASS.
+ */
 class SubPattern {
 public:
     const std::string n;
@@ -75,8 +79,7 @@ public:
 class IAGG : public SubPattern {
 public:
     IAGG() : SubPattern("IAGG", 2) {
-        g.edge(1, 0) = Relation::Aggregation;
-        g.edge(1, 0) = Relation::Inheritance;
+        g.edge(1, 0) = Relation::Aggregation * Relation::Inheritance;
     }
 
     const SubPatternType type() const override {

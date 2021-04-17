@@ -78,11 +78,27 @@ void PatternAnalyzer::analyze_adapter() {
     }
 }
 
-void PatternAnalyzer::analyze_composite() { std::cout << "composite!\n"; }
+void PatternAnalyzer::analyze_composite() {
+    for (const auto &ci : spis[SPT_CI]) {
+        for (const auto &iagg : spis[SPT_IAGG]) {
+            if (ci[0] == iagg[0] && ci[2] == iagg[1]) {
+                composites.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]]);
+                std::cout << "composite!\n";
+            }
+        }
+    }
+    // deterio
+    for (const auto &ci : spis[SPT_CI]) {
+        for (const auto &iass : spis[SPT_IASS]) {
+            if (ci[0] == iass[0] && ci[2] == iass[1]) {
+                composites.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]]);
+                std::cout << "composite!\n";
+            }
+        }
+    }
+}
 
-void PatternAnalyzer::analyze_visitor() { 
-
-
+void PatternAnalyzer::analyze_visitor() {
     // std::cout << "visitor!\n";
 }
 

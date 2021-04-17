@@ -17,7 +17,9 @@ class PatternAnalyzer {
     PatternType pp;
 
     std::vector<Proxy> proxys;
+    std::vector<Composite> composites;
     std::vector<Adapter> adapters;
+    std::vector<Visitor> visitors;
 
 public:
     PatternAnalyzer(SubPatternDetector &spd)

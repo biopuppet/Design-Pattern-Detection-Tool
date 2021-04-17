@@ -3,7 +3,6 @@
 #include <map>
 #include <string>
 #include <cstring>
-// #include <boost/graph/adjacency_matrix.hpp>
 
 #include "pugixml.hpp"
 #include "parser.hpp"
@@ -39,7 +38,7 @@ struct simple_walker : pugi::xml_tree_walker {
     }
 };
 
-Parameter XMIParser::parse_parameter(pugi::xml_node cur) {
+Parameter XMIParser::parse_parameter(pugi::xml_node &cur) {
     Parameter node;
     node.id = cur.attribute("xmi:id").value();
     node.name = cur.attribute("name").value();
@@ -49,7 +48,7 @@ Parameter XMIParser::parse_parameter(pugi::xml_node cur) {
     return node;
 }
 
-Method XMIParser::parse_operation(pugi::xml_node cur) {
+Method XMIParser::parse_operation(pugi::xml_node &cur) {
     Method node;
     node.id = cur.attribute("xmi:id").value();
     node.name = cur.attribute("name").value();
@@ -61,7 +60,7 @@ Method XMIParser::parse_operation(pugi::xml_node cur) {
     return node;
 }
 
-void XMIParser::parse_class(pugi::xml_node cur, Graph &gcdr) {
+void XMIParser::parse_class(pugi::xml_node &cur, Graph &gcdr) {
     // multi inheritance ignored
     auto &node = gcdr.node(node_map[cur]);
     for (auto &child : cur.children()) {
@@ -85,10 +84,15 @@ void XMIParser::parse_class(pugi::xml_node cur, Graph &gcdr) {
     }
 }
 
-static void
-add_global_relation(pugi::xml_node &node, Graph &gcdr, Relation relation) {
+void XMIParser::add_global_relation(pugi::xml_node &node,
+                                    Graph &gcdr,
+                                    Relation relation) {
     auto client = node.attribute("client").value();
     auto supplier = node.attribute("supplier").value();
+    // std::cout << xml_nodes[client].name() << std::endl;
+    // std::cout << xml_nodes[supplier].name() << std::endl;
+    // std::cout << node_map[xml_nodes[client]] << std::endl;
+    // std::cout << node_map[xml_nodes[supplier]] << std::endl;
     auto &e =
         gcdr.edge(node_map[xml_nodes[client]], node_map[xml_nodes[supplier]]);
     e *= relation;
