@@ -10,7 +10,12 @@ const PatternMap PatternAnalyzer::pattern_map = {
 };
 
 void PatternAnalyzer::analyze(const std::string &pattern) {
-    if (!pattern_map.count(pattern)) {
+    if (pattern.empty()) {
+#define PATTERN(x) analyze_##x();
+#include "pattern.def"
+        return;
+    }
+    else if (!pattern_map.count(pattern)) {
         std::cerr << "Unknow pattern name " << pattern << std::endl;
         return;
     }
@@ -58,11 +63,15 @@ void PatternAnalyzer::analyze_proxy() {
 
 void PatternAnalyzer::analyze_adapter() {
     for (const auto &ica : spis[SPT_ICA]) {
+        bool proxy_flag = false;
         for (const auto &ci : spis[SPT_CI]) {
             if (ica[0] == ci[0] && ica[1] == ci[1] && ica[2] == ci[2]) {
-                return;
+                // CI && ICA, same as Proxy
+                proxy_flag = true;
+                break;
             }
         }
+        if (proxy_flag) continue;
         adapters.emplace_back(sys[ica[0]], sys[ica[1]], sys[ica[2]]);
         std::cout << "adapter!\n";
     }

@@ -25,17 +25,13 @@ public:
 
     void analyze(const std::string &pattern);
 
-    typedef void (*analyze_pattern)();
-    void analyze_proxy();
-    void analyze_adapter();
-    void analyze_composite();
-    void analyze_singleton();
-    void analyze_command();
-    void analyze_memento();
-    void analyze_visitor();
+    // typedef void (*analyze_pattern)();
+    #define PATTERN(x) void analyze_##x();
+    #include "pattern.def"
 
     void behavoiral_check();
-    bool behavoiral_check(const Proxy &proxy);
+    bool behavoiral_check(const Proxy &p);
+    // bool behavoiral_check(const Visitor &p);
 
     static const PatternMap pattern_map;
 };
