@@ -63,37 +63,21 @@ void PatternAnalyzer::analyze_proxy() {
 
 void PatternAnalyzer::analyze_adapter() {
     for (const auto &ica : spis[SPT_ICA]) {
-        bool proxy_flag = false;
-        for (const auto &ci : spis[SPT_CI]) {
-            if (ica[0] == ci[0] && ica[1] == ci[1] && ica[2] == ci[2]) {
-                // CI && ICA, same as Proxy
-                proxy_flag = true;
-                break;
-            }
+        if (!sys.hasInheritance(ica[2], ica[0])) {
+            // CI && ICA, same as Proxy
+            adapters.emplace_back(sys[ica[0]], sys[ica[1]], sys[ica[2]]);
+            printf("Adapter: (%s, %s, %s)\n", sys[ica[0]].name(),
+                   sys[ica[1]].name(), sys[ica[2]].name());
         }
-        if (proxy_flag)
-            continue;
-        adapters.emplace_back(sys[ica[0]], sys[ica[1]], sys[ica[2]]);
-        std::cout << "adapter!\n";
     }
 }
 
 void PatternAnalyzer::analyze_composite() {
     for (const auto &ci : spis[SPT_CI]) {
-        for (const auto &iagg : spis[SPT_IAGG]) {
-            if (ci[0] == iagg[0] && ci[2] == iagg[1]) {
-                composites.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]]);
-                std::cout << "composite!\n";
-            }
-        }
-    }
-    // deterio
-    for (const auto &ci : spis[SPT_CI]) {
-        for (const auto &iass : spis[SPT_IASS]) {
-            if (ci[0] == iass[0] && ci[2] == iass[1]) {
-                composites.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]]);
-                std::cout << "composite!\n";
-            }
+        if (sys.hasAssOrAgg(ci[2], ci[0])) {
+            composites.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]]);
+            printf("Composite: (%s, %s, %s)\n", sys[ci[0]].name(),
+                   sys[ci[1]].name(), sys[ci[2]].name());
         }
     }
 }
