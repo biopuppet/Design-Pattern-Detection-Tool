@@ -121,19 +121,12 @@ public:
     Method *operation;
 
     Flyweight(Node &factory,
-           Node &flyweight,
-           Node &concrete_flyweight,
-           Node &unshared_concrete_flyweight)
-        : m_factory(factory),
-          m_flyweight(flyweight),
+              Node &flyweight,
+              Node &concrete_flyweight,
+              Node &unshared_concrete_flyweight)
+        : m_factory(factory), m_flyweight(flyweight),
           m_concrete_flyweight(concrete_flyweight),
           m_unshared_concrete_flyweight(unshared_concrete_flyweight) {}
-
-    Flyweight(Graph &g, size_t factory,
-           size_t flyweight,
-           size_t concrete_flyweight,
-           size_t unshared_concrete_flyweight)
-        : Flyweight(g[factory], g[flyweight], g[concrete_flyweight], g[unshared_concrete_flyweight]) {}
 };
 
 class Visitor : public Pattern {
