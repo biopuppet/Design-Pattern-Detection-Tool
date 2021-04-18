@@ -21,6 +21,7 @@ class PatternAnalyzer {
     std::vector<Adapter> adapters;
     std::vector<Visitor> visitors;
     std::vector<Decorator> decorators;
+    std::vector<Bridge> bridges;
 
 public:
     PatternAnalyzer(SubPatternDetector &spd)

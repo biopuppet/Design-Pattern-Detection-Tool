@@ -85,6 +85,29 @@ public:
           decorator(decorator), concrete_decorator(concrete_decorator) {}
 };
 
+/**
+ * IPAG(2) & CI(0)
+ */
+class Bridge : public Pattern {
+public:
+    Node &m_abstraction;
+    Node &m_refined_abstraction;
+    Node &m_implementor;
+    Node &m_concrete_implementor1;
+    Node &m_concrete_implementor2;
+
+    Bridge(Node &abstraction,
+           Node &refined_abstraction,
+           Node &implementor,
+           Node &concrete_implementor1,
+           Node &concrete_implementor2)
+        : m_abstraction(abstraction),
+          m_refined_abstraction(refined_abstraction),
+          m_implementor(implementor),
+          m_concrete_implementor1(concrete_implementor1),
+          m_concrete_implementor2(concrete_implementor2) {}
+};
+
 class Visitor : public Pattern {
 public:
     Node &element;

@@ -97,6 +97,21 @@ void PatternAnalyzer::analyze_decorator() {
     }
 }
 
+void PatternAnalyzer::analyze_bridge() {
+    for (const auto &ci : spis[SPT_CI]) {
+        for (const auto &ipag : spis[SPT_IPAG]) {
+            if (ipag[2] == ci[0] && ipag[1] != ci[2] && ipag[2] != ci[1] &&
+                ci[1] != ipag[1] && ci[2] != ipag[2]) {
+                bridges.emplace_back(sys[ipag[0]], sys[ipag[1]], sys[ipag[2]],
+                                     sys[ci[1]], sys[ci[2]]);
+                printf("Bridge: (%s, %s, %s, %s, %s)\n", sys[ipag[0]].name(),
+                       sys[ipag[1]].name(), sys[ipag[2]].name(),
+                       sys[ci[1]].name(), sys[ci[2]].name());
+            }
+        }
+    }
+}
+
 void PatternAnalyzer::analyze_visitor() {
     // std::cout << "visitor!\n";
     for (const auto &icd : spis[SPT_ICD]) {
