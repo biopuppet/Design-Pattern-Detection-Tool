@@ -112,6 +112,20 @@ void PatternAnalyzer::analyze_bridge() {
     }
 }
 
+void PatternAnalyzer::analyze_flyweight() {
+    for (const auto &ci : spis[SPT_CI]) {
+        for (const auto &agpi : spis[SPT_AGPI]) {
+            if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
+                flyweights.emplace_back(agpi[0], agpi[1], agpi[2],
+                                     ci[1], ci[2]);
+                printf("Flyweight: (%s, %s, %s, %s, %s)\n", sys[agpi[0]].name(),
+                       sys[agpi[1]].name(), sys[agpi[2]].name(),
+                       sys[ci[1]].name(), sys[ci[2]].name());
+            }
+        }
+    }
+}
+
 void PatternAnalyzer::analyze_visitor() {
     // std::cout << "visitor!\n";
     for (const auto &icd : spis[SPT_ICD]) {

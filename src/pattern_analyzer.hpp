@@ -22,6 +22,7 @@ class PatternAnalyzer {
     std::vector<Visitor> visitors;
     std::vector<Decorator> decorators;
     std::vector<Bridge> bridges;
+    std::vector<Flyweight> flyweights;
 
 public:
     PatternAnalyzer(SubPatternDetector &spd)

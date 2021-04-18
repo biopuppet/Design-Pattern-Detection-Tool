@@ -108,6 +108,34 @@ public:
           m_concrete_implementor2(concrete_implementor2) {}
 };
 
+/**
+ * AGPI(0,1) & CI(0,1)
+ */
+class Flyweight : public Pattern {
+public:
+    Node &m_factory;
+    Node &m_flyweight;
+    Node &m_concrete_flyweight;
+    Node &m_unshared_concrete_flyweight;
+
+    Method *operation;
+
+    Flyweight(Node &factory,
+           Node &flyweight,
+           Node &concrete_flyweight,
+           Node &unshared_concrete_flyweight)
+        : m_factory(factory),
+          m_flyweight(flyweight),
+          m_concrete_flyweight(concrete_flyweight),
+          m_unshared_concrete_flyweight(unshared_concrete_flyweight) {}
+
+    Flyweight(Graph &g, size_t factory,
+           size_t flyweight,
+           size_t concrete_flyweight,
+           size_t unshared_concrete_flyweight)
+        : Flyweight(g[factory], g[flyweight], g[concrete_flyweight], g[unshared_concrete_flyweight]) {}
+};
+
 class Visitor : public Pattern {
 public:
     Node &element;
