@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_9F7BB4D0_0357_4fd0_9CBD_B82EA1F574F0" name="decorator" visibility="public">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_45E19BC8_BECD_4584_AA9B_C70C07E1680F" name="Component" visibility="public" isAbstract="true">
+				<ownedOperation xmi:id="EAID_34E656FA_4655_4ba7_B563_E46057B70EC1" name="operation" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_RT000000_4655_4ba7_B563_E46057B70EC1" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_A32F23AA_C610_4950_82F3_7B6D15D67B4D" visibility="public">
+				<memberEnd xmi:idref="EAID_dst2F23AA_C610_4950_82F3_7B6D15D67B4D"/>
+				<memberEnd xmi:idref="EAID_src2F23AA_C610_4950_82F3_7B6D15D67B4D"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_src2F23AA_C610_4950_82F3_7B6D15D67B4D" visibility="public" association="EAID_A32F23AA_C610_4950_82F3_7B6D15D67B4D" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_E5B45F4F_2EC1_414f_B5BE_D51BCFAF5721"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_75510B4E_00B8_476d_8831_25B6B18EF27D" name="ConcreteComponent" visibility="public">
+				<ownedOperation xmi:id="EAID_BD64299E_F57C_448c_919B_9A97E70D2DA8" name="operation" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_F57C_448c_919B_9A97E70D2DA8" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_A074E30E_A99C_4018_8C5B_02D3ACA596B0" general="EAID_45E19BC8_BECD_4584_AA9B_C70C07E1680F"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_A72C27F2_C08B_4f57_B05B_6363D0F1A204" name="ConcreteDecoratorA" visibility="package">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_F4E79FB1_EB48_43af_B24C_D2ADABB0ABB7" name="addedState" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_String"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000001_EB48_43af_B24C_D2ADABB0ABB7" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000002_EB48_43af_B24C_D2ADABB0ABB7" value="1"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_1A8D1C7D_A5A3_4178_A7E7_2F5A8087FADA" name="addedBehavior" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_A5A3_4178_A7E7_2F5A8087FADA" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_EF8D8007_9DCC_4d46_95BA_2C19F8F12A1E" name="operation" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_9DCC_4d46_95BA_2C19F8F12A1E" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_6474F2BC_7745_40af_9A8F_4B3C74AE58FF" general="EAID_E5B45F4F_2EC1_414f_B5BE_D51BCFAF5721"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_2CF11F2D_9F89_4aca_B31C_3B1673D34694" name="ConcreteDecoratorC" visibility="package">
+				<ownedOperation xmi:id="EAID_6D665556_F6B0_4582_A39D_8B8F2DD35CC0" name="operation" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_F6B0_4582_A39D_8B8F2DD35CC0" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_37F79C56_A570_4789_919D_2DA5F65221D0" general="EAID_E5B45F4F_2EC1_414f_B5BE_D51BCFAF5721"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_E5B45F4F_2EC1_414f_B5BE_D51BCFAF5721" name="Decorator" visibility="public" isAbstract="true">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_3B09964C_6F6A_465a_8398_B0A156595F3D" name="component" visibility="protected" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAID_45E19BC8_BECD_4584_AA9B_C70C07E1680F"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000003_6F6A_465a_8398_B0A156595F3D" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000004_6F6A_465a_8398_B0A156595F3D" value="1"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_19D0FE36_10E6_45ac_B56B_8EDBECD9D093" name="getComponent" visibility="public" type="EAID_45E19BC8_BECD_4584_AA9B_C70C07E1680F" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_10E6_45ac_B56B_8EDBECD9D093" name="return" type="EAID_45E19BC8_BECD_4584_AA9B_C70C07E1680F" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_CE92E862_7D6A_4423_83E2_FAC07876E773" name="operation" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_7D6A_4423_83E2_FAC07876E773" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_7094A41D_E681_4c1d_8C28_B64CC9879FC8" name="setComponent" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_C092EF0C_1864_4ced_AAAB_DBCD9931E409" name="component" type="EAID_45E19BC8_BECD_4584_AA9B_C70C07E1680F" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_E681_4c1d_8C28_B64CC9879FC8" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dst2F23AA_C610_4950_82F3_7B6D15D67B4D" name="component" visibility="protected" association="EAID_A32F23AA_C610_4950_82F3_7B6D15D67B4D" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_45E19BC8_BECD_4584_AA9B_C70C07E1680F"/>
+				</ownedAttribute>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_F4FEA12C_A8B0_4c99_B651_A05D8296D2B7" general="EAID_45E19BC8_BECD_4584_AA9B_C70C07E1680F"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_46BB06A1_6E3E_4557_8224_45057E9DE3D9" name="DecoratorClient" visibility="public">
+				<ownedOperation xmi:id="EAID_D5CD760D_A202_4413_A9E6_8CAF72A60EDB" name="main" visibility="public" concurrency="sequential" isStatic="true">
+					<ownedParameter xmi:id="EAID_3468129B_ADD0_4565_9E3C_AC63CDE1B3E6" name="args" type="EAJava_String__" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_A202_4413_A9E6_8CAF72A60EDB" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+		</packagedElement>
+		<thecustomprofile:annotations base_Operation="EAID_BD64299E_F57C_448c_919B_9A97E70D2DA8" annotations="@Override"/>
+		<thecustomprofile:annotations base_Operation="EAID_EF8D8007_9DCC_4d46_95BA_2C19F8F12A1E" annotations="@Override"/>
+		<thecustomprofile:annotations base_Operation="EAID_6D665556_F6B0_4582_A39D_8B8F2DD35CC0" annotations="@Override"/>
+		<thecustomprofile:annotations base_Operation="EAID_CE92E862_7D6A_4423_83E2_FAC07876E773" annotations="@Override"/>
+	</uml:Model>
+</xmi:XMI>

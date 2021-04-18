@@ -114,6 +114,26 @@ public:
     size_t cw_out(size_t v) const;
 
     void print_gcdr() const;
+
+    bool hasInheritance(size_t u, size_t v) {
+        return edge(u, v) % Relation::Inheritance == 0;
+    }
+
+    bool hasAssociation(size_t u, size_t v) {
+        return edge(u, v) % Relation::Association == 0;
+    }
+
+    bool hasAggregation(size_t u, size_t v) {
+        return edge(u, v) % Relation::Aggregation == 0;
+    }
+
+    bool hasDependency(size_t u, size_t v) {
+        return edge(u, v) % Relation::Dependency == 0;
+    }
+
+    bool hasAssOrAgg(size_t u, size_t v) {
+        return hasAggregation(u, v) || hasAssociation(u, v);
+    }
 };
 
 #endif  // !DPDT_GRAPH_H

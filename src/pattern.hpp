@@ -47,12 +47,10 @@ public:
     Node &leaf;
 
     Method *operation;
-    Method *add; // optional
-    Method *remove; // optional
+    Method *add;     // optional
+    Method *remove;  // optional
 
-    Composite(Node &s,
-          Node &rs,
-          Node &p)
+    Composite(Node &s, Node &rs, Node &p)
         : component(s), composite(rs), leaf(p) {}
 };
 
@@ -66,27 +64,26 @@ public:
     Method *adapter_request;
     Method *adaptee_specific_request;
 
-    Adapter(Node &target,
-            Node &adapter,
-            Node &adaptee)
+    Adapter(Node &target, Node &adapter, Node &adaptee)
         : target(target), adapter(adapter), adaptee(adaptee) {}
 };
 
-
 class Decorator : public Pattern {
 public:
-    Node &target;
+    Node &component;
+    Node &concrete_component;
     Node &decorator;
-    Node &adaptee;
+    Node &concrete_decorator;
 
     Method *operation;
 
-    Decorator(Node &target,
-            Node &decorator,
-            Node &adaptee)
-        : target(target), decorator(decorator), adaptee(adaptee) {}
+    Decorator(Node &component,
+              Node &concrete_component,
+              Node &decorator,
+              Node &concrete_decorator)
+        : component(component), concrete_component(concrete_component),
+          decorator(decorator), concrete_decorator(concrete_decorator) {}
 };
-
 
 class Visitor : public Pattern {
 public:
@@ -97,10 +94,9 @@ public:
 
     Node *object_struct;
 
-    Visitor(Node &e,
-          Node &v,
-          Node &ce, Node &cv, Node *os = nullptr)
-        : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv), object_struct(os) {}
+    Visitor(Node &e, Node &v, Node &ce, Node &cv, Node *os = nullptr)
+        : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv),
+          object_struct(os) {}
 };
 
 #endif  // !DPDT_PATTERN_H

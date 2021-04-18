@@ -20,6 +20,7 @@ class PatternAnalyzer {
     std::vector<Composite> composites;
     std::vector<Adapter> adapters;
     std::vector<Visitor> visitors;
+    std::vector<Decorator> decorators;
 
 public:
     PatternAnalyzer(SubPatternDetector &spd)

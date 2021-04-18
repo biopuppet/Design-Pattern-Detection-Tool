@@ -98,6 +98,21 @@ void PatternAnalyzer::analyze_composite() {
     }
 }
 
+void PatternAnalyzer::analyze_decorator() {
+    for (const auto &mli : spis[SPT_MLI]) {
+        for (const auto &ci : spis[SPT_CI]) {
+            if (mli[0] == ci[0] && mli[1] == ci[2] && mli[2] != ci[1] &&
+                sys.hasAssOrAgg(ci[2], ci[0])) {
+                decorators.emplace_back(sys[mli[0]], sys[ci[1]], sys[ci[2]],
+                                        sys[mli[2]]);
+                printf("Decorator: (%s, %s, %s, %s)\n", sys[mli[0]].name(),
+                       sys[ci[1]].name(), sys[ci[2]].name(),
+                       sys[mli[2]].name());
+            }
+        }
+    }
+}
+
 void PatternAnalyzer::analyze_visitor() {
     // std::cout << "visitor!\n";
     for (const auto &icd : spis[SPT_ICD]) {
@@ -105,11 +120,11 @@ void PatternAnalyzer::analyze_visitor() {
             if (icd[0] == dpi[0] && icd[1] == dpi[1] &&
                 icd[2] != dpi[2]
                 // visitor --> concrete element
-                && sys.edge(dpi[0], icd[2]) % Relation::Dependency == 0
+                && sys.hasDependency(dpi[0], icd[2])
                 // concrete element --> visitor
-                && sys.edge(icd[2], dpi[0]) % Relation::Dependency == 0
+                && sys.hasDependency(icd[2], dpi[0])
                 // concrete element --|> element
-                && sys.edge(icd[2], dpi[2]) % Relation::Inheritance == 0) {
+                && sys.hasInheritance(icd[2], dpi[2])) {
                 visitors.emplace_back(sys[dpi[2]], sys[dpi[0]], sys[icd[2]],
                                       sys[dpi[1]]);
                 printf("visitor: (%s %s %s %s)\n", sys[dpi[2]].name(),
