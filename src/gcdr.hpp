@@ -54,7 +54,7 @@ struct MethodCmp {
 
 struct Node {
     std::string id;
-    std::string name;
+    std::string m_name;
     Visibility visibility;
     bool isAbstract;  // bit-mask?
 
@@ -72,7 +72,9 @@ struct Node {
          const char *name = "",
          Visibility v = Visibility::PRIVATE,
          bool isabstract = false)
-        : id(id), name(name), visibility(v), isAbstract(isabstract) {}
+        : id(id), m_name(name), visibility(v), isAbstract(isabstract) {}
+
+    const char *name() const { return m_name.c_str(); }
 
     static Visibility get_vis(const char *s);
 };

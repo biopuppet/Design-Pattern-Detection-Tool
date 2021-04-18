@@ -23,10 +23,14 @@ void Graph::print_gcdr() const {
     auto n = size();
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j < n; ++j) {
-            std::cout << nodes[i].name << " --" << edge(i, j) << "--> "
-                      << nodes[j].name << std::endl;
+            if (edge(i, j) == 1) {
+                continue;
+            }
+            std::cout << nodes[i].name() << " --" << edge(i, j) << "--> "
+                      << nodes[j].name() << std::endl;
         }
     }
+    std::cout << std::endl;
 }
 
 Visibility Node::get_vis(const char *s) {

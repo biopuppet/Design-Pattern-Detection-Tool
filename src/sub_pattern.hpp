@@ -34,9 +34,9 @@ public:
 
     SubPattern(const char *name, size_t size) : n(name), g(size) {}
 
-    const char *name() const { return n.c_str(); }
-
     virtual ~SubPattern() {}
+
+    const char *name() const { return n.c_str(); }
 
     const Graph &gcdr() const { return g; }
 

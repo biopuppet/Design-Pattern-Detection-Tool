@@ -112,9 +112,9 @@ void PatternAnalyzer::analyze_visitor() {
                 && sys.edge(icd[2], dpi[2]) % Relation::Inheritance == 0) {
                 visitors.emplace_back(sys[dpi[2]], sys[dpi[0]], sys[icd[2]],
                                       sys[dpi[1]]);
-                printf("visitor: (%s %s %s %s)\n", sys[dpi[2]].name.c_str(),
-                       sys[dpi[0]].name.c_str(), sys[icd[2]].name.c_str(),
-                       sys[dpi[1]].name.c_str());
+                printf("visitor: (%s %s %s %s)\n", sys[dpi[2]].name(),
+                       sys[dpi[0]].name(), sys[icd[2]].name(),
+                       sys[dpi[1]].name());
             }
         }
     }

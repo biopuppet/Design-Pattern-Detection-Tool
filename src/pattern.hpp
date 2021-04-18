@@ -12,12 +12,12 @@ class Pattern {
 public:
 };
 
+// Q: Why not Graph/size_t/...?
+// A: On this level(Behavorial Analysis and further), we care nothing but
+// Node, Method (signature), and things within Graph. And, A pointer to Node
+// is much more safe and robust in terms of invalid indication.
 class Proxy : public Pattern {
 public:
-    // Q: Why not Graph/size_t/...?
-    // A: On this level(Behavorial Analysis and further), we care nothing but
-    // Node, Method (signature), and things within Graph. And, A pointer to Node
-    // is much more safe and robust in terms of invalid indication.
     Node &subject;
     Node &real_subject;
     Node &proxy;
