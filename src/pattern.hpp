@@ -68,13 +68,23 @@ public:
 
     Adapter(Node &target,
             Node &adapter,
-            Node &adaptee,
-            Method *tr = nullptr,
-            Method *ar = nullptr,
-            Method *asr = nullptr)
-        : target(target), adapter(adapter), adaptee(adaptee),
-          target_request(tr), adapter_request(ar),
-          adaptee_specific_request(asr) {}
+            Node &adaptee)
+        : target(target), adapter(adapter), adaptee(adaptee) {}
+};
+
+
+class Decorator : public Pattern {
+public:
+    Node &target;
+    Node &decorator;
+    Node &adaptee;
+
+    Method *operation;
+
+    Decorator(Node &target,
+            Node &decorator,
+            Node &adaptee)
+        : target(target), decorator(decorator), adaptee(adaptee) {}
 };
 
 
