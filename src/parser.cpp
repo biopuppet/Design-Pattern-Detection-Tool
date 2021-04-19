@@ -72,7 +72,9 @@ void XMIParser::parse_class(pugi::xml_node &cur, Graph &gcdr) {
                 auto ass = child.child("type").attribute("xmi:idref").value();
                 // TODO: Add Aggregation and Dependency
                 auto &e = gcdr.edge(node_map[cur], node_map[xml_nodes[ass]]);
-                e *= Relation::Association;
+                e *= strcmp("shared", child.attribute("aggregation").value()) ?
+                         Relation::Aggregation :
+                         Relation::Association;
             }
         }
         else if (!strcmp(child.name(), "generalization")) {
@@ -102,16 +104,14 @@ Graph XMIParser::parse(const char *file_path) {
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(file_path);
 
-    std::cout << "Load result: " << result.description() << std::endl;
+    std::cout << "XMI file <" << file_path
+              << "> Load result: " << result.description() << std::endl;
     std::cout << "XMI version: "
               << doc.child("xmi:XMI").attribute("xmi:version").value()
-              << std::endl;
+              << "\n\n";
 
     simple_walker walker;
     doc.traverse(walker);
-    // for (auto it : xml_nodes) {
-    //     std::cout << it.first << " -- " << it.second.name() << std::endl;
-    // }
 
     Graph gcdr_system(nodes.size());
 

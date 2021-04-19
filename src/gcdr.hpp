@@ -115,23 +115,23 @@ public:
 
     void print_gcdr() const;
 
-    bool hasInheritance(size_t u, size_t v) {
+    bool hasInheritance(size_t u, size_t v) const {
         return edge(u, v) % Relation::Inheritance == 0;
     }
 
-    bool hasAssociation(size_t u, size_t v) {
+    bool hasAssociation(size_t u, size_t v) const {
         return edge(u, v) % Relation::Association == 0;
     }
 
-    bool hasAggregation(size_t u, size_t v) {
+    bool hasAggregation(size_t u, size_t v) const {
         return edge(u, v) % Relation::Aggregation == 0;
     }
 
-    bool hasDependency(size_t u, size_t v) {
+    bool hasDependency(size_t u, size_t v) const {
         return edge(u, v) % Relation::Dependency == 0;
     }
 
-    bool hasAssOrAgg(size_t u, size_t v) {
+    bool hasAssOrAgg(size_t u, size_t v) const {
         return hasAggregation(u, v) || hasAssociation(u, v);
     }
 };
