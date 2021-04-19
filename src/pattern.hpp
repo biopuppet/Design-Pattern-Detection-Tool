@@ -129,6 +129,21 @@ public:
           m_unshared_concrete_flyweight(unshared_concrete_flyweight) {}
 };
 
+/**
+ * ICD(0,1) & ICD(0,1) & ICD(0,1)
+ */
+class Facade : public Pattern {
+public:
+    Node &m_facade;
+    Node &m_subsystem1;
+    Node &m_subsystem2;
+    Node &m_subsystem3;
+
+    Facade(Node &facade, Node &subsystem1, Node &subsystem2, Node &subsystem3)
+        : m_facade(facade), m_subsystem1(subsystem1), m_subsystem2(subsystem2),
+          m_subsystem3(subsystem3) {}
+};
+
 class Visitor : public Pattern {
 public:
     Node &element;
