@@ -32,22 +32,19 @@ public:
     }
 
     virtual void struct_analyze() = 0;
+
     virtual void behavioral_check() {
         for (const auto &p : m_patterns) {
+            p->print();
             m_real.push_back(p->behavioral_check());
         }
     }
+
     virtual void print() {
         for (const auto &p : m_patterns) {
             p->print();
         }
     }
-
-    // typedef void (*analyze_pattern)();
-    // #define PATTERN(x, c) void analyze_##x();
-    // #include "pattern.def"
-
-    // bool behavoiral_check(const Visitor &p);
 
     static const PatternMap pattern_map;
     static PatternAnalyzer *createPatternAnalyzer(const SubPatternDetector &spd,
@@ -104,7 +101,6 @@ public:
 
     void behavioral_check() override {
         for (auto pa : m_pas) {
-            pa->print();
             pa->behavioral_check();
         }
     }
