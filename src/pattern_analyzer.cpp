@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 
 #include "gcdr.hpp"
 #include "pattern_analyzer.hpp"
@@ -36,8 +35,8 @@ void ProxyAnalyzer::struct_analyze() {
     for (const auto &ica : spis[SPT_ICA]) {
         for (const auto &ci : spis[SPT_CI]) {
             if (ica[0] == ci[0] && ica[1] == ci[1] && ica[2] == ci[2]) {
-                m_proxys.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]],
-                                      Proxy::RefRealSubject);
+                m_patterns.emplace_back(new Proxy(
+                    sys[ci[0]], sys[ci[1]], sys[ci[2]], Proxy::RefRealSubject));
             }
         }
     }
@@ -45,26 +44,27 @@ void ProxyAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &iass : spis[SPT_IASS]) {
             if (ci[0] == iass[0] && ci[2] == iass[1]) {
-                m_proxys.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]],
-                                      Proxy::RefSubject);
+                m_patterns.emplace_back(new Proxy(
+                    sys[ci[0]], sys[ci[1]], sys[ci[2]], Proxy::RefSubject));
             }
         }
     }
 }
 
-#if 0
-void PatternAnalyzer::analyze_adapter() {
+void AdapterAnalyzer::struct_analyze() {
     for (const auto &ica : spis[SPT_ICA]) {
         if (!sys.hasInheritance(ica[2], ica[0])) {
             // CI && ICA, same as Proxy
-            adapters.emplace_back(sys[ica[0]], sys[ica[1]], sys[ica[2]]);
-            printf("Adapter: (%s, %s, %s)\n", sys[ica[0]].name(),
-                   sys[ica[1]].name(), sys[ica[2]].name());
+            m_patterns.emplace_back(
+                new Adapter(sys[ica[0]], sys[ica[1]], sys[ica[2]]));
+            // printf("Adapter: (%s, %s, %s)\n", sys[ica[0]].name(),
+            //    sys[ica[1]].name(), sys[ica[2]].name());
         }
     }
 }
 
-void PatternAnalyzer::analyze_composite() {
+#if 0
+void PatternAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         if (sys.hasAssOrAgg(ci[2], ci[0])) {
             composites.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]]);
@@ -74,7 +74,7 @@ void PatternAnalyzer::analyze_composite() {
     }
 }
 
-void PatternAnalyzer::analyze_decorator() {
+void PatternAnalyzer::struct_analyze() {
     for (const auto &mli : spis[SPT_MLI]) {
         for (const auto &ci : spis[SPT_CI]) {
             if (mli[0] == ci[0] && mli[1] == ci[2] && mli[2] != ci[1] &&
@@ -89,7 +89,7 @@ void PatternAnalyzer::analyze_decorator() {
     }
 }
 
-void PatternAnalyzer::analyze_bridge() {
+void PatternAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &ipag : spis[SPT_IPAG]) {
             if (ipag[2] == ci[0] && ipag[1] != ci[2] && ipag[2] != ci[1] &&
@@ -104,7 +104,7 @@ void PatternAnalyzer::analyze_bridge() {
     }
 }
 
-void PatternAnalyzer::analyze_flyweight() {
+void PatternAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &agpi : spis[SPT_AGPI]) {
             if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
@@ -118,7 +118,7 @@ void PatternAnalyzer::analyze_flyweight() {
 }
 
 // TODO: Facade implementation undetermined
-void PatternAnalyzer::analyze_facade() {
+void PatternAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &agpi : spis[SPT_AGPI]) {
             if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
@@ -134,7 +134,7 @@ void PatternAnalyzer::analyze_facade() {
 /**
  * Builder
  */
-void PatternAnalyzer::analyze_builder() {
+void PatternAnalyzer::struct_analyze() {
     for (const auto &agpi : spis[SPT_AGPI]) {
         for (const auto &ica : spis[SPT_ICA]) {
             if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
@@ -148,7 +148,7 @@ void PatternAnalyzer::analyze_builder() {
     }
 }
 
-void PatternAnalyzer::analyze_visitor() {
+void PatternAnalyzer::struct_analyze() {
     // std::cout << "visitor!\n";
     for (const auto &icd : spis[SPT_ICD]) {
         for (const auto &dpi : spis[SPT_DPI]) {
@@ -170,42 +170,18 @@ void PatternAnalyzer::analyze_visitor() {
     }
 }
 
+
+void ProxyAnalyzer::behavioral_check() {
+    for (const auto &p : m_proxys) {
+        p.print();
+        m_real.push_back(p.behavioral_check());
+    }
+}
+
+void AdapterAnalyzer::behavioral_check() {
+    for (const auto &p : m_adapters) {
+        p.print();
+        m_real.push_back(p.behavioral_check());
+    }
+}
 #endif
-
-bool ProxyAnalyzer::behavoiral_check(const Proxy &proxy) {
-    // Looking for 3 identical method signature
-    std::vector<Method> result;
-    auto &sub = proxy.subject.methods;
-    auto &pro = proxy.proxy.methods;
-    auto &real = proxy.real_subject.methods;
-    std::set_intersection(pro.begin(), pro.end(), sub.begin(), sub.end(),
-                          std::inserter(result, result.begin()), MethodCmp());
-    std::set_intersection(real.begin(), real.end(), result.begin(),
-                          result.end(), result.begin(), MethodCmp());
-    for (const auto &it : result) {
-        std::cout << it.name << std::endl;
-    }
-    if (result.size()) {
-        std::cout << "Proxy!!!\n";
-        return true;
-    }
-    return false;
-}
-
-// bool PatternAnalyzer::behavoiral_check() {
-//     for (const auto &proxy : proxys) {
-//         behavoiral_check(proxy);
-//     }
-//     // std::cout << proxys.size() << std::endl;
-// }
-void AllAnalyzer::struct_analyze() {
-    for (auto p : m_pas) {
-        p->struct_analyze();
-    }
-}
-
-void AllAnalyzer::print() {
-    for (auto p : m_pas) {
-        p->print();
-    }
-}

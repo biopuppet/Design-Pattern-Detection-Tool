@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 
     auto pa = PatternAnalyzer::createPatternAnalyzer(spd, pattern);
     pa->struct_analyze();
-    pa->print();
+    pa->behavioral_check();
 
     return 0;
 }

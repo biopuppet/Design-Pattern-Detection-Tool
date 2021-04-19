@@ -36,6 +36,7 @@ add_executable(dpdt
     gcdr.cpp
     parser.cpp
     sp_detector.cpp
+    pattern.cpp
     pattern_analyzer.cpp
 
     main.cpp

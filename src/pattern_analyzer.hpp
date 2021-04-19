@@ -15,24 +15,33 @@ protected:
 
     const std::vector<SPRefList> &spis;
 
-    // std::vector<Composite> composites;
-    // std::vector<Adapter> adapters;
-    // std::vector<Visitor> visitors;
-    // std::vector<Decorator> decorators;
-    // std::vector<Bridge> bridges;
-    // std::vector<Flyweight> flyweights;
-    // std::vector<Facade> facades;
+    /// Candidate pattern instances
+    std::vector<Pattern *> m_patterns;
 
-    // std::vector<Builder> builders;
+    /// True if the pattern instance passed the behavioral check
+    std::vector<bool> m_real;
 
 public:
     PatternAnalyzer(const SubPatternDetector &spd)
         : sys(spd.system), spis(spd.spis) {}
 
-    virtual ~PatternAnalyzer() {}
+    virtual ~PatternAnalyzer() {
+        for (auto p : m_patterns) {
+            delete p;
+        }
+    }
 
     virtual void struct_analyze() = 0;
-    virtual void print() = 0;
+    virtual void behavioral_check() {
+        for (const auto &p : m_patterns) {
+            m_real.push_back(p->behavioral_check());
+        }
+    }
+    virtual void print() {
+        for (const auto &p : m_patterns) {
+            p->print();
+        }
+    }
 
     // typedef void (*analyze_pattern)();
     // #define PATTERN(x, c) void analyze_##x();
@@ -47,20 +56,27 @@ public:
 
 class ProxyAnalyzer : public PatternAnalyzer {
 public:
-    std::vector<Proxy> m_proxys;
-
     ProxyAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
 
     void struct_analyze() override;
-
-    bool behavoiral_check(const Proxy &p);
-
-    void print() override {
-        for (const auto &p : m_proxys) {
-            std::cout << p << std::endl;
-        }
-    }
 };
+
+class AdapterAnalyzer : public PatternAnalyzer {
+public:
+    AdapterAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
+// std::vector<Composite> composites;
+// std::vector<Adapter> adapters;
+// std::vector<Visitor> visitors;
+// std::vector<Decorator> decorators;
+// std::vector<Bridge> bridges;
+// std::vector<Flyweight> flyweights;
+// std::vector<Facade> facades;
+
+// std::vector<Builder> builders;
 
 /**
  * TODO: It could be a set of analyzers instead of 'All', but it needs hell
@@ -82,8 +98,23 @@ public:
         }
     }
 
-    void struct_analyze() override;
-    void print() override;
+    void struct_analyze() override {
+        for (auto p : m_pas) {
+            p->struct_analyze();
+        }
+    }
+
+    void behavioral_check() override {
+        for (auto p : m_pas) {
+            p->behavioral_check();
+        }
+    }
+
+    void print() override {
+        for (auto p : m_pas) {
+            p->print();
+        }
+    }
 };
 
 #endif  // !DPDT_PATTERN_ANALYZER_H

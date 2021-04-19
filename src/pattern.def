@@ -6,7 +6,7 @@
 #define PATTERN(X, C)
 #endif
 
-// PATTERN(adapter, Adapter)
+PATTERN(adapter, Adapter)
 PATTERN(proxy, Proxy)
 // PATTERN(composite, Composite)
 // PATTERN(decorator, Decorator)

@@ -12,12 +12,37 @@ enum PatternType {
 
 class Pattern {
 public:
+    virtual bool behavioral_check() const = 0;
+    virtual void print() const = 0;
+    virtual ~Pattern() {}
 };
 
 // Q: Why not Graph/size_t/...?
 // A: On this level(Behavorial Analysis and further), we care nothing but
 // Node, Method (signature), and things within Graph. And, A pointer to Node
 // is much more safe and robust in terms of invalid indication.
+
+class Adapter : public Pattern {
+public:
+    Node &target;
+    Node &adapter;
+    Node &adaptee;
+
+    Method *target_request;
+    Method *adapter_request;
+    Method *adaptee_specific_request;
+
+    Adapter(Node &target, Node &adapter, Node &adaptee)
+        : target(target), adapter(adapter), adaptee(adaptee) {}
+
+    bool behavioral_check() const override;
+
+    void print() const override {
+        printf("Adapter<%s, %s, %s>\n", target.name(), adapter.name(),
+               adaptee.name());
+    }
+};
+
 class Proxy : public Pattern {
 public:
     Node &subject;
@@ -38,7 +63,15 @@ public:
         return os << "Proxy<" << p.subject.name() << ", "
                   << p.real_subject.name() << ", " << p.proxy.name() << ">";
     }
+    void print() const override {
+        printf("Proxy<%s, %s, %s>\n", subject.name(), real_subject.name(),
+               proxy.name());
+    }
+
+    bool behavioral_check() const override;
 };
+
+#if 0
 
 class Composite : public Pattern {
 public:
@@ -57,20 +90,8 @@ public:
         return os << "Composite<" << p.component.name() << ", "
                   << p.composite.name() << ", " << p.leaf.name() << ">";
     }
-};
 
-class Adapter : public Pattern {
-public:
-    Node &target;
-    Node &adapter;
-    Node &adaptee;
-
-    Method *target_request;
-    Method *adapter_request;
-    Method *adaptee_specific_request;
-
-    Adapter(Node &target, Node &adapter, Node &adaptee)
-        : target(target), adapter(adapter), adaptee(adaptee) {}
+    bool behavioral_check() const override;
 };
 
 class Decorator : public Pattern {
@@ -88,6 +109,8 @@ public:
               Node &concrete_decorator)
         : component(component), concrete_component(concrete_component),
           decorator(decorator), concrete_decorator(concrete_decorator) {}
+    
+    bool behavioral_check() const override;
 };
 
 /**
@@ -111,6 +134,8 @@ public:
           m_implementor(implementor),
           m_concrete_implementor1(concrete_implementor1),
           m_concrete_implementor2(concrete_implementor2) {}
+
+    bool behavioral_check() const override;
 };
 
 /**
@@ -132,6 +157,8 @@ public:
         : m_factory(factory), m_flyweight(flyweight),
           m_concrete_flyweight(concrete_flyweight),
           m_unshared_concrete_flyweight(unshared_concrete_flyweight) {}
+
+    bool behavioral_check() const override;
 };
 
 /**
@@ -147,6 +174,8 @@ public:
     Facade(Node &facade, Node &subsystem1, Node &subsystem2, Node &subsystem3)
         : m_facade(facade), m_subsystem1(subsystem1), m_subsystem2(subsystem2),
           m_subsystem3(subsystem3) {}
+
+    bool behavioral_check() const override;
 };
 
 /**
@@ -165,6 +194,8 @@ public:
             Node &product)
         : m_builder(builder), m_concrete_builder(concrete_builder),
           m_director(director), m_product(product) {}
+
+    bool behavioral_check() const override;
 };
 
 class Visitor : public Pattern {
@@ -179,6 +210,9 @@ public:
     Visitor(Node &e, Node &v, Node &ce, Node &cv, Node *os = nullptr)
         : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv),
           object_struct(os) {}
+
+    bool behavioral_check() const override;
 };
+#endif
 
 #endif  // !DPDT_PATTERN_H
