@@ -28,6 +28,6 @@ PATTERN(proxy, Proxy)
 // PATTERN(state)
 // PATTERN(strategy)
 // PATTERN(template)
-// PATTERN(visitor, Visitor)
+PATTERN(visitor, Visitor)
 
 #undef PATTERN

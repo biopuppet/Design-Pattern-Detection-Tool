@@ -197,6 +197,7 @@ public:
 
     bool behavioral_check() const override;
 };
+#endif
 
 class Visitor : public Pattern {
 public:
@@ -207,12 +208,15 @@ public:
 
     Node *object_struct;
 
-    Visitor(Node &e, Node &v, Node &ce, Node &cv, Node *os = nullptr)
-        : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv),
-          object_struct(os) {}
+    Visitor(Node &e, Node &v, Node &ce, Node &cv)
+        : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv) {}
 
     bool behavioral_check() const override;
+
+    void print() const override {
+        printf("Visitor<%s, %s, %s, %s>\n", element.name(), visitor.name(),
+               concrete_elem.name(), concrete_visitor.name());
+    }
 };
-#endif
 
 #endif  // !DPDT_PATTERN_H

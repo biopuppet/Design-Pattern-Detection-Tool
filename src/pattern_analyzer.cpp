@@ -147,9 +147,9 @@ void PatternAnalyzer::struct_analyze() {
         }
     }
 }
+#endif
 
-void PatternAnalyzer::struct_analyze() {
-    // std::cout << "visitor!\n";
+void VisitorAnalyzer::struct_analyze() {
     for (const auto &icd : spis[SPT_ICD]) {
         for (const auto &dpi : spis[SPT_DPI]) {
             if (icd[0] == dpi[0] && icd[1] == dpi[1] &&
@@ -160,28 +160,16 @@ void PatternAnalyzer::struct_analyze() {
                 && sys.hasDependency(icd[2], dpi[0])
                 // concrete element --|> element
                 && sys.hasInheritance(icd[2], dpi[2])) {
-                visitors.emplace_back(sys[dpi[2]], sys[dpi[0]], sys[icd[2]],
-                                      sys[dpi[1]]);
-                printf("visitor: (%s %s %s %s)\n", sys[dpi[2]].name(),
-                       sys[dpi[0]].name(), sys[icd[2]].name(),
-                       sys[dpi[1]].name());
+                m_patterns.emplace_back(new Visitor(sys[dpi[2]], sys[dpi[0]],
+                                                    sys[icd[2]], sys[dpi[1]]));
             }
         }
     }
 }
 
-
-void ProxyAnalyzer::behavioral_check() {
-    for (const auto &p : m_proxys) {
-        p.print();
-        m_real.push_back(p.behavioral_check());
-    }
-}
-
-void AdapterAnalyzer::behavioral_check() {
-    for (const auto &p : m_adapters) {
-        p.print();
-        m_real.push_back(p.behavioral_check());
-    }
-}
-#endif
+// void AdapterAnalyzer::behavioral_check() {
+//     for (const auto &p : m_adapters) {
+//         p.print();
+//         m_real.push_back(p.behavioral_check());
+//     }
+// }

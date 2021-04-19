@@ -68,15 +68,12 @@ public:
     void struct_analyze() override;
 };
 
-// std::vector<Composite> composites;
-// std::vector<Adapter> adapters;
-// std::vector<Visitor> visitors;
-// std::vector<Decorator> decorators;
-// std::vector<Bridge> bridges;
-// std::vector<Flyweight> flyweights;
-// std::vector<Facade> facades;
+class VisitorAnalyzer : public PatternAnalyzer {
+public:
+    VisitorAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
 
-// std::vector<Builder> builders;
+    void struct_analyze() override;
+};
 
 /**
  * TODO: It could be a set of analyzers instead of 'All', but it needs hell
@@ -90,29 +87,31 @@ public:
     AllAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {
 #define PATTERN(X, C) m_pas.push_back(new C##Analyzer(spd));
 #include "pattern.def"
+        // std::cout << m_pas.size() << std::endl;
     }
 
     ~AllAnalyzer() {
-        for (auto p : m_pas) {
-            delete p;
+        for (auto pa : m_pas) {
+            delete pa;
         }
     }
 
     void struct_analyze() override {
-        for (auto p : m_pas) {
-            p->struct_analyze();
+        for (auto pa : m_pas) {
+            pa->struct_analyze();
         }
     }
 
     void behavioral_check() override {
-        for (auto p : m_pas) {
-            p->behavioral_check();
+        for (auto pa : m_pas) {
+            pa->print();
+            pa->behavioral_check();
         }
     }
 
     void print() override {
-        for (auto p : m_pas) {
-            p->print();
+        for (auto pa : m_pas) {
+            pa->print();
         }
     }
 };

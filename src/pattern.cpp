@@ -29,3 +29,11 @@ bool Adapter::behavioral_check() const {
     }
     return false;
 }
+
+bool Visitor::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}
