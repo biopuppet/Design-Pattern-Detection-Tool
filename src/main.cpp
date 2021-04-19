@@ -3,7 +3,6 @@
 
 #include "argh.h"
 #include "pugixml.hpp"
-#include "gcdr.hpp"
 #include "parser.hpp"
 #include "sp_detector.hpp"
 #include "pattern_analyzer.hpp"
@@ -67,8 +66,9 @@ int main(int argc, char **argv) {
     SubPatternDetector spd{system};
     spd.detect_all();
 
-    PatternAnalyzer pattern_analyzer{spd};
-    pattern_analyzer.analyze(pattern);
+    auto pa = PatternAnalyzer::createPatternAnalyzer(spd, pattern);
+    pa->struct_analyze();
+    pa->print();
 
     return 0;
 }

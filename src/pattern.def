@@ -3,22 +3,22 @@
  */
 
 #ifndef PATTERN
-#define PATTERN(X)
+#define PATTERN(X, C)
 #endif
 
-PATTERN(adapter)
-PATTERN(proxy)
-PATTERN(composite)
-PATTERN(decorator)
-PATTERN(bridge)
-PATTERN(flyweight)
-PATTERN(facade)
-// PATTERN(abstract_factory)
-// PATTERN(builder)
+// PATTERN(adapter, Adapter)
+PATTERN(proxy, Proxy)
+// PATTERN(composite, Composite)
+// PATTERN(decorator, Decorator)
+// PATTERN(bridge, Bridge)
+// PATTERN(flyweight, Flyweight)
+// PATTERN(facade, Facade)
+// PATTERN(abstract_factory, AbstractFactory)
+// PATTERN(builder, Builder)
 // PATTERN(factory)
 // PATTERN(prototype)
 // PATTERN(singleton)
-// PATTERN(chain_of_responsibility)
+// PATTERN(responsibility_chain)
 // PATTERN(command)
 // PATTERN(interpreter)
 // PATTERN(iterator)
@@ -28,6 +28,6 @@ PATTERN(facade)
 // PATTERN(state)
 // PATTERN(strategy)
 // PATTERN(template)
-PATTERN(visitor)
+// PATTERN(visitor, Visitor)
 
 #undef PATTERN

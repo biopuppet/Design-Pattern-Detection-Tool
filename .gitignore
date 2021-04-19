@@ -5,6 +5,10 @@
 # VS Code
 .vscode/
 
+# CLion
+.idea/
+cmake-build-debug/
+
 # Cmake
 debug/
 build/

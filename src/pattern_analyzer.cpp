@@ -3,50 +3,41 @@
 
 #include "gcdr.hpp"
 #include "pattern_analyzer.hpp"
+// #include <boost/algorithm/string/predicate.hpp>
 
 const PatternMap PatternAnalyzer::pattern_map = {
-#define PATTERN(x) {#x, PatternType::PT_##x},
+#define PATTERN(x, c) {#x, PatternType::PT_##x},
 #include "pattern.def"
 };
 
-void PatternAnalyzer::analyze(const std::string &pattern) {
-    if (pattern.empty()) {
-#define PATTERN(x) analyze_##x();
-#include "pattern.def"
-        return;
+PatternAnalyzer *
+PatternAnalyzer::createPatternAnalyzer(const SubPatternDetector &spd,
+                                       const std::string &p) {
+    if (p.empty()) {
+        return new AllAnalyzer(spd);
     }
-    else if (!pattern_map.count(pattern)) {
-        std::cerr << "Unknow pattern name " << pattern << std::endl;
-        return;
+    if (!pattern_map.count(p)) {
+        std::cerr << "Unknow pattern name " << p << std::endl;
+        return nullptr;
     }
-    pp = pattern_map.at(pattern);
-
-    switch (pp) {
-#define PATTERN(x)     \
-    case PT_##x:       \
-        analyze_##x(); \
-        break;
+    auto pt = pattern_map.at(p);
+    switch (pt) {
+#define PATTERN(X, C) \
+    case PT_##X:      \
+        return new C##Analyzer(spd);
 #include "pattern.def"
     default:
         break;
     }
-    // std::cout << proxys.size() << std::endl;
-    behavoiral_check();
+    return nullptr;
 }
 
-void PatternAnalyzer::behavoiral_check() {
-    for (const auto &proxy : proxys) {
-        behavoiral_check(proxy);
-    }
-    // std::cout << proxys.size() << std::endl;
-}
-
-void PatternAnalyzer::analyze_proxy() {
+void ProxyAnalyzer::struct_analyze() {
     for (const auto &ica : spis[SPT_ICA]) {
         for (const auto &ci : spis[SPT_CI]) {
             if (ica[0] == ci[0] && ica[1] == ci[1] && ica[2] == ci[2]) {
-                proxys.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]],
-                                    Proxy::RefRealSubject);
+                m_proxys.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]],
+                                      Proxy::RefRealSubject);
             }
         }
     }
@@ -54,13 +45,14 @@ void PatternAnalyzer::analyze_proxy() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &iass : spis[SPT_IASS]) {
             if (ci[0] == iass[0] && ci[2] == iass[1]) {
-                proxys.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]],
-                                    Proxy::RefSubject);
+                m_proxys.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]],
+                                      Proxy::RefSubject);
             }
         }
     }
 }
 
+#if 0
 void PatternAnalyzer::analyze_adapter() {
     for (const auto &ica : spis[SPT_ICA]) {
         if (!sys.hasInheritance(ica[2], ica[0])) {
@@ -139,6 +131,23 @@ void PatternAnalyzer::analyze_facade() {
     }
 }
 
+/**
+ * Builder
+ */
+void PatternAnalyzer::analyze_builder() {
+    for (const auto &agpi : spis[SPT_AGPI]) {
+        for (const auto &ica : spis[SPT_ICA]) {
+            if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
+                builders.emplace_back(sys[ica[0]], sys[ica[1]], sys[agpi[2]],
+                                      sys[ica[2]]);
+                printf("Builder: (%s, %s, %s, %s)\n", sys[ica[2]].name(),
+                       sys[ica[0]].name(), sys[ica[1]].name(),
+                       sys[ica[2]].name());
+            }
+        }
+    }
+}
+
 void PatternAnalyzer::analyze_visitor() {
     // std::cout << "visitor!\n";
     for (const auto &icd : spis[SPT_ICD]) {
@@ -161,7 +170,9 @@ void PatternAnalyzer::analyze_visitor() {
     }
 }
 
-bool PatternAnalyzer::behavoiral_check(const Proxy &proxy) {
+#endif
+
+bool ProxyAnalyzer::behavoiral_check(const Proxy &proxy) {
     // Looking for 3 identical method signature
     std::vector<Method> result;
     auto &sub = proxy.subject.methods;
@@ -179,4 +190,22 @@ bool PatternAnalyzer::behavoiral_check(const Proxy &proxy) {
         return true;
     }
     return false;
+}
+
+// bool PatternAnalyzer::behavoiral_check() {
+//     for (const auto &proxy : proxys) {
+//         behavoiral_check(proxy);
+//     }
+//     // std::cout << proxys.size() << std::endl;
+// }
+void AllAnalyzer::struct_analyze() {
+    for (auto p : m_pas) {
+        p->struct_analyze();
+    }
+}
+
+void AllAnalyzer::print() {
+    for (auto p : m_pas) {
+        p->print();
+    }
 }

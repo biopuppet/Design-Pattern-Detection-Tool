@@ -73,8 +73,8 @@ void XMIParser::parse_class(pugi::xml_node &cur, Graph &gcdr) {
                 // TODO: Add Aggregation and Dependency
                 auto &e = gcdr.edge(node_map[cur], node_map[xml_nodes[ass]]);
                 e *= strcmp("shared", child.attribute("aggregation").value()) ?
-                         Relation::Aggregation :
-                         Relation::Association;
+                         Relation::Association :
+                         Relation::Aggregation;
             }
         }
         else if (!strcmp(child.name(), "generalization")) {

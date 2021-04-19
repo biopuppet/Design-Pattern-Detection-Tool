@@ -1,10 +1,12 @@
 #ifndef DPDT_PATTERN_H
 #define DPDT_PATTERN_H
 
+#include <ostream>
+
 #include "gcdr.hpp"
 
 enum PatternType {
-#define PATTERN(x) PT_##x,
+#define PATTERN(x, c) PT_##x,
 #include "pattern.def"
 };
 
@@ -29,15 +31,13 @@ public:
     Method *real_subject_request;
     Method *proxy_request;
 
-    Proxy(Node &s,
-          Node &rs,
-          Node &p,
-          Type t,
-          Method *sr = nullptr,
-          Method *rsr = nullptr,
-          Method *pr = nullptr)
-        : subject(s), real_subject(rs), proxy(p), type(t), subject_request(sr),
-          real_subject_request(rsr), proxy_request(pr) {}
+    Proxy(Node &s, Node &rs, Node &p, Type t)
+        : subject(s), real_subject(rs), proxy(p), type(t) {}
+
+    friend std::ostream &operator<<(std::ostream &os, const Proxy &p) {
+        return os << "Proxy<" << p.subject.name() << ", "
+                  << p.real_subject.name() << ", " << p.proxy.name() << ">";
+    }
 };
 
 class Composite : public Pattern {
@@ -52,6 +52,11 @@ public:
 
     Composite(Node &s, Node &rs, Node &p)
         : component(s), composite(rs), leaf(p) {}
+
+    friend std::ostream &operator<<(std::ostream &os, const Composite &p) {
+        return os << "Composite<" << p.component.name() << ", "
+                  << p.composite.name() << ", " << p.leaf.name() << ">";
+    }
 };
 
 class Adapter : public Pattern {
@@ -142,6 +147,24 @@ public:
     Facade(Node &facade, Node &subsystem1, Node &subsystem2, Node &subsystem3)
         : m_facade(facade), m_subsystem1(subsystem1), m_subsystem2(subsystem2),
           m_subsystem3(subsystem3) {}
+};
+
+/**
+ * AGPI(0,1) & ICA(0,1)
+ */
+class Builder : public Pattern {
+public:
+    Node &m_builder;
+    Node &m_concrete_builder;
+    Node &m_director;
+    Node &m_product;
+
+    Builder(Node &builder,
+            Node &concrete_builder,
+            Node &director,
+            Node &product)
+        : m_builder(builder), m_concrete_builder(concrete_builder),
+          m_director(director), m_product(product) {}
 };
 
 class Visitor : public Pattern {
