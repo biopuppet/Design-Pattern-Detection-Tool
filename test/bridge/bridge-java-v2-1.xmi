@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_23189455_48FF_466e_BBD6_FBDD5F1A208A" name="bridge" visibility="public">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_CCB6DE68_7094_4719_9A42_5A4F34D86C9C" name="Abstraction" visibility="public" isAbstract="true">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_9C72C068_4532_4020_965B_B7E3C5CA43A6" name="implementor" visibility="protected" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAID_E97256EE_59B6_409f_8C2F_3A67C8EAB14D"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000001_4532_4020_965B_B7E3C5CA43A6" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000002_4532_4020_965B_B7E3C5CA43A6" value="1"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_2718AAD1_8917_425c_8C43_42218C021214" name="name" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_String"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000003_8917_425c_8C43_42218C021214" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000004_8917_425c_8C43_42218C021214" value="1"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_EB26749A_98C4_4f75_8673_C04A9B9DF2C4" name="Abstraction" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_E9CBEE0B_68D1_4885_A20B_C1EAD17DB69B" name="name" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_AB851BED_8233_4288_8281_C36F09B476DD" name="getName" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_8233_4288_8281_C36F09B476DD" name="return" type="EAJava_String" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_63E6EC4E_E622_4f59_9777_B6BEE88FBF01" name="operation" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_E622_4f59_9777_B6BEE88FBF01" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_A1148DCA_81EF_4293_9BAB_ED56818FDB94" name="setImplementor" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_DF4F14A0_4EF6_426a_820F_EE432ED9F464" name="implementor" type="EAID_E97256EE_59B6_409f_8C2F_3A67C8EAB14D" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_81EF_4293_9BAB_ED56818FDB94" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_5DD7DD14_BF67_470b_BE6A_33E973C76CBE" name="setName" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_2CA76594_9F64_46da_ABFC_BFFD6E4FBA3D" name="name" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_BF67_470b_BE6A_33E973C76CBE" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dstC2B380_83D7_42bb_9F76_9F0383598D2A" name="implementor" visibility="protected" association="EAID_86C2B380_83D7_42bb_9F76_9F0383598D2A" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_E97256EE_59B6_409f_8C2F_3A67C8EAB14D"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_86C2B380_83D7_42bb_9F76_9F0383598D2A" visibility="public">
+				<memberEnd xmi:idref="EAID_dstC2B380_83D7_42bb_9F76_9F0383598D2A"/>
+				<memberEnd xmi:idref="EAID_srcC2B380_83D7_42bb_9F76_9F0383598D2A"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_srcC2B380_83D7_42bb_9F76_9F0383598D2A" visibility="public" association="EAID_86C2B380_83D7_42bb_9F76_9F0383598D2A" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_CCB6DE68_7094_4719_9A42_5A4F34D86C9C"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_08797315_E822_4a55_BE59_14A86D5ADDEC" name="AbstractionA" visibility="package">
+				<ownedOperation xmi:id="EAID_9F1AA8A2_3429_41ad_9E86_7C3AC9C6A687" name="AbstractionA" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_3CA8E0A9_A405_4d95_9713_B41189DB2663" name="name" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_744632D4_DF8D_4623_953F_7C34FAD3B53F" name="operation" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_DF8D_4623_953F_7C34FAD3B53F" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_5902FB7B_B6E8_4093_A3D8_33DC41C2B6BA" general="EAID_CCB6DE68_7094_4719_9A42_5A4F34D86C9C"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_06BD77DB_F017_4d66_82B9_935C8EA5E324" name="AbstractionB" visibility="package">
+				<ownedOperation xmi:id="EAID_CA2C5FEA_C539_43a0_B7EE_0D6698A89FC0" name="AbstractionB" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_7933FC79_A446_4fec_ACA0_111AE69002AA" name="name" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_E0984165_031A_40e7_B5E1_78C4E5CB6343" name="operation" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_031A_40e7_B5E1_78C4E5CB6343" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_9D75D76D_0161_41d0_8D64_0BBC1EB45CB8" general="EAID_CCB6DE68_7094_4719_9A42_5A4F34D86C9C"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_E71D70E7_85BB_47ee_A677_14A203E8DC7A" name="ConcreteImplemtorA" visibility="package">
+				<ownedOperation xmi:id="EAID_4614F21A_D228_4509_8154_E3B79FD6E06E" name="operation" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_D228_4509_8154_E3B79FD6E06E" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_06B99000_47EF_4efd_93E4_7F5132F2D723" general="EAID_E97256EE_59B6_409f_8C2F_3A67C8EAB14D"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_E97256EE_59B6_409f_8C2F_3A67C8EAB14D" name="Implementor" visibility="public" isAbstract="true">
+				<ownedOperation xmi:id="EAID_21CEB69A_AC39_4c29_9330_814141A1ADC1" name="operation" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_RT000000_AC39_4c29_9330_814141A1ADC1" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+		</packagedElement>
+		<thecustomprofile:annotations base_Operation="EAID_744632D4_DF8D_4623_953F_7C34FAD3B53F" annotations="@Override"/>
+		<thecustomprofile:annotations base_Operation="EAID_E0984165_031A_40e7_B5E1_78C4E5CB6343" annotations="@Override"/>
+		<thecustomprofile:annotations base_Operation="EAID_4614F21A_D228_4509_8154_E3B79FD6E06E" annotations="@Override"/>
+	</uml:Model>
+</xmi:XMI>

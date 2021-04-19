@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_CBCF8AB1_075A_49b5_8C07_C92D00C4EA2D" name="prototype" visibility="public">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_532D64F5_2CFA_49f1_8588_C312C10754CC" name="PrototypeClient" visibility="public">
+				<ownedOperation xmi:id="EAID_32F8FA00_A012_4bd4_B480_091EF4992764" name="deepCopy" visibility="public" concurrency="sequential" isStatic="true">
+					<ownedParameter xmi:id="EAID_RT000000_A012_4bd4_B480_091EF4992764" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_F9EFDA9C_B9A4_47ff_86E9_1EDB5DA162E6" name="main" visibility="public" concurrency="sequential" isStatic="true">
+					<ownedParameter xmi:id="EAID_557F85FB_2532_4ad4_85A5_D4272E32F740" name="args" type="EAJava_String__" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_B9A4_47ff_86E9_1EDB5DA162E6" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_2AEBF4CD_E2AE_42ce_A45B_D1F607D3302C" name="shallowCopy" visibility="public" concurrency="sequential" isStatic="true">
+					<ownedParameter xmi:id="EAID_RT000000_E2AE_42ce_A45B_D1F607D3302C" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_4C7AE208_FD54_44c7_A431_27DF665B3462" name="Resume" visibility="public">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_16DD276D_B3F6_4b9d_8F42_7F6D0D6F44DC" name="age" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_int"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000001_B3F6_4b9d_8F42_7F6D0D6F44DC" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000002_B3F6_4b9d_8F42_7F6D0D6F44DC" value="1"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_E80FC85C_03CE_424c_9493_67929EA7E638" name="gender" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_String"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000003_03CE_424c_9493_67929EA7E638" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000004_03CE_424c_9493_67929EA7E638" value="1"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_B2CDFB76_7AA6_4b99_9014_3EC3EBA71A1F" name="name" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_String"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000005_7AA6_4b99_9014_3EC3EBA71A1F" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000006_7AA6_4b99_9014_3EC3EBA71A1F" value="1"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_6E6BC02A_621B_4aec_8738_33E96A53FE4A" name="serialVersionUID" visibility="private" isStatic="true" isReadOnly="true" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_long"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000007_621B_4aec_8738_33E96A53FE4A" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000008_621B_4aec_8738_33E96A53FE4A" value="1"/>
+					<defaultValue xmi:type="uml:LiteralString" xmi:id="EAID_LI000009_621B_4aec_8738_33E96A53FE4A" value="-4410449301166191440L"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_C62200A5_B8D2_4b6e_ACEF_5B1C4CBB8562" name="workExperience" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAID_0ACC8ADB_53DD_4e48_A704_27FA8B4D35BC"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000009_B8D2_4b6e_ACEF_5B1C4CBB8562" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000010_B8D2_4b6e_ACEF_5B1C4CBB8562" value="1"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_48C3FE19_FFBA_4510_84B2_AB5A8ED481C5" name="clone" visibility="protected" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_FFBA_4510_84B2_AB5A8ED481C5" name="return" type="EAJava_Object" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_2ACFE32D_ED37_472e_8F53_D6761C7B6D05" name="deepClone" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_ED37_472e_8F53_D6761C7B6D05" name="return" type="EAJava_Object" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_A81E2A1E_D090_4666_B8CC_45DF2E00256E" name="display" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_D090_4666_B8CC_45DF2E00256E" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_342CFA6B_E33E_4dd3_A4AD_8AC1AC10ED52" name="getAge" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_E33E_4dd3_A4AD_8AC1AC10ED52" name="return" type="EAJava_int" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_6F2A2F7F_4F73_415c_B6BD_4F7797D87CE1" name="getGender" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_4F73_415c_B6BD_4F7797D87CE1" name="return" type="EAJava_String" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_CA9EE1FF_FDA6_4fab_A577_CA10D4092B5C" name="getName" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_FDA6_4fab_A577_CA10D4092B5C" name="return" type="EAJava_String" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_F52C3241_EF3E_4dcc_889F_E7CEE79B74C6" name="getWorkExperience" visibility="public" type="EAID_0ACC8ADB_53DD_4e48_A704_27FA8B4D35BC" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_EF3E_4dcc_889F_E7CEE79B74C6" name="return" type="EAID_0ACC8ADB_53DD_4e48_A704_27FA8B4D35BC" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_E3AF523A_D7A2_4ed6_9FE6_6123C51872CF" name="Resume" visibility="public" concurrency="sequential"/>
+				<ownedOperation xmi:id="EAID_086194E2_43A8_4248_AA97_DF95F4107741" name="setAge" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_D833B6B5_E623_41c6_9D33_1B5FE9A7B6C9" name="age" type="EAJava_int" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_43A8_4248_AA97_DF95F4107741" name="return" type="EAJava_Resume" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_AC5A5F4A_4767_4281_B861_FF6E0112B5CD" name="setGender" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_D9774540_4A50_498d_8CE5_C6695FA47F0E" name="gender" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_4767_4281_B861_FF6E0112B5CD" name="return" type="EAJava_Resume" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_5472B0AE_EAAA_4dfd_AC06_29E8ECA33CAD" name="setName" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_CC324257_329E_4350_918D_DACB0C16B6DE" name="name" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_EAAA_4dfd_AC06_29E8ECA33CAD" name="return" type="EAJava_Resume" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_7FCB7E2B_2A03_43da_BA1E_A8A525D19A77" name="setWorkExperience" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_7824F8C8_BF6B_462b_BF34_DE0432206CD8" name="workDate" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_8E4AE6D0_DFA8_44c3_BE00_807E1AE3B96F" name="workCompany" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_2A03_43da_BA1E_A8A525D19A77" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_dstFC907C_128F_4a85_ABA9_1E72C0CF3375" name="workExperience" visibility="private" association="EAID_15FC907C_128F_4a85_ABA9_1E72C0CF3375" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_0ACC8ADB_53DD_4e48_A704_27FA8B4D35BC"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_15FC907C_128F_4a85_ABA9_1E72C0CF3375" visibility="public">
+				<memberEnd xmi:idref="EAID_dstFC907C_128F_4a85_ABA9_1E72C0CF3375"/>
+				<memberEnd xmi:idref="EAID_srcFC907C_128F_4a85_ABA9_1E72C0CF3375"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_srcFC907C_128F_4a85_ABA9_1E72C0CF3375" visibility="public" association="EAID_15FC907C_128F_4a85_ABA9_1E72C0CF3375" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_4C7AE208_FD54_44c7_A431_27DF665B3462"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_0ACC8ADB_53DD_4e48_A704_27FA8B4D35BC" name="WorkExperience" visibility="public">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_08E7A44E_48B9_46d4_80C4_4ECA9AABD1D3" name="serialVersionUID" visibility="private" isStatic="true" isReadOnly="true" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_long"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000011_48B9_46d4_80C4_4ECA9AABD1D3" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000012_48B9_46d4_80C4_4ECA9AABD1D3" value="1"/>
+					<defaultValue xmi:type="uml:LiteralString" xmi:id="EAID_LI000013_48B9_46d4_80C4_4ECA9AABD1D3" value="1L"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_77884723_727E_4fbb_86BC_68B157042B6A" name="workCompany" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_String"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000013_727E_4fbb_86BC_68B157042B6A" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000014_727E_4fbb_86BC_68B157042B6A" value="1"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_05D91D18_5997_4e41_874E_6A1D64FFB51D" name="workDate" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_String"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000015_5997_4e41_874E_6A1D64FFB51D" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000016_5997_4e41_874E_6A1D64FFB51D" value="1"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_563EF113_0CCD_4892_9A20_8AD4B2BB926D" name="getWorkCompany" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_0CCD_4892_9A20_8AD4B2BB926D" name="return" type="EAJava_String" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_9EFE7352_F5F0_4437_BF28_AA408645142F" name="getWorkDate" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_RT000000_F5F0_4437_BF28_AA408645142F" name="return" type="EAJava_String" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_2D44FED5_0148_4edf_A62B_F866A424A8FA" name="setWorkCompany" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_BE5B6DC1_E8D0_4357_BBCF_D6087AAA3405" name="workCompany" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_0148_4edf_A62B_F866A424A8FA" name="return" type="EAJava_WorkExperience" direction="return"/>
+				</ownedOperation>
+				<ownedOperation xmi:id="EAID_D1AC8206_34A0_4c62_BFD0_80B86CAD85F2" name="setWorkDate" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_56DB7C33_B4C1_413c_995B_737A3B3145CC" name="workDate" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_34A0_4c62_BFD0_80B86CAD85F2" name="return" type="EAJava_WorkExperience" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+		</packagedElement>
+		<thecustomprofile:throws base_Operation="EAID_32F8FA00_A012_4bd4_B480_091EF4992764" throws="CloneNotSupportedException,ClassNotFoundException,IOException"/>
+		<thecustomprofile:throws base_Operation="EAID_F9EFDA9C_B9A4_47ff_86E9_1EDB5DA162E6" throws="CloneNotSupportedException,ClassNotFoundException,IOException"/>
+		<thecustomprofile:throws base_Operation="EAID_2AEBF4CD_E2AE_42ce_A45B_D1F607D3302C" throws="CloneNotSupportedException"/>
+		<thecustomprofile:annotations base_Operation="EAID_48C3FE19_FFBA_4510_84B2_AB5A8ED481C5" annotations="@Override"/>
+		<thecustomprofile:throws base_Operation="EAID_48C3FE19_FFBA_4510_84B2_AB5A8ED481C5" throws="CloneNotSupportedException"/>
+		<thecustomprofile:throws base_Operation="EAID_2ACFE32D_ED37_472e_8F53_D6761C7B6D05" throws="IOException,ClassNotFoundException"/>
+	</uml:Model>
+</xmi:XMI>

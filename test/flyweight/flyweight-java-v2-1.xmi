@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_A98D03DE_2F78_4044_BEBA_8B219422B616" name="flyweight" visibility="public">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_BC60019E_E854_4a17_AD91_C23F8208BEAF" name="ConcreteFlyWeight" visibility="package">
+				<ownedOperation xmi:id="EAID_FB6BB208_C201_4373_8A66_B73187C62C9A" name="operation" visibility="public" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_D3145BC5_B6BF_43c9_9DCB_53A623E197FB" name="extrinsicState" type="EAJava_int" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_C201_4373_8A66_B73187C62C9A" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="EAID_A1955374_73C1_4263_95D3_1BEBBC09BD28" general="EAID_B4983734_8C7E_46bd_BA40_9A9874C29F5E"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_B4983734_8C7E_46bd_BA40_9A9874C29F5E" name="FlyWeight" visibility="public" isAbstract="true">
+				<ownedOperation xmi:id="EAID_CE695BAD_C19D_4ad7_80DD_6C09B2A63EBC" name="operation" visibility="public" concurrency="sequential" isAbstract="true">
+					<ownedParameter xmi:id="EAID_A779A0E4_49A8_459c_9131_B830F2CA8C3F" name="extrinsicState" type="EAJava_int" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_C19D_4ad7_80DD_6C09B2A63EBC" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_6C9071F4_BFB0_41c1_9E6D_751A720EC23C" name="FlyWeightClient" visibility="public">
+				<ownedOperation xmi:id="EAID_75327BE8_0FC8_4373_8D83_10C07718E5DB" name="main" visibility="public" concurrency="sequential" isStatic="true">
+					<ownedParameter xmi:id="EAID_18074BCA_CAA3_4901_BCD2_32F1B17C54CC" name="args" type="EAJava_String__" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_0FC8_4373_8D83_10C07718E5DB" name="return" type="EAJava_void" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_66BEAA19_9810_4cd4_9BA0_16D3492ED7FB" name="FlyWeightFactory" visibility="public">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_2BDA3A5B_1173_4f0e_91C9_59CC9CBDD0A1" name="flyWeights" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
+					<type xmi:idref="EAJava_HashMap_String__FlyWeight_"/>
+					<lowerValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000001_1173_4f0e_91C9_59CC9CBDD0A1" value="1"/>
+					<upperValue xmi:type="uml:LiteralInteger" xmi:id="EAID_LI000002_1173_4f0e_91C9_59CC9CBDD0A1" value="1"/>
+					<defaultValue xmi:type="uml:LiteralString" xmi:id="EAID_LI000003_1173_4f0e_91C9_59CC9CBDD0A1" value="new HashMap&lt;&gt;()"/>
+				</ownedAttribute>
+				<ownedOperation xmi:id="EAID_7D235BDF_C043_46c6_B901_3956DBF5437F" name="getFlyWeight" visibility="public" type="EAID_B4983734_8C7E_46bd_BA40_9A9874C29F5E" concurrency="sequential">
+					<ownedParameter xmi:id="EAID_EB901355_EEF9_4bc1_AE38_5A98729C44EC" name="key" type="EAJava_String" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
+					<ownedParameter xmi:id="EAID_RT000000_C043_46c6_B901_3956DBF5437F" name="return" type="EAID_B4983734_8C7E_46bd_BA40_9A9874C29F5E" direction="return"/>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_8B0502FC_DF1D_4bb9_8F3F_97CB310035DD" visibility="public" supplier="EAID_B4983734_8C7E_46bd_BA40_9A9874C29F5E" client="EAID_66BEAA19_9810_4cd4_9BA0_16D3492ED7FB"/>
+		</packagedElement>
+		<thecustomprofile:annotations base_Operation="EAID_FB6BB208_C201_4373_8A66_B73187C62C9A" annotations="@Override"/>
+	</uml:Model>
+</xmi:XMI>
