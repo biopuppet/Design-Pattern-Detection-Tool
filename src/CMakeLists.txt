@@ -26,6 +26,15 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/include
 )
 
+set(ALL_SOURCE_FILES 
+    graph.cpp
+    parser.cpp
+    sp_detector.cpp
+    pattern.cpp
+    pattern_analyzer.cpp
+    main.cpp
+)
+
 # LINK_DIRECTORIES(${PROJECT_BINARY_DIR}/lib)
 
 add_library(pugixml STATIC
@@ -33,13 +42,7 @@ add_library(pugixml STATIC
 )
 
 add_executable(dpdt
-    graph.cpp
-    parser.cpp
-    sp_detector.cpp
-    pattern.cpp
-    pattern_analyzer.cpp
-
-    main.cpp
+    ${ALL_SOURCE_FILES}
 )
 
 TARGET_LINK_LIBRARIES(dpdt pugixml)
@@ -50,4 +53,30 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 install(TARGETS dpdt
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
+)
+
+set(CLANG_FORMAT clang-format)
+
+
+add_custom_target(format
+    COMMENT "Running clang-format to change files"
+    COMMAND cd ${PROJECT_SOURCE_DIR}/src && ${CLANG_FORMAT}
+    -style=file
+    -i
+    ${ALL_SOURCE_FILES} *.hpp
+)
+
+add_custom_target(format-check
+    COMMENT "Checking clang-format changes"
+    # Use ! to negate the result for correct output
+    COMMAND !
+    cd ${PROJECT_SOURCE_DIR}/src && ${CLANG_FORMAT}
+    -style=file
+    -output-replacements-xml
+    ${ALL_SOURCE_FILES} | grep -q "\"replacement offset\""
+)
+
+add_custom_target(wc
+    COMMENT "Counting LOC..."
+    COMMAND cd ${PROJECT_SOURCE_DIR}/src && wc -l ${ALL_SOURCE_FILES} *.hpp
 )
