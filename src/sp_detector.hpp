@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "gcdr.hpp"
+#include "graph.hpp"
 #include "sub_pattern.hpp"
 
 typedef std::vector<std::vector<size_t>> SPRefList;

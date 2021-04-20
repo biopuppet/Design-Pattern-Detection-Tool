@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "gcdr.hpp"
+#include "graph.hpp"
 #include "pugixml.hpp"
 
 class XMIParser {

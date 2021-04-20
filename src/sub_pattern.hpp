@@ -1,7 +1,7 @@
 #ifndef DPDT_SUB_PATTERN_H
 #define DPDT_SUB_PATTERN_H
 
-#include "gcdr.hpp"
+#include "graph.hpp"
 
 enum SubPatternType {
     SPT_NONE = -1,

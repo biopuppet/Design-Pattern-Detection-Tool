@@ -33,7 +33,7 @@ add_library(pugixml STATIC
 )
 
 add_executable(dpdt
-    gcdr.cpp
+    graph.cpp
     parser.cpp
     sp_detector.cpp
     pattern.cpp

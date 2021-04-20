@@ -2,7 +2,7 @@
 #include <array>
 #include <iostream>
 
-#include "gcdr.hpp"
+#include "graph.hpp"
 #include "sub_pattern.hpp"
 #include "sp_detector.hpp"
 

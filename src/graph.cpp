@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 
-#include "gcdr.hpp"
+#include "graph.hpp"
 
 static const char *edge2str(size_t e) {
     switch (e) {

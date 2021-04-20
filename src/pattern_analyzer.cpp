@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "gcdr.hpp"
+#include "graph.hpp"
 #include "pattern_analyzer.hpp"
 // #include <boost/algorithm/string/predicate.hpp>
 
@@ -86,7 +86,7 @@ void BridgeAnalyzer::struct_analyze() {
             if (ipag[2] == ci[0] && ipag[1] != ci[2] && ipag[2] != ci[1] &&
                 ci[1] != ipag[1] && ci[2] != ipag[2]) {
                 add_pattern(new Bridge(sys[ipag[0]], sys[ipag[1]], sys[ipag[2]],
-                                     sys[ci[1]], sys[ci[2]]));
+                                       sys[ci[1]], sys[ci[2]]));
             }
         }
     }
@@ -97,7 +97,7 @@ void FlyweightAnalyzer::struct_analyze() {
         for (const auto &agpi : spis[SPT_AGPI]) {
             if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
                 add_pattern(new Flyweight(sys[agpi[2]], sys[ci[0]], sys[ci[1]],
-                                        sys[ci[2]]));
+                                          sys[ci[2]]));
             }
         }
     }
@@ -109,7 +109,7 @@ void FacadeAnalyzer::struct_analyze() {
         for (const auto &agpi : spis[SPT_AGPI]) {
             if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
                 add_pattern(new Facade(sys[agpi[2]], sys[ci[0]], sys[ci[1]],
-                                     sys[ci[2]]));
+                                       sys[ci[2]]));
             }
         }
     }
@@ -123,7 +123,7 @@ void BuilderAnalyzer::struct_analyze() {
         for (const auto &ica : spis[SPT_ICA]) {
             if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
                 add_pattern(new Builder(sys[ica[0]], sys[ica[1]], sys[agpi[2]],
-                                      sys[ica[2]]));
+                                        sys[ica[2]]));
             }
         }
     }

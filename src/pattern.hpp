@@ -3,7 +3,7 @@
 
 #include <ostream>
 
-#include "gcdr.hpp"
+#include "graph.hpp"
 
 enum PatternType {
 #define PATTERN(x, c) PT_##x,
@@ -152,7 +152,7 @@ public:
           m_implementor(implementor),
           m_concrete_implementor1(concrete_implementor1),
           m_concrete_implementor2(concrete_implementor2) {}
-    
+
     void print() const override {
         printf("Bridge<%s, %s, %s, %s, %s>\n", m_abstraction.name(),
                m_refined_abstraction.name(), m_implementor.name(),
@@ -206,9 +206,8 @@ public:
           m_subsystem3(subsystem3) {}
 
     void print() const override {
-        printf("Facade<%s, %s, %s, %s>\n", m_facade.name(),
-               m_subsystem1.name(), m_subsystem2.name(),
-               m_subsystem3.name());
+        printf("Facade<%s, %s, %s, %s>\n", m_facade.name(), m_subsystem1.name(),
+               m_subsystem2.name(), m_subsystem3.name());
     }
 
     bool behavioral_check() const override;
@@ -233,8 +232,7 @@ public:
 
     void print() const override {
         printf("Builder<%s, %s, %s, %s>\n", m_builder.name(),
-               m_concrete_builder.name(), m_director.name(),
-               m_product.name());
+               m_concrete_builder.name(), m_director.name(), m_product.name());
     }
 
     bool behavioral_check() const override;
