@@ -42,14 +42,14 @@ public:
 
     Graph &gcdr() { return g; }
 
-    void add(size_t u, size_t v, const size_t r) {
+    void add(size_t u, size_t v, size_t r) {
         auto &e = g.edge(u, v);
         if (r % e)
             return;
         e = r;
     }
 
-    virtual const SubPatternType type() const = 0;
+    virtual SubPatternType type() const = 0;
 };
 
 class ICA : public SubPattern {
@@ -59,7 +59,7 @@ public:
         g.edge(1, 2) = Relation::Association;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_ICA;
     }
 };
@@ -71,7 +71,7 @@ public:
         g.edge(2, 0) = Relation::Inheritance;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_CI;
     }
 };
@@ -82,7 +82,7 @@ public:
         g.edge(1, 0) = Relation::Aggregation * Relation::Inheritance;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_IAGG;
     }
 };
@@ -94,7 +94,7 @@ public:
         g.edge(0, 2) = Relation::Aggregation;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_IPAG;
     }
 };
@@ -106,7 +106,7 @@ public:
         g.edge(1, 0) = Relation::Inheritance;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_IPAS;
     }
 };
@@ -115,7 +115,7 @@ class SASS : public SubPattern {
 public:
     SASS() : SubPattern("SASS", 1) { g.edge(0, 0) = Relation::Association; }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_SASS;
     }
 };
@@ -127,7 +127,7 @@ public:
         g.edge(2, 1) = Relation::Inheritance;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_MLI;
     }
 };
@@ -140,7 +140,7 @@ public:
         g.edge(2, 0) = Relation::Aggregation;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_IIAGG;
     }
 };
@@ -151,7 +151,7 @@ public:
         g.edge(1, 0) = Relation::Inheritance * Relation::Association;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_IASS;
     }
 };
@@ -163,7 +163,7 @@ public:
         g.edge(1, 2) = Relation::Dependency;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_ICD;
     }
 };
@@ -175,7 +175,7 @@ public:
         g.edge(2, 1) = Relation::Dependency;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_DCI;
     }
 };
@@ -184,7 +184,7 @@ class SAGG : public SubPattern {
 public:
     SAGG() : SubPattern("SAGG", 1) { g.edge(0, 0) = Relation::Aggregation; }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_SAGG;
     }
 };
@@ -196,7 +196,7 @@ public:
         g.edge(1, 0) = Relation::Inheritance;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_AGPI;
     }
 };
@@ -208,7 +208,7 @@ public:
         g.edge(1, 0) = Relation::Inheritance;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_IPD;
     }
 };
@@ -220,7 +220,7 @@ public:
         g.edge(1, 0) = Relation::Inheritance;
     }
 
-    const SubPatternType type() const override {
+    SubPatternType type() const override {
         return SubPatternType::SPT_DPI;
     }
 };

@@ -53,10 +53,10 @@ struct MethodCmp {
 };
 
 struct Node {
-    std::string id;
+    std::string m_id;
     std::string m_name;
-    Visibility visibility;
-    bool isAbstract;  // bit-mask?
+    Visibility m_visibility;
+    bool m_isAbstract;  // bit-mask?
 
     // Attributes: property, ...
     std::vector<Attribute> attrs;
@@ -71,8 +71,8 @@ struct Node {
     Node(const char *id,
          const char *name = "",
          Visibility v = Visibility::PRIVATE,
-         bool isabstract = false)
-        : id(id), m_name(name), visibility(v), isAbstract(isabstract) {}
+         bool isAbstract = false)
+        : m_id(id), m_name(name), m_visibility(v), m_isAbstract(isAbstract) {}
 
     const char *name() const { return m_name.c_str(); }
 
@@ -83,7 +83,7 @@ struct Node {
  * Graph is a complete directed graph.
  */
 class Graph {
-    size_t n;
+    size_t m_n;
 
     // Optional property
     std::vector<Node> nodes;
@@ -91,11 +91,11 @@ class Graph {
     std::vector<size_t> matrix;
 
 public:
-    Graph(size_t n) : n(n), nodes(n), matrix(n * n, 1) {}
+    Graph(size_t n) : m_n(n), nodes(n), matrix(n * n, 1) {}
 
-    const size_t edge(size_t u, size_t v) const { return matrix.at(u * n + v); }
+    size_t edge(size_t u, size_t v) const { return matrix.at(u * m_n + v); }
 
-    size_t &edge(size_t u, size_t v) { return matrix.at(u * n + v); }
+    size_t &edge(size_t u, size_t v) { return matrix.at(u * m_n + v); }
 
     Node &node(size_t index) { return nodes.at(index); }
 
@@ -103,11 +103,11 @@ public:
 
     Node &operator[](size_t index) { return node(index); }
 
-    size_t size() const { return n; }
+    size_t size() const { return m_n; }
 
     size_t num_nodes() const { return nodes.size(); }
 
-    size_t num_edges() const { return n * n; }
+    size_t num_edges() const { return m_n * m_n; }
 
     size_t cw_in(size_t v) const;
 

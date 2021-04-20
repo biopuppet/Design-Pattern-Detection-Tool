@@ -16,7 +16,7 @@ PatternAnalyzer::createPatternAnalyzer(const SubPatternDetector &spd,
         return new AllAnalyzer(spd);
     }
     if (!pattern_map.count(p)) {
-        std::cerr << "Unknow pattern name " << p << std::endl;
+        std::cerr << "Unknown pattern name " << p << std::endl;
         return nullptr;
     }
     auto pt = pattern_map.at(p);

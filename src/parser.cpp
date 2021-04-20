@@ -118,10 +118,10 @@ Graph XMIParser::parse(const char *file_path) {
     int i = 0;
     for (auto &child : nodes) {
         auto &node = gcdr_system.node(i);
-        node.id = child.attribute("xmi:id").value();
+        node.m_id = child.attribute("xmi:id").value();
         node.m_name = child.attribute("name").value();
-        node.visibility = Node::get_vis(child.attribute("visibility").value());
-        node.isAbstract = child.attribute("isAbstract") ? true : false;
+        node.m_visibility = Node::get_vis(child.attribute("visibility").value());
+        node.m_isAbstract = child.attribute("isAbstract") ? true : false;
 
         node_map[child] = i;
         ++i;

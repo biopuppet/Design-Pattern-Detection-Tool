@@ -24,48 +24,44 @@ public:
 
 class Adapter : public Pattern {
 public:
-    Node &target;
-    Node &adapter;
-    Node &adaptee;
+    Node &m_target;
+    Node &m_adapter;
+    Node &m_adaptee;
 
-    Method *target_request;
-    Method *adapter_request;
-    Method *adaptee_specific_request;
+    Method *m_target_request;
+    Method *m_adapter_request;
+    Method *m_adaptee_specific_request;
 
     Adapter(Node &target, Node &adapter, Node &adaptee)
-        : target(target), adapter(adapter), adaptee(adaptee) {}
+        : m_target(target), m_adapter(adapter), m_adaptee(adaptee) {}
 
     bool behavioral_check() const override;
 
     void print() const override {
-        printf("Adapter<%s, %s, %s>\n", target.name(), adapter.name(),
-               adaptee.name());
+        printf("Adapter<%s, %s, %s>\n", m_target.name(), m_adapter.name(),
+               m_adaptee.name());
     }
 };
 
 class Proxy : public Pattern {
 public:
-    Node &subject;
-    Node &real_subject;
-    Node &proxy;
+    Node &m_subject;
+    Node &m_real_subject;
+    Node &m_proxy;
 
     // CI && IASS   CI && ICA
-    enum Type { RefSubject, RefRealSubject } type;
-
-    Method *subject_request;
-    Method *real_subject_request;
-    Method *proxy_request;
+    enum Type { RefSubject, RefRealSubject } m_type;
 
     Proxy(Node &s, Node &rs, Node &p, Type t)
-        : subject(s), real_subject(rs), proxy(p), type(t) {}
+        : m_subject(s), m_real_subject(rs), m_proxy(p), m_type(t) {}
 
     friend std::ostream &operator<<(std::ostream &os, const Proxy &p) {
-        return os << "Proxy<" << p.subject.name() << ", "
-                  << p.real_subject.name() << ", " << p.proxy.name() << ">";
+        return os << "Proxy<" << p.m_subject.name() << ", "
+                  << p.m_real_subject.name() << ", " << p.m_proxy.name() << ">";
     }
     void print() const override {
-        printf("Proxy<%s, %s, %s>\n", subject.name(), real_subject.name(),
-               proxy.name());
+        printf("Proxy<%s, %s, %s>\n", m_subject.name(), m_real_subject.name(),
+               m_proxy.name());
     }
 
     bool behavioral_check() const override;
