@@ -13,6 +13,12 @@ static const char *edge2str(size_t e) {
         return "dep";
     case Relation::Inheritance:
         return "inherits";
+    case Relation::Association *Relation::Inheritance:
+        return "ass|inherits";
+    case Relation::Aggregation *Relation::Inheritance:
+        return "agg|inherits";
+    case Relation::Dependency *Relation::Inheritance:
+        return "dep|inherits";
     default:
         break;
     }

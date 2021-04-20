@@ -35,8 +35,8 @@ void ProxyAnalyzer::struct_analyze() {
     for (const auto &ica : spis[SPT_ICA]) {
         for (const auto &ci : spis[SPT_CI]) {
             if (ica[0] == ci[0] && ica[1] == ci[1] && ica[2] == ci[2]) {
-                m_patterns.emplace_back(new Proxy(
-                    sys[ci[0]], sys[ci[1]], sys[ci[2]], Proxy::RefRealSubject));
+                add_pattern(new Proxy(sys[ci[0]], sys[ci[1]], sys[ci[2]],
+                                      Proxy::RefRealSubject));
             }
         }
     }
@@ -44,8 +44,8 @@ void ProxyAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &iass : spis[SPT_IASS]) {
             if (ci[0] == iass[0] && ci[2] == iass[1]) {
-                m_patterns.emplace_back(new Proxy(
-                    sys[ci[0]], sys[ci[1]], sys[ci[2]], Proxy::RefSubject));
+                add_pattern(new Proxy(sys[ci[0]], sys[ci[1]], sys[ci[2]],
+                                      Proxy::RefSubject));
             }
         }
     }
@@ -53,27 +53,22 @@ void ProxyAnalyzer::struct_analyze() {
 
 void AdapterAnalyzer::struct_analyze() {
     for (const auto &ica : spis[SPT_ICA]) {
+        // CI && ICA, same as Proxy
         if (!sys.hasInheritance(ica[2], ica[0])) {
-            // CI && ICA, same as Proxy
-            m_patterns.emplace_back(
-                new Adapter(sys[ica[0]], sys[ica[1]], sys[ica[2]]));
-            // printf("Adapter: (%s, %s, %s)\n", sys[ica[0]].name(),
-            //    sys[ica[1]].name(), sys[ica[2]].name());
+            add_pattern(new Adapter(sys[ica[0]], sys[ica[1]], sys[ica[2]]));
+        }
+    }
+}
+
+void CompositeAnalyzer::struct_analyze() {
+    for (const auto &ci : spis[SPT_CI]) {
+        if (sys.hasAssOrAgg(ci[2], ci[0])) {
+            add_pattern(new Composite(sys[ci[0]], sys[ci[1]], sys[ci[2]]));
         }
     }
 }
 
 #if 0
-void PatternAnalyzer::struct_analyze() {
-    for (const auto &ci : spis[SPT_CI]) {
-        if (sys.hasAssOrAgg(ci[2], ci[0])) {
-            composites.emplace_back(sys[ci[0]], sys[ci[1]], sys[ci[2]]);
-            printf("Composite: (%s, %s, %s)\n", sys[ci[0]].name(),
-                   sys[ci[1]].name(), sys[ci[2]].name());
-        }
-    }
-}
-
 void PatternAnalyzer::struct_analyze() {
     for (const auto &mli : spis[SPT_MLI]) {
         for (const auto &ci : spis[SPT_CI]) {
@@ -160,8 +155,8 @@ void VisitorAnalyzer::struct_analyze() {
                 && sys.hasDependency(icd[2], dpi[0])
                 // concrete element --|> element
                 && sys.hasInheritance(icd[2], dpi[2])) {
-                m_patterns.emplace_back(new Visitor(sys[dpi[2]], sys[dpi[0]],
-                                                    sys[icd[2]], sys[dpi[1]]));
+                add_pattern(new Visitor(sys[dpi[2]], sys[dpi[0]], sys[icd[2]],
+                                        sys[dpi[1]]));
             }
         }
     }

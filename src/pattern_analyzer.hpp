@@ -31,6 +31,8 @@ public:
         }
     }
 
+    void add_pattern(Pattern *p) { m_patterns.emplace_back(p); }
+
     virtual void struct_analyze() = 0;
 
     virtual void behavioral_check() {
@@ -61,6 +63,13 @@ public:
 class AdapterAnalyzer : public PatternAnalyzer {
 public:
     AdapterAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
+class CompositeAnalyzer : public PatternAnalyzer {
+public:
+    CompositeAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
 
     void struct_analyze() override;
 };

@@ -22,6 +22,9 @@ public:
 // Node, Method (signature), and things within Graph. And, A pointer to Node
 // is much more safe and robust in terms of invalid indication.
 
+/**
+ *
+ */
 class Adapter : public Pattern {
 public:
     Node &m_target;
@@ -43,6 +46,9 @@ public:
     }
 };
 
+/**
+ *
+ */
 class Proxy : public Pattern {
 public:
     Node &m_subject;
@@ -59,6 +65,7 @@ public:
         return os << "Proxy<" << p.m_subject.name() << ", "
                   << p.m_real_subject.name() << ", " << p.m_proxy.name() << ">";
     }
+
     void print() const override {
         printf("Proxy<%s, %s, %s>\n", m_subject.name(), m_real_subject.name(),
                m_proxy.name());
@@ -67,28 +74,36 @@ public:
     bool behavioral_check() const override;
 };
 
-#if 0
-
+/**
+ *
+ */
 class Composite : public Pattern {
 public:
-    Node &component;
-    Node &composite;
-    Node &leaf;
+    Node &m_component;
+    Node &m_composite;
+    Node &m_leaf;
 
     Method *operation;
     Method *add;     // optional
     Method *remove;  // optional
 
-    Composite(Node &s, Node &rs, Node &p)
-        : component(s), composite(rs), leaf(p) {}
+    Composite(Node &component, Node &composite, Node &leaf)
+        : m_component(component), m_composite(composite), m_leaf(leaf) {}
 
     friend std::ostream &operator<<(std::ostream &os, const Composite &p) {
-        return os << "Composite<" << p.component.name() << ", "
-                  << p.composite.name() << ", " << p.leaf.name() << ">";
+        return os << "Composite<" << p.m_component.name() << ", "
+                  << p.m_composite.name() << ", " << p.m_leaf.name() << ">";
+    }
+
+    void print() const override {
+        printf("Composite<%s, %s, %s>\n", m_component.name(),
+               m_composite.name(), m_leaf.name());
     }
 
     bool behavioral_check() const override;
 };
+
+#if 0
 
 class Decorator : public Pattern {
 public:

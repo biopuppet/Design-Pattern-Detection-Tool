@@ -37,3 +37,11 @@ bool Visitor::behavioral_check() const {
     }
     return false;
 }
+
+bool Composite::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}
