@@ -9,7 +9,7 @@
 PATTERN(adapter, Adapter)
 PATTERN(proxy, Proxy)
 PATTERN(composite, Composite)
-// PATTERN(decorator, Decorator)
+PATTERN(decorator, Decorator)
 // PATTERN(bridge, Bridge)
 // PATTERN(flyweight, Flyweight)
 // PATTERN(facade, Facade)

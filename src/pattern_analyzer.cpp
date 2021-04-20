@@ -68,22 +68,19 @@ void CompositeAnalyzer::struct_analyze() {
     }
 }
 
-#if 0
-void PatternAnalyzer::struct_analyze() {
+void DecoratorAnalyzer::struct_analyze() {
     for (const auto &mli : spis[SPT_MLI]) {
         for (const auto &ci : spis[SPT_CI]) {
             if (mli[0] == ci[0] && mli[1] == ci[2] && mli[2] != ci[1] &&
                 sys.hasAssOrAgg(ci[2], ci[0])) {
-                decorators.emplace_back(sys[mli[0]], sys[ci[1]], sys[ci[2]],
-                                        sys[mli[2]]);
-                printf("Decorator: (%s, %s, %s, %s)\n", sys[mli[0]].name(),
-                       sys[ci[1]].name(), sys[ci[2]].name(),
-                       sys[mli[2]].name());
+                add_pattern(new Decorator(sys[mli[0]], sys[ci[1]], sys[ci[2]],
+                                          sys[mli[2]]));
             }
         }
     }
 }
 
+#if 0
 void PatternAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &ipag : spis[SPT_IPAG]) {

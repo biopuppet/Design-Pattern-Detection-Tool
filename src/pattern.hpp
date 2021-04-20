@@ -103,14 +103,15 @@ public:
     bool behavioral_check() const override;
 };
 
-#if 0
-
+/**
+ *
+ */
 class Decorator : public Pattern {
 public:
-    Node &component;
-    Node &concrete_component;
-    Node &decorator;
-    Node &concrete_decorator;
+    Node &m_component;
+    Node &m_concrete_component;
+    Node &m_decorator;
+    Node &m_concrete_decorator;
 
     Method *operation;
 
@@ -118,12 +119,19 @@ public:
               Node &concrete_component,
               Node &decorator,
               Node &concrete_decorator)
-        : component(component), concrete_component(concrete_component),
-          decorator(decorator), concrete_decorator(concrete_decorator) {}
-    
+        : m_component(component), m_concrete_component(concrete_component),
+          m_decorator(decorator), m_concrete_decorator(concrete_decorator) {}
+
+    void print() const override {
+        printf("Decorator<%s, %s, %s, %s>\n", m_component.name(),
+               m_concrete_component.name(), m_decorator.name(),
+               m_concrete_decorator.name());
+    }
+
     bool behavioral_check() const override;
 };
 
+#if 0
 /**
  * IPAG(2) & CI(0)
  */

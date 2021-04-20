@@ -45,3 +45,11 @@ bool Composite::behavioral_check() const {
     }
     return false;
 }
+
+bool Decorator::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}

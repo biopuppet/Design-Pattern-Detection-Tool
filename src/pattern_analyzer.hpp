@@ -74,6 +74,13 @@ public:
     void struct_analyze() override;
 };
 
+class DecoratorAnalyzer : public PatternAnalyzer {
+public:
+    DecoratorAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
 class VisitorAnalyzer : public PatternAnalyzer {
 public:
     VisitorAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
