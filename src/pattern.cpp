@@ -53,3 +53,35 @@ bool Decorator::behavioral_check() const {
     }
     return false;
 }
+
+bool Bridge::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}
+
+bool Flyweight::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}
+
+bool Facade::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}
+
+bool Builder::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}

@@ -80,44 +80,36 @@ void DecoratorAnalyzer::struct_analyze() {
     }
 }
 
-#if 0
-void PatternAnalyzer::struct_analyze() {
+void BridgeAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &ipag : spis[SPT_IPAG]) {
             if (ipag[2] == ci[0] && ipag[1] != ci[2] && ipag[2] != ci[1] &&
                 ci[1] != ipag[1] && ci[2] != ipag[2]) {
-                bridges.emplace_back(sys[ipag[0]], sys[ipag[1]], sys[ipag[2]],
-                                     sys[ci[1]], sys[ci[2]]);
-                printf("Bridge: (%s, %s, %s, %s, %s)\n", sys[ipag[0]].name(),
-                       sys[ipag[1]].name(), sys[ipag[2]].name(),
-                       sys[ci[1]].name(), sys[ci[2]].name());
+                add_pattern(new Bridge(sys[ipag[0]], sys[ipag[1]], sys[ipag[2]],
+                                     sys[ci[1]], sys[ci[2]]));
             }
         }
     }
 }
 
-void PatternAnalyzer::struct_analyze() {
+void FlyweightAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &agpi : spis[SPT_AGPI]) {
             if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-                flyweights.emplace_back(sys[agpi[2]], sys[ci[0]], sys[ci[1]],
-                                        sys[ci[2]]);
-                printf("Flyweight: (%s, %s, %s, %s)\n", sys[agpi[2]].name(),
-                       sys[ci[0]].name(), sys[ci[1]].name(), sys[ci[2]].name());
+                add_pattern(new Flyweight(sys[agpi[2]], sys[ci[0]], sys[ci[1]],
+                                        sys[ci[2]]));
             }
         }
     }
 }
 
 // TODO: Facade implementation undetermined
-void PatternAnalyzer::struct_analyze() {
+void FacadeAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
         for (const auto &agpi : spis[SPT_AGPI]) {
             if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-                facades.emplace_back(sys[agpi[2]], sys[ci[0]], sys[ci[1]],
-                                     sys[ci[2]]);
-                printf("Facade: (%s, %s, %s, %s)\n", sys[agpi[2]].name(),
-                       sys[ci[0]].name(), sys[ci[1]].name(), sys[ci[2]].name());
+                add_pattern(new Facade(sys[agpi[2]], sys[ci[0]], sys[ci[1]],
+                                     sys[ci[2]]));
             }
         }
     }
@@ -126,20 +118,16 @@ void PatternAnalyzer::struct_analyze() {
 /**
  * Builder
  */
-void PatternAnalyzer::struct_analyze() {
+void BuilderAnalyzer::struct_analyze() {
     for (const auto &agpi : spis[SPT_AGPI]) {
         for (const auto &ica : spis[SPT_ICA]) {
             if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
-                builders.emplace_back(sys[ica[0]], sys[ica[1]], sys[agpi[2]],
-                                      sys[ica[2]]);
-                printf("Builder: (%s, %s, %s, %s)\n", sys[ica[2]].name(),
-                       sys[ica[0]].name(), sys[ica[1]].name(),
-                       sys[ica[2]].name());
+                add_pattern(new Builder(sys[ica[0]], sys[ica[1]], sys[agpi[2]],
+                                      sys[ica[2]]));
             }
         }
     }
 }
-#endif
 
 void VisitorAnalyzer::struct_analyze() {
     for (const auto &icd : spis[SPT_ICD]) {

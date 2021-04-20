@@ -81,6 +81,34 @@ public:
     void struct_analyze() override;
 };
 
+class BridgeAnalyzer : public PatternAnalyzer {
+public:
+    BridgeAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
+class FlyweightAnalyzer : public PatternAnalyzer {
+public:
+    FlyweightAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
+class FacadeAnalyzer : public PatternAnalyzer {
+public:
+    FacadeAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
+class BuilderAnalyzer : public PatternAnalyzer {
+public:
+    BuilderAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
 class VisitorAnalyzer : public PatternAnalyzer {
 public:
     VisitorAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}

@@ -131,7 +131,6 @@ public:
     bool behavioral_check() const override;
 };
 
-#if 0
 /**
  * IPAG(2) & CI(0)
  */
@@ -153,6 +152,12 @@ public:
           m_implementor(implementor),
           m_concrete_implementor1(concrete_implementor1),
           m_concrete_implementor2(concrete_implementor2) {}
+    
+    void print() const override {
+        printf("Bridge<%s, %s, %s, %s, %s>\n", m_abstraction.name(),
+               m_refined_abstraction.name(), m_implementor.name(),
+               m_concrete_implementor1.name(), m_concrete_implementor2.name());
+    }
 
     bool behavioral_check() const override;
 };
@@ -177,6 +182,12 @@ public:
           m_concrete_flyweight(concrete_flyweight),
           m_unshared_concrete_flyweight(unshared_concrete_flyweight) {}
 
+    void print() const override {
+        printf("Flyweight<%s, %s, %s, %s>\n", m_factory.name(),
+               m_flyweight.name(), m_concrete_flyweight.name(),
+               m_unshared_concrete_flyweight.name());
+    }
+
     bool behavioral_check() const override;
 };
 
@@ -193,6 +204,12 @@ public:
     Facade(Node &facade, Node &subsystem1, Node &subsystem2, Node &subsystem3)
         : m_facade(facade), m_subsystem1(subsystem1), m_subsystem2(subsystem2),
           m_subsystem3(subsystem3) {}
+
+    void print() const override {
+        printf("Facade<%s, %s, %s, %s>\n", m_facade.name(),
+               m_subsystem1.name(), m_subsystem2.name(),
+               m_subsystem3.name());
+    }
 
     bool behavioral_check() const override;
 };
@@ -214,9 +231,14 @@ public:
         : m_builder(builder), m_concrete_builder(concrete_builder),
           m_director(director), m_product(product) {}
 
+    void print() const override {
+        printf("Builder<%s, %s, %s, %s>\n", m_builder.name(),
+               m_concrete_builder.name(), m_director.name(),
+               m_product.name());
+    }
+
     bool behavioral_check() const override;
 };
-#endif
 
 class Visitor : public Pattern {
 public:
