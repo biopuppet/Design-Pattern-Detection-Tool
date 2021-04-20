@@ -197,17 +197,24 @@ public:
 class Facade : public Pattern {
 public:
     Node &m_facade;
+    Node &m_concrete_facade;
     Node &m_subsystem1;
     Node &m_subsystem2;
-    Node &m_subsystem3;
+    Node *m_subsystem3;
 
-    Facade(Node &facade, Node &subsystem1, Node &subsystem2, Node &subsystem3)
-        : m_facade(facade), m_subsystem1(subsystem1), m_subsystem2(subsystem2),
+    Facade(Node &facade,
+           Node &concrete_facade,
+           Node &subsystem1,
+           Node &subsystem2,
+           Node *subsystem3 = nullptr)
+        : m_facade(facade), m_concrete_facade(concrete_facade),
+          m_subsystem1(subsystem1), m_subsystem2(subsystem2),
           m_subsystem3(subsystem3) {}
 
     void print() const override {
-        printf("Facade<%s, %s, %s, %s>\n", m_facade.name(), m_subsystem1.name(),
-               m_subsystem2.name(), m_subsystem3.name());
+        printf("Facade<%s, %s, %s, %s>\n", m_facade.name(),
+               m_concrete_facade.name(), m_subsystem1.name(),
+               m_subsystem2.name());
     }
 
     bool behavioral_check() const override;

@@ -104,12 +104,15 @@ void FlyweightAnalyzer::struct_analyze() {
 }
 
 // TODO: Facade implementation undetermined
+// Facade with a concrete facade
+// ICA & ICA (& ICA)
 void FacadeAnalyzer::struct_analyze() {
-    for (const auto &ci : spis[SPT_CI]) {
-        for (const auto &agpi : spis[SPT_AGPI]) {
-            if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-                add_pattern(new Facade(sys[agpi[2]], sys[ci[0]], sys[ci[1]],
-                                       sys[ci[2]]));
+    for (const auto &ica1 : spis[SPT_ICA]) {
+        for (const auto &ica2 : spis[SPT_ICA]) {
+            if (ica1[0] == ica2[0] && ica1[1] == ica2[1] &&
+                ica1[2] != ica2[2]) {
+                add_pattern(new Facade(sys[ica1[0]], sys[ica1[1]], sys[ica1[2]],
+                                       sys[ica2[2]]));
             }
         }
     }
