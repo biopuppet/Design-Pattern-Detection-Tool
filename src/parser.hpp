@@ -7,9 +7,9 @@
 #include "pugixml.hpp"
 
 class XMIParser {
-  Node *m_curnode = nullptr;
+  Node *curnode_ = nullptr;
 
-  Graph *m_gcdr;
+  Graph *gcdr_;
 
  public:
   Graph &parse(const char *file_path);

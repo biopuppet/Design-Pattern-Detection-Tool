@@ -48,8 +48,8 @@ void Graph::print_gcdr() const {
       if (edge(i, j) == 1) {
         continue;
       }
-      std::cout << nodes[i].name() << " --" << edge2str(edge(i, j)) << "--> "
-                << nodes[j].name() << std::endl;
+      std::cout << nodes_[i].name() << " --" << edge2str(edge(i, j)) << "--> "
+                << nodes_[j].name() << std::endl;
     }
   }
   std::cout << std::endl;

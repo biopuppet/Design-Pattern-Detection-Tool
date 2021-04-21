@@ -27,22 +27,22 @@ class Pattern {
  */
 class Adapter : public Pattern {
  public:
-  Node &m_target;
-  Node &m_adapter;
-  Node &m_adaptee;
+  Node &target_;
+  Node &adapter_;
+  Node &adaptee_;
 
-  Method *m_target_request;
-  Method *m_adapter_request;
-  Method *m_adaptee_specific_request;
+  Method *target_request_;
+  Method *adapter_request_;
+  Method *adaptee_specific_request_;
 
   Adapter(Node &target, Node &adapter, Node &adaptee)
-      : m_target(target), m_adapter(adapter), m_adaptee(adaptee) {}
+      : target_(target), adapter_(adapter), adaptee_(adaptee) {}
 
   bool behavioral_check() const override;
 
   void print() const override {
-    printf("Adapter<%s, %s, %s>\n", m_target.name(), m_adapter.name(),
-           m_adaptee.name());
+    printf("Adapter<%s, %s, %s>\n", target_.name(), adapter_.name(),
+           adaptee_.name());
   }
 };
 
@@ -51,24 +51,24 @@ class Adapter : public Pattern {
  */
 class Proxy : public Pattern {
  public:
-  Node &m_subject;
-  Node &m_real_subject;
-  Node &m_proxy;
+  Node &subject_;
+  Node &real_subject_;
+  Node &proxy_;
 
   // CI && IASS   CI && ICA
-  enum Type { RefSubject, RefRealSubject } m_type;
+  enum Type { RefSubject, RefRealSubject } type_;
 
   Proxy(Node &s, Node &rs, Node &p, Type t)
-      : m_subject(s), m_real_subject(rs), m_proxy(p), m_type(t) {}
+      : subject_(s), real_subject_(rs), proxy_(p), type_(t) {}
 
   friend std::ostream &operator<<(std::ostream &os, const Proxy &p) {
-    return os << "Proxy<" << p.m_subject.name() << ", "
-              << p.m_real_subject.name() << ", " << p.m_proxy.name() << ">";
+    return os << "Proxy<" << p.subject_.name() << ", " << p.real_subject_.name()
+              << ", " << p.proxy_.name() << ">";
   }
 
   void print() const override {
-    printf("Proxy<%s, %s, %s>\n", m_subject.name(), m_real_subject.name(),
-           m_proxy.name());
+    printf("Proxy<%s, %s, %s>\n", subject_.name(), real_subject_.name(),
+           proxy_.name());
   }
 
   bool behavioral_check() const override;
@@ -79,25 +79,25 @@ class Proxy : public Pattern {
  */
 class Composite : public Pattern {
  public:
-  Node &m_component;
-  Node &m_composite;
-  Node &m_leaf;
+  Node &component_;
+  Node &composite_;
+  Node &leaf_;
 
   Method *operation;
   Method *add;     // optional
   Method *remove;  // optional
 
   Composite(Node &component, Node &composite, Node &leaf)
-      : m_component(component), m_composite(composite), m_leaf(leaf) {}
+      : component_(component), composite_(composite), leaf_(leaf) {}
 
   friend std::ostream &operator<<(std::ostream &os, const Composite &p) {
-    return os << "Composite<" << p.m_component.name() << ", "
-              << p.m_composite.name() << ", " << p.m_leaf.name() << ">";
+    return os << "Composite<" << p.component_.name() << ", "
+              << p.composite_.name() << ", " << p.leaf_.name() << ">";
   }
 
   void print() const override {
-    printf("Composite<%s, %s, %s>\n", m_component.name(), m_composite.name(),
-           m_leaf.name());
+    printf("Composite<%s, %s, %s>\n", component_.name(), composite_.name(),
+           leaf_.name());
   }
 
   bool behavioral_check() const override;
@@ -108,24 +108,24 @@ class Composite : public Pattern {
  */
 class Decorator : public Pattern {
  public:
-  Node &m_component;
-  Node &m_concrete_component;
-  Node &m_decorator;
-  Node &m_concrete_decorator;
+  Node &component_;
+  Node &concrete_component_;
+  Node &decorator_;
+  Node &concrete_decorator_;
 
   Method *operation;
 
   Decorator(Node &component, Node &concrete_component, Node &decorator,
             Node &concrete_decorator)
-      : m_component(component),
-        m_concrete_component(concrete_component),
-        m_decorator(decorator),
-        m_concrete_decorator(concrete_decorator) {}
+      : component_(component),
+        concrete_component_(concrete_component),
+        decorator_(decorator),
+        concrete_decorator_(concrete_decorator) {}
 
   void print() const override {
-    printf("Decorator<%s, %s, %s, %s>\n", m_component.name(),
-           m_concrete_component.name(), m_decorator.name(),
-           m_concrete_decorator.name());
+    printf("Decorator<%s, %s, %s, %s>\n", component_.name(),
+           concrete_component_.name(), decorator_.name(),
+           concrete_decorator_.name());
   }
 
   bool behavioral_check() const override;
@@ -136,24 +136,24 @@ class Decorator : public Pattern {
  */
 class Bridge : public Pattern {
  public:
-  Node &m_abstraction;
-  Node &m_refined_abstraction;
-  Node &m_implementor;
-  Node &m_concrete_implementor1;
-  Node &m_concrete_implementor2;
+  Node &abstraction_;
+  Node &refined_abstraction_;
+  Node &implementor_;
+  Node &concrete_implementor1_;
+  Node &concrete_implementor2_;
 
   Bridge(Node &abstraction, Node &refined_abstraction, Node &implementor,
          Node &concrete_implementor1, Node &concrete_implementor2)
-      : m_abstraction(abstraction),
-        m_refined_abstraction(refined_abstraction),
-        m_implementor(implementor),
-        m_concrete_implementor1(concrete_implementor1),
-        m_concrete_implementor2(concrete_implementor2) {}
+      : abstraction_(abstraction),
+        refined_abstraction_(refined_abstraction),
+        implementor_(implementor),
+        concrete_implementor1_(concrete_implementor1),
+        concrete_implementor2_(concrete_implementor2) {}
 
   void print() const override {
-    printf("Bridge<%s, %s, %s, %s, %s>\n", m_abstraction.name(),
-           m_refined_abstraction.name(), m_implementor.name(),
-           m_concrete_implementor1.name(), m_concrete_implementor2.name());
+    printf("Bridge<%s, %s, %s, %s, %s>\n", abstraction_.name(),
+           refined_abstraction_.name(), implementor_.name(),
+           concrete_implementor1_.name(), concrete_implementor2_.name());
   }
 
   bool behavioral_check() const override;
@@ -164,23 +164,23 @@ class Bridge : public Pattern {
  */
 class Flyweight : public Pattern {
  public:
-  Node &m_factory;
-  Node &m_flyweight;
-  Node &m_concrete_flyweight;
-  Node &m_unshared_concrete_flyweight;
+  Node &factory_;
+  Node &flyweight_;
+  Node &concrete_flyweight_;
+  Node &unshared_concrete_flyweight_;
 
   Method *operation;
 
   Flyweight(Node &factory, Node &flyweight, Node &concrete_flyweight,
             Node &unshared_concrete_flyweight)
-      : m_factory(factory),
-        m_flyweight(flyweight),
-        m_concrete_flyweight(concrete_flyweight),
-        m_unshared_concrete_flyweight(unshared_concrete_flyweight) {}
+      : factory_(factory),
+        flyweight_(flyweight),
+        concrete_flyweight_(concrete_flyweight),
+        unshared_concrete_flyweight_(unshared_concrete_flyweight) {}
 
   void print() const override {
-    printf("Flyweight<%s, %s, %s, %s>\n", m_factory.name(), m_flyweight.name(),
-           m_concrete_flyweight.name(), m_unshared_concrete_flyweight.name());
+    printf("Flyweight<%s, %s, %s, %s>\n", factory_.name(), flyweight_.name(),
+           concrete_flyweight_.name(), unshared_concrete_flyweight_.name());
   }
 
   bool behavioral_check() const override;
@@ -191,23 +191,23 @@ class Flyweight : public Pattern {
  */
 class Facade : public Pattern {
  public:
-  Node &m_facade;
-  Node &m_concrete_facade;
-  Node &m_subsystem1;
-  Node &m_subsystem2;
-  Node *m_subsystem3;
+  Node &facade_;
+  Node &concrete_facade_;
+  Node &subsystem1_;
+  Node &subsystem2_;
+  Node *subsystem3_;
 
   Facade(Node &facade, Node &concrete_facade, Node &subsystem1,
          Node &subsystem2, Node *subsystem3 = nullptr)
-      : m_facade(facade),
-        m_concrete_facade(concrete_facade),
-        m_subsystem1(subsystem1),
-        m_subsystem2(subsystem2),
-        m_subsystem3(subsystem3) {}
+      : facade_(facade),
+        concrete_facade_(concrete_facade),
+        subsystem1_(subsystem1),
+        subsystem2_(subsystem2),
+        subsystem3_(subsystem3) {}
 
   void print() const override {
-    printf("Facade<%s, %s, %s, %s>\n", m_facade.name(),
-           m_concrete_facade.name(), m_subsystem1.name(), m_subsystem2.name());
+    printf("Facade<%s, %s, %s, %s>\n", facade_.name(), concrete_facade_.name(),
+           subsystem1_.name(), subsystem2_.name());
   }
 
   bool behavioral_check() const override;
@@ -218,20 +218,20 @@ class Facade : public Pattern {
  */
 class Builder : public Pattern {
  public:
-  Node &m_builder;
-  Node &m_concrete_builder;
-  Node &m_director;
-  Node &m_product;
+  Node &builder_;
+  Node &concrete_builder_;
+  Node &director_;
+  Node &product_;
 
   Builder(Node &builder, Node &concrete_builder, Node &director, Node &product)
-      : m_builder(builder),
-        m_concrete_builder(concrete_builder),
-        m_director(director),
-        m_product(product) {}
+      : builder_(builder),
+        concrete_builder_(concrete_builder),
+        director_(director),
+        product_(product) {}
 
   void print() const override {
-    printf("Builder<%s, %s, %s, %s>\n", m_builder.name(),
-           m_concrete_builder.name(), m_director.name(), m_product.name());
+    printf("Builder<%s, %s, %s, %s>\n", builder_.name(),
+           concrete_builder_.name(), director_.name(), product_.name());
   }
 
   bool behavioral_check() const override;
@@ -242,21 +242,21 @@ class Builder : public Pattern {
  */
 class Prototype : public Pattern {
  public:
-  Node &m_client;
-  Node &m_prototype;
-  Node &m_concrete_prototype;
-  Node &m_concrete_prototype2;
+  Node &client_;
+  Node &prototype_;
+  Node &concrete_prototype_;
+  Node &concrete_prototype2_;
 
   Prototype(Node &client, Node &prototype, Node &concrete_prototype,
             Node &concrete_prototype2)
-      : m_client(client),
-        m_prototype(prototype),
-        m_concrete_prototype(concrete_prototype),
-        m_concrete_prototype2(concrete_prototype2) {}
+      : client_(client),
+        prototype_(prototype),
+        concrete_prototype_(concrete_prototype),
+        concrete_prototype2_(concrete_prototype2) {}
 
   void print() const override {
-    printf("Prototype<%s, %s, %s, %s>\n", m_client.name(), m_prototype.name(),
-           m_concrete_prototype.name(), m_concrete_prototype2.name());
+    printf("Prototype<%s, %s, %s, %s>\n", client_.name(), prototype_.name(),
+           concrete_prototype_.name(), concrete_prototype2_.name());
   }
 
   bool behavioral_check() const override;
@@ -267,11 +267,11 @@ class Prototype : public Pattern {
  */
 class Singleton : public Pattern {
  public:
-  Node &m_singleton;
+  Node &singleton_;
 
-  Singleton(Node &singleton) : m_singleton(singleton) {}
+  Singleton(Node &singleton) : singleton_(singleton) {}
 
-  void print() const override { printf("Singleton<%s>\n", m_singleton.name()); }
+  void print() const override { printf("Singleton<%s>\n", singleton_.name()); }
 
   bool behavioral_check() const override;
 };
@@ -281,19 +281,19 @@ class Singleton : public Pattern {
  */
 class ResponsibilityChain : public Pattern {
  public:
-  Node &m_handler;
-  Node &m_concrete_handler1;
-  Node &m_concrete_handler2;
+  Node &handler_;
+  Node &concrete_handler1_;
+  Node &concrete_handler2_;
 
   ResponsibilityChain(Node &handler, Node &concrete_handler1,
                       Node &concrete_handler2)
-      : m_handler(handler),
-        m_concrete_handler1(concrete_handler1),
-        m_concrete_handler2(concrete_handler2) {}
+      : handler_(handler),
+        concrete_handler1_(concrete_handler1),
+        concrete_handler2_(concrete_handler2) {}
 
   void print() const override {
-    printf("ResponsibilityChain<%s, %s, %s>\n", m_handler.name(),
-           m_concrete_handler1.name(), m_concrete_handler2.name());
+    printf("ResponsibilityChain<%s, %s, %s>\n", handler_.name(),
+           concrete_handler1_.name(), concrete_handler2_.name());
   }
 
   bool behavioral_check() const override;

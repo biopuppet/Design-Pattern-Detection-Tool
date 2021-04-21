@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-#include "graph.hpp"
-// #include <boost/algorithm/string/predicate.hpp>
-
 const PatternMap PatternAnalyzer::pattern_map = {
 #define PATTERN(x, c) {#x, PatternType::PT_##x},
 #include "pattern.def"
@@ -187,8 +184,8 @@ void VisitorAnalyzer::struct_analyze() {
 }
 
 // void AdapterAnalyzer::behavioral_check() {
-//     for (const auto &p : m_adapters) {
+//     for (const auto &p : adapters_) {
 //         p.print();
-//         m_real.push_back(p.behavioral_check());
+//         real_.push_back(p.behavioral_check());
 //     }
 // }

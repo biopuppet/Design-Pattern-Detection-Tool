@@ -16,34 +16,34 @@ class PatternAnalyzer {
   const std::vector<SPRefList> &spis;
 
   /// Candidate pattern instances
-  std::vector<Pattern *> m_patterns;
+  std::vector<Pattern *> patterns_;
 
   /// True if the pattern instance passed the behavioral check
-  std::vector<bool> m_real;
+  std::vector<bool> real_;
 
  public:
   PatternAnalyzer(const SubPatternDetector &spd)
       : sys(spd.system), spis(spd.spis) {}
 
   virtual ~PatternAnalyzer() {
-    for (auto p : m_patterns) {
+    for (auto p : patterns_) {
       delete p;
     }
   }
 
-  void add_pattern(Pattern *p) { m_patterns.emplace_back(p); }
+  void add_pattern(Pattern *p) { patterns_.emplace_back(p); }
 
   virtual void struct_analyze() = 0;
 
   virtual void behavioral_check() {
-    for (const auto &p : m_patterns) {
+    for (const auto &p : patterns_) {
       p->print();
-      m_real.push_back(p->behavioral_check());
+      real_.push_back(p->behavioral_check());
     }
   }
 
   virtual void print() {
-    for (const auto &p : m_patterns) {
+    for (const auto &p : patterns_) {
       p->print();
     }
   }
@@ -145,34 +145,34 @@ class VisitorAnalyzer : public PatternAnalyzer {
  */
 class AllAnalyzer : public PatternAnalyzer {
  public:
-  std::vector<PatternAnalyzer *> m_pas;
+  std::vector<PatternAnalyzer *> pas_;
 
   AllAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {
-#define PATTERN(X, C) m_pas.push_back(new C##Analyzer(spd));
+#define PATTERN(X, C) pas_.push_back(new C##Analyzer(spd));
 #include "pattern.def"
-    // std::cout << m_pas.size() << std::endl;
+    // std::cout << pas_.size() << std::endl;
   }
 
   ~AllAnalyzer() {
-    for (auto pa : m_pas) {
+    for (auto pa : pas_) {
       delete pa;
     }
   }
 
   void struct_analyze() override {
-    for (auto pa : m_pas) {
+    for (auto pa : pas_) {
       pa->struct_analyze();
     }
   }
 
   void behavioral_check() override {
-    for (auto pa : m_pas) {
+    for (auto pa : pas_) {
       pa->behavioral_check();
     }
   }
 
   void print() override {
-    for (auto pa : m_pas) {
+    for (auto pa : pas_) {
       pa->print();
     }
   }

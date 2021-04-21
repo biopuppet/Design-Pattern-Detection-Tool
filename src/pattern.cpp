@@ -6,9 +6,9 @@
 bool Proxy::behavioral_check() const {
   // Looking for 3 identical method signature
   std::vector<Method> result;
-  auto &sub = m_subject.methods;
-  auto &pro = m_proxy.methods;
-  auto &real = m_real_subject.methods;
+  auto &sub = subject_.methods;
+  auto &pro = proxy_.methods;
+  auto &real = real_subject_.methods;
   std::set_intersection(pro.begin(), pro.end(), sub.begin(), sub.end(),
                         std::inserter(result, result.begin()), MethodCmp());
   std::set_intersection(real.begin(), real.end(), result.begin(), result.end(),

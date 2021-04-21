@@ -48,20 +48,20 @@ Parameter *XMIParser::parse_parameter(pugi::xml_node &cur) {
                        : Parameter::RETURN;
 
   std::string type = cur.attribute("type").value();
-  auto m_type = Parameter::Type::Void;
+  auto type_ = Parameter::Type::Void;
 
   if (type.substr(0, 7) == "EAJava_") {
     type = type.substr(7);
     // std::cout << type << std::endl;
     if (type == "void") {
-      m_type = Parameter::Void;
+      type_ = Parameter::Void;
     } else if (type == "String__") {
-      m_type = Parameter::Java_String;
+      type_ = Parameter::Java_String;
     } else {
-      m_type = Parameter::Java_Class;
+      type_ = Parameter::Java_Class;
     }
   }
-  return new Parameter(id, name, type, m_type, direction);
+  return new Parameter(id, name, type, type_, direction);
 }
 
 Method XMIParser::parse_operation(pugi::xml_node &cur, size_t curidx) {
@@ -73,9 +73,9 @@ Method XMIParser::parse_operation(pugi::xml_node &cur, size_t curidx) {
   for (auto child : cur.children()) {
     auto p = parse_parameter(child);
     if (p->direction == Parameter::RETURN &&
-        p->m_type == Parameter::Java_Class) {
-      auto &ass = class_map[p->type];
-      m_gcdr->addAssociation(curidx, ass);
+        p->type_ == Parameter::Java_Class) {
+      auto &ass = class_map[p->type_str];
+      gcdr_->addAssociation(curidx, ass);
     }
     node.params.emplace_back(p);
   }
@@ -84,8 +84,8 @@ Method XMIParser::parse_operation(pugi::xml_node &cur, size_t curidx) {
 
 void XMIParser::parse_class(pugi::xml_node &cur) {
   // multi inheritance ignored
-  auto &node = m_gcdr->node(node_map[cur]);
-  m_curnode = &node;
+  auto &node = gcdr_->node(node_map[cur]);
+  curnode_ = &node;
   for (auto &child : cur.children()) {
     if (!strcmp(child.name(), "ownedOperation")) {
       node.methods.emplace_back(parse_operation(child, node_map[cur]));
@@ -93,15 +93,15 @@ void XMIParser::parse_class(pugi::xml_node &cur) {
       if (!child.attribute("association").empty()) {
         auto ass = child.child("type").attribute("xmi:idref").value();
         if (!strcmp("shared", child.attribute("aggregation").value())) {
-          m_gcdr->addAggregationSafe(node_map[cur], node_map[xml_nodes[ass]]);
+          gcdr_->addAggregationSafe(node_map[cur], node_map[xml_nodes[ass]]);
         } else {
-          m_gcdr->addAssociationSafe(node_map[cur], node_map[xml_nodes[ass]]);
+          gcdr_->addAssociationSafe(node_map[cur], node_map[xml_nodes[ass]]);
         }
       }
     } else if (!strcmp(child.name(), "generalization")) {
       auto father_id = child.attribute("general").value();
       auto father = xml_nodes[father_id];
-      m_gcdr->addInheritanceSafe(node_map[cur], node_map[father]);
+      gcdr_->addInheritanceSafe(node_map[cur], node_map[father]);
     }
   }
 }
@@ -118,18 +118,18 @@ Graph &XMIParser::parse(const char *file_path) {
   simple_walker walker;
   doc.traverse(walker);
 
-  m_gcdr = new Graph(nodes.size());
+  gcdr_ = new Graph(nodes.size());
 
   int i = 0;
   for (auto &child : nodes) {
-    auto &node = m_gcdr->node(i);
-    node.m_id = child.attribute("xmi:id").value();
-    node.m_name = child.attribute("name").value();
-    node.m_visibility = Node::get_vis(child.attribute("visibility").value());
-    node.m_isAbstract = child.attribute("isAbstract") ? true : false;
+    auto &node = gcdr_->node(i);
+    node.id_ = child.attribute("xmi:id").value();
+    node.name_ = child.attribute("name").value();
+    node.visibility_ = Node::get_vis(child.attribute("visibility").value());
+    node.isAbstract_ = child.attribute("isAbstract") ? true : false;
 
     node_map[child] = i;
-    class_map[node.m_name] = i;
+    class_map[node.name_] = i;
     ++i;
   }
 
@@ -137,15 +137,15 @@ Graph &XMIParser::parse(const char *file_path) {
   for (auto &r : realizations) {
     auto client = r.attribute("client").value();
     auto supplier = r.attribute("supplier").value();
-    m_gcdr->addInheritanceSafe(node_map[xml_nodes[client]],
-                               node_map[xml_nodes[supplier]]);
+    gcdr_->addInheritanceSafe(node_map[xml_nodes[client]],
+                              node_map[xml_nodes[supplier]]);
   }
 
   for (auto &r : deps) {
     auto client = r.attribute("client").value();
     auto supplier = r.attribute("supplier").value();
-    m_gcdr->addDependencySafe(node_map[xml_nodes[client]],
-                              node_map[xml_nodes[supplier]]);
+    gcdr_->addDependencySafe(node_map[xml_nodes[client]],
+                             node_map[xml_nodes[supplier]]);
   }
 
   // in-class property relations
@@ -153,7 +153,7 @@ Graph &XMIParser::parse(const char *file_path) {
     parse_class(child);
   }
 
-  m_gcdr->print_gcdr();
+  gcdr_->print_gcdr();
 
-  return *m_gcdr;
+  return *gcdr_;
 }

@@ -28,21 +28,20 @@ struct Node;
 struct Parameter {
   std::string id;
   std::string name;
-  std::string type;
+  std::string type_str;
   enum Type {
     Void,
     Int,
     Double,
     Java_Class,
     Java_String,
-  } m_type;
+  } type_;
   enum Direction { IN, RETURN } direction;
   bool isUnique;
-  Node *class_type;
 
   Parameter(const char *id, const char *name, std::string &type, Type ttype,
             Direction dir)
-      : id(id), name(name), type(type), m_type(ttype), direction(dir) {}
+      : id(id), name(name), type_str(type), type_(ttype), direction(dir) {}
 };
 
 struct Method {
@@ -59,10 +58,10 @@ struct MethodCmp {
 };
 
 struct Node {
-  std::string m_id;
-  std::string m_name;
-  Visibility m_visibility;
-  bool m_isAbstract;  // bit-mask?
+  std::string id_;
+  std::string name_;
+  Visibility visibility_;
+  bool isAbstract_;  // bit-mask?
 
   // Attributes: property, ...
   std::vector<Attribute> attrs;
@@ -76,9 +75,9 @@ struct Node {
   Node() {}
   Node(const char *id, const char *name = "",
        Visibility v = Visibility::PRIVATE, bool isAbstract = false)
-      : m_id(id), m_name(name), m_visibility(v), m_isAbstract(isAbstract) {}
+      : id_(id), name_(name), visibility_(v), isAbstract_(isAbstract) {}
 
-  const char *name() const { return m_name.c_str(); }
+  const char *name() const { return name_.c_str(); }
 
   static Visibility get_vis(const char *s);
 };
@@ -91,30 +90,30 @@ class Graph {
   const size_t n_;
 
   // Associated class nodes
-  std::vector<Node> nodes;
+  std::vector<Node> nodes_;
 
   // 1-dim implementation of adjacency matrix
-  std::vector<size_t> matrix;
+  std::vector<size_t> matrix_;
 
  public:
-  Graph(size_t n) : n_(n), nodes(n), matrix(n * n, 1) {}
+  explicit Graph(size_t n) : n_(n), nodes_(n), matrix_(n * n, 1) {}
 
   Graph(const Graph &) = delete;
   Graph &operator=(const Graph &) = delete;
 
-  size_t edge(size_t u, size_t v) const { return matrix.at(u * n_ + v); }
+  size_t edge(size_t u, size_t v) const { return matrix_.at(u * n_ + v); }
 
-  size_t &edge(size_t u, size_t v) { return matrix.at(u * n_ + v); }
+  size_t &edge(size_t u, size_t v) { return matrix_.at(u * n_ + v); }
 
-  Node &node(size_t index) { return nodes.at(index); }
+  Node &node(size_t index) { return nodes_.at(index); }
 
-  const Node &node(size_t index) const { return nodes.at(index); }
+  const Node &node(size_t index) const { return nodes_.at(index); }
 
   Node &operator[](size_t index) { return node(index); }
 
   size_t size() const { return n_; }
 
-  size_t num_nodes() const { return nodes.size(); }
+  size_t num_nodes() const { return nodes_.size(); }
 
   size_t num_edges() const { return n_ * n_; }
 
