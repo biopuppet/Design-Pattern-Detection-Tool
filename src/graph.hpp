@@ -87,19 +87,24 @@ struct Node {
  * Graph is a complete directed graph.
  */
 class Graph {
-  size_t m_n;
+  // Graph size, length, # of nodes
+  const size_t n_;
 
-  // Optional property
+  // Associated class nodes
   std::vector<Node> nodes;
 
+  // 1-dim implementation of adjacency matrix
   std::vector<size_t> matrix;
 
  public:
-  Graph(size_t n) : m_n(n), nodes(n), matrix(n * n, 1) {}
+  Graph(size_t n) : n_(n), nodes(n), matrix(n * n, 1) {}
 
-  size_t edge(size_t u, size_t v) const { return matrix.at(u * m_n + v); }
+  Graph(const Graph &) = delete;
+  Graph &operator=(const Graph &) = delete;
 
-  size_t &edge(size_t u, size_t v) { return matrix.at(u * m_n + v); }
+  size_t edge(size_t u, size_t v) const { return matrix.at(u * n_ + v); }
+
+  size_t &edge(size_t u, size_t v) { return matrix.at(u * n_ + v); }
 
   Node &node(size_t index) { return nodes.at(index); }
 
@@ -107,11 +112,11 @@ class Graph {
 
   Node &operator[](size_t index) { return node(index); }
 
-  size_t size() const { return m_n; }
+  size_t size() const { return n_; }
 
   size_t num_nodes() const { return nodes.size(); }
 
-  size_t num_edges() const { return m_n * m_n; }
+  size_t num_edges() const { return n_ * n_; }
 
   size_t cw_in(size_t v) const;
 

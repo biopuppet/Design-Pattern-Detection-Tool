@@ -43,7 +43,7 @@ void SubPatternDetector::detect_all() {
 
 void SubPatternDetector::combine_cv_1(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
-  auto sp = subp.gcdr();
+  auto &sp = subp.gcdr();
   auto sp_e = sp.edge(0, 0);
   for (const auto &vd : cvs[0]) {
     if (system.edge(vd, vd) % sp_e) {
@@ -56,7 +56,7 @@ void SubPatternDetector::combine_cv_1(const SubPattern &subp,
 
 void SubPatternDetector::combine_cv_2(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
-  auto sp = subp.gcdr();
+  auto &sp = subp.gcdr();
   auto sp_e1 = sp.edge(0, 1);
   auto sp_e2 = sp.edge(1, 0);
   for (const auto &vd1 : cvs[0]) {
@@ -73,7 +73,7 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
 
 void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
-  auto sp = subp.gcdr();
+  auto &sp = subp.gcdr();
   size_t sp_es[] = {sp.edge(0, 1), sp.edge(0, 2), sp.edge(1, 0),
                     sp.edge(1, 2), sp.edge(2, 0), sp.edge(2, 1)};
   for (const auto &vd1 : cvs[0]) {

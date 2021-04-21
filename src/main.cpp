@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
   if (parse(argc, argv)) return 0;
 
   XMIParser parser;
-  auto system = parser.parse(xmi_file.c_str());
+  Graph &system = parser.parse(xmi_file.c_str());
 
   SubPatternDetector spd{system};
   spd.detect_all();
