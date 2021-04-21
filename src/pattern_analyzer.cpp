@@ -160,7 +160,7 @@ void SingletonAnalyzer::struct_analyze() {
  */
 void ResponsibilityChainAnalyzer::struct_analyze() {
     for (const auto &sass : spis[SPT_SASS]) {
-        for (const auto &ci : spis[SPT_ICA]) {
+        for (const auto &ci : spis[SPT_CI]) {
             if (sass[0] == ci[0]) {
                 add_pattern(new ResponsibilityChain(sys[ci[0]], sys[ci[1]],
                                                     sys[ci[2]]));

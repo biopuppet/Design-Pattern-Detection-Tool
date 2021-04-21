@@ -16,6 +16,8 @@ static std::map<std::string, size_t> class_map;
 
 /**
  * Map all xmi id to the corresponding xml_node for later references.
+ * TODO: Make this struct a friend of XMIParser so that
+ * it can use static maps of XMIParser.
  */
 struct simple_walker : pugi::xml_tree_walker {
     virtual bool for_each(pugi::xml_node &node) {
@@ -78,14 +80,14 @@ Method XMIParser::parse_operation(pugi::xml_node &cur, size_t curidx) {
             auto &ass = class_map[p->type];
             m_gcdr->addAssociation(curidx, ass);
         }
-        node.params.emplace_back(*p);
+        node.params.emplace_back(p);
     }
     return node;
 }
 
-void XMIParser::parse_class(pugi::xml_node &cur, Graph &gcdr) {
+void XMIParser::parse_class(pugi::xml_node &cur) {
     // multi inheritance ignored
-    auto &node = gcdr.node(node_map[cur]);
+    auto &node = m_gcdr->node(node_map[cur]);
     m_curnode = &node;
     for (auto &child : cur.children()) {
         if (!strcmp(child.name(), "ownedOperation")) {
@@ -94,36 +96,25 @@ void XMIParser::parse_class(pugi::xml_node &cur, Graph &gcdr) {
         else if (!strcmp(child.name(), "ownedAttribute")) {
             if (!child.attribute("association").empty()) {
                 auto ass = child.child("type").attribute("xmi:idref").value();
-                // TODO: Add Aggregation and Dependency
-                auto &e = gcdr.edge(node_map[cur], node_map[xml_nodes[ass]]);
-                e *= strcmp("shared", child.attribute("aggregation").value()) ?
-                         Relation::Association :
-                         Relation::Aggregation;
+                if (!strcmp("shared", child.attribute("aggregation").value())) {
+                    m_gcdr->addAggregationSafe(node_map[cur],
+                                               node_map[xml_nodes[ass]]);
+                }
+                else {
+                    m_gcdr->addAssociationSafe(node_map[cur],
+                                               node_map[xml_nodes[ass]]);
+                }
             }
         }
         else if (!strcmp(child.name(), "generalization")) {
             auto father_id = child.attribute("general").value();
             auto father = xml_nodes[father_id];
-            gcdr.addInheritanceSafe(node_map[cur], node_map[father]);
+            m_gcdr->addInheritanceSafe(node_map[cur], node_map[father]);
         }
     }
 }
 
-void XMIParser::add_global_relation(pugi::xml_node &node,
-                                    Graph &gcdr,
-                                    Relation relation) {
-    auto client = node.attribute("client").value();
-    auto supplier = node.attribute("supplier").value();
-    // std::cout << xml_nodes[client].name() << std::endl;
-    // std::cout << xml_nodes[supplier].name() << std::endl;
-    // std::cout << node_map[xml_nodes[client]] << std::endl;
-    // std::cout << node_map[xml_nodes[supplier]] << std::endl;
-    auto &e =
-        gcdr.edge(node_map[xml_nodes[client]], node_map[xml_nodes[supplier]]);
-    e *= relation;
-}
-
-Graph XMIParser::parse(const char *file_path) {
+Graph &XMIParser::parse(const char *file_path) {
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(file_path);
 
@@ -136,12 +127,11 @@ Graph XMIParser::parse(const char *file_path) {
     simple_walker walker;
     doc.traverse(walker);
 
-    Graph gcdr_system(nodes.size());
-    m_gcdr = &gcdr_system;
+    m_gcdr = new Graph(nodes.size());
 
     int i = 0;
     for (auto &child : nodes) {
-        auto &node = gcdr_system.node(i);
+        auto &node = m_gcdr->node(i);
         node.m_id = child.attribute("xmi:id").value();
         node.m_name = child.attribute("name").value();
         node.m_visibility =
@@ -153,21 +143,27 @@ Graph XMIParser::parse(const char *file_path) {
         ++i;
     }
 
-    // out-class relation
+    // out-class relations
     for (auto &r : realizations) {
-        add_global_relation(r, gcdr_system, Inheritance);
+        auto client = r.attribute("client").value();
+        auto supplier = r.attribute("supplier").value();
+        m_gcdr->addInheritanceSafe(node_map[xml_nodes[client]],
+                                   node_map[xml_nodes[supplier]]);
     }
 
     for (auto &r : deps) {
-        add_global_relation(r, gcdr_system, Dependency);
+        auto client = r.attribute("client").value();
+        auto supplier = r.attribute("supplier").value();
+        m_gcdr->addDependencySafe(node_map[xml_nodes[client]],
+                                  node_map[xml_nodes[supplier]]);
     }
 
     // in-class property relations
     for (auto &child : nodes) {
-        parse_class(child, gcdr_system);
+        parse_class(child);
     }
 
-    gcdr_system.print_gcdr();
+    m_gcdr->print_gcdr();
 
-    return gcdr_system;
+    return *m_gcdr;
 }

@@ -52,8 +52,8 @@ struct Method {
     std::string id;
     std::string name;
     Visibility visibility;
-    bool isAbstract;                // bit-mask?
-    std::vector<Parameter> params;  // including return value
+    bool isAbstract;                  // bit-mask?
+    std::vector<Parameter *> params;  // including return value
 };
 
 struct MethodCmp {
