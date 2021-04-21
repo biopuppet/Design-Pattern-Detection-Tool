@@ -13,13 +13,17 @@ class PatternAnalyzer;
 class SubPatternDetector {
   friend class PatternAnalyzer;
 
+  // System GCDR reference
   Graph &system;
 
   // Sub-pattern instance set
   std::vector<SPRefList> spis{SPT_NUM};
 
  public:
-  SubPatternDetector(Graph &sys) : system(sys) {}
+  explicit SubPatternDetector(Graph &sys) : system(sys) {}
+
+  SubPatternDetector(const SubPatternDetector &) = delete;
+  SubPatternDetector &operator=(const SubPatternDetector &) = delete;
 
   void detect_all();
 

@@ -15,15 +15,18 @@ class PatternAnalyzer {
 
   const std::vector<SPRefList> &spis;
 
-  /// Candidate pattern instances
+  // Candidate pattern instances
   std::vector<Pattern *> patterns_;
 
-  /// True if the pattern instance passed the behavioral check
+  // True if the pattern instance passed the behavioral check
   std::vector<bool> real_;
 
  public:
-  PatternAnalyzer(const SubPatternDetector &spd)
+  explicit PatternAnalyzer(const SubPatternDetector &spd)
       : sys(spd.system), spis(spd.spis) {}
+
+  PatternAnalyzer(const PatternAnalyzer &) = delete;
+  PatternAnalyzer &operator=(const PatternAnalyzer &) = delete;
 
   virtual ~PatternAnalyzer() {
     for (auto p : patterns_) {
@@ -55,77 +58,87 @@ class PatternAnalyzer {
 
 class ProxyAnalyzer : public PatternAnalyzer {
  public:
-  ProxyAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit ProxyAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class AdapterAnalyzer : public PatternAnalyzer {
  public:
-  AdapterAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit AdapterAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class CompositeAnalyzer : public PatternAnalyzer {
  public:
-  CompositeAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit CompositeAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class DecoratorAnalyzer : public PatternAnalyzer {
  public:
-  DecoratorAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit DecoratorAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class BridgeAnalyzer : public PatternAnalyzer {
  public:
-  BridgeAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit BridgeAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class FlyweightAnalyzer : public PatternAnalyzer {
  public:
-  FlyweightAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit FlyweightAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class FacadeAnalyzer : public PatternAnalyzer {
  public:
-  FacadeAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit FacadeAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class BuilderAnalyzer : public PatternAnalyzer {
  public:
-  BuilderAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit BuilderAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class PrototypeAnalyzer : public PatternAnalyzer {
  public:
-  PrototypeAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit PrototypeAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class SingletonAnalyzer : public PatternAnalyzer {
  public:
-  SingletonAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit SingletonAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
 
 class ResponsibilityChainAnalyzer : public PatternAnalyzer {
  public:
-  ResponsibilityChainAnalyzer(const SubPatternDetector &spd)
+  explicit ResponsibilityChainAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
@@ -133,7 +146,8 @@ class ResponsibilityChainAnalyzer : public PatternAnalyzer {
 
 class VisitorAnalyzer : public PatternAnalyzer {
  public:
-  VisitorAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+  explicit VisitorAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
@@ -147,7 +161,7 @@ class AllAnalyzer : public PatternAnalyzer {
  public:
   std::vector<PatternAnalyzer *> pas_;
 
-  AllAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {
+  explicit AllAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {
 #define PATTERN(X, C) pas_.push_back(new C##Analyzer(spd));
 #include "pattern.def"
     // std::cout << pas_.size() << std::endl;

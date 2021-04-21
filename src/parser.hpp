@@ -1,8 +1,6 @@
 #ifndef DPDT_PARSER_H
 #define DPDT_PARSER_H
 
-#include <vector>
-
 #include "graph.hpp"
 #include "pugixml.hpp"
 
@@ -11,8 +9,15 @@ class XMIParser {
 
   Graph *gcdr_;
 
+  const std::string xmi_;
+
  public:
-  Graph &parse(const char *file_path);
+  explicit XMIParser(const std::string &file) : xmi_(file) {}
+
+  XMIParser(const XMIParser &) = delete;
+  XMIParser &operator=(const XMIParser &) = delete;
+
+  Graph &parse();
   void parse_class(pugi::xml_node &cur);
   Parameter *parse_parameter(pugi::xml_node &cur);
   Method *parseMethod(pugi::xml_node &cur, size_t curidx);

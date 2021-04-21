@@ -6,15 +6,12 @@
 #include <string>
 #include <unordered_map>
 
-#include "pugixml.hpp"
-
 static std::map<pugi::xml_node, size_t> node_map;
 static std::unordered_map<std::string, pugi::xml_node> xml_nodes;
 static std::vector<pugi::xml_node> nodes;
 static std::vector<pugi::xml_node> realizations;
 static std::vector<pugi::xml_node> deps;
 static std::map<std::string, size_t> class_map;
-
 
 static Visibility get_vis(const char *s) {
   if (!strcmp(s, "public"))
@@ -118,12 +115,12 @@ void XMIParser::parse_class(pugi::xml_node &cur) {
   }
 }
 
-Graph &XMIParser::parse(const char *file_path) {
+Graph &XMIParser::parse() {
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_file(file_path);
+  pugi::xml_parse_result result = doc.load_file(xmi_.c_str());
 
-  std::cout << "XMI file <" << file_path
-            << "> Load result: " << result.description() << std::endl;
+  std::cout << "XMI file <" << xmi_ << "> Load result: " << result.description()
+            << std::endl;
   std::cout << "XMI version: "
             << doc.child("xmi:XMI").attribute("xmi:version").value() << "\n\n";
 
