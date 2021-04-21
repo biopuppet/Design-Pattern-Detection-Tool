@@ -54,14 +54,3 @@ void Graph::print_gcdr() const {
   }
   std::cout << std::endl;
 }
-
-Visibility Node::get_vis(const char *s) {
-  if (!strcmp(s, "public"))
-    return Visibility::PUBLIC;
-  else if (!strcmp(s, "protected"))
-    return Visibility::PROTECTED;
-  else if (!strcmp(s, "private"))
-    return Visibility::PRIVATE;
-  else
-    return Visibility::PRIVATE;
-}

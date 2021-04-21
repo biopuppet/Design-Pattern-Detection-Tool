@@ -5,7 +5,7 @@
 
 bool Proxy::behavioral_check() const {
   // Looking for 3 identical method signature
-  std::vector<Method> result;
+  std::vector<Method *> result;
   auto &sub = subject_.methods;
   auto &pro = proxy_.methods;
   auto &real = real_subject_.methods;
@@ -13,8 +13,8 @@ bool Proxy::behavioral_check() const {
                         std::inserter(result, result.begin()), MethodCmp());
   std::set_intersection(real.begin(), real.end(), result.begin(), result.end(),
                         result.begin(), MethodCmp());
-  for (const auto &it : result) {
-    std::cout << "Proxy request: " << it.name << std::endl;
+  for (auto &it : result) {
+    std::cout << "Proxy request: " << it->name << std::endl;
   }
   if (result.size()) {
     return true;
@@ -23,7 +23,7 @@ bool Proxy::behavioral_check() const {
 }
 
 bool Adapter::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -31,7 +31,7 @@ bool Adapter::behavioral_check() const {
 }
 
 bool Visitor::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -39,7 +39,7 @@ bool Visitor::behavioral_check() const {
 }
 
 bool Composite::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -47,7 +47,7 @@ bool Composite::behavioral_check() const {
 }
 
 bool Decorator::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -55,7 +55,7 @@ bool Decorator::behavioral_check() const {
 }
 
 bool Bridge::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -63,7 +63,7 @@ bool Bridge::behavioral_check() const {
 }
 
 bool Flyweight::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -71,7 +71,7 @@ bool Flyweight::behavioral_check() const {
 }
 
 bool Facade::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -79,7 +79,7 @@ bool Facade::behavioral_check() const {
 }
 
 bool Builder::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -87,7 +87,7 @@ bool Builder::behavioral_check() const {
 }
 
 bool Prototype::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -95,7 +95,7 @@ bool Prototype::behavioral_check() const {
 }
 
 bool Singleton::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }
@@ -103,7 +103,7 @@ bool Singleton::behavioral_check() const {
 }
 
 bool ResponsibilityChain::behavioral_check() const {
-  std::vector<Method> result;
+  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }

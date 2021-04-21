@@ -54,7 +54,7 @@ struct Method {
 
 struct MethodCmp {
   // TODO: Check parameters
-  bool operator()(Method a, Method b) { return a.name != b.name; }
+  bool operator()(Method *a, Method *b) { return a->name != b->name; }
 };
 
 struct Node {
@@ -67,7 +67,7 @@ struct Node {
   std::vector<Attribute> attrs;
 
   // Methods
-  std::vector<Method> methods;
+  std::vector<Method *> methods;
 
   // Explicit construction methods that share the same name with its class.
   std::vector<Method *> constructors;
@@ -78,8 +78,6 @@ struct Node {
       : id_(id), name_(name), visibility_(v), isAbstract_(isAbstract) {}
 
   const char *name() const { return name_.c_str(); }
-
-  static Visibility get_vis(const char *s);
 };
 
 /**

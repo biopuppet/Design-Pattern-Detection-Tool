@@ -15,6 +15,18 @@ static std::vector<pugi::xml_node> realizations;
 static std::vector<pugi::xml_node> deps;
 static std::map<std::string, size_t> class_map;
 
+
+static Visibility get_vis(const char *s) {
+  if (!strcmp(s, "public"))
+    return Visibility::PUBLIC;
+  else if (!strcmp(s, "protected"))
+    return Visibility::PROTECTED;
+  else if (!strcmp(s, "private"))
+    return Visibility::PRIVATE;
+  else
+    return Visibility::PRIVATE;
+}
+
 /**
  * Map all xmi id to the corresponding xml_node for later references.
  * TODO: Make this struct a friend of XMIParser so that
@@ -47,37 +59,37 @@ Parameter *XMIParser::parse_parameter(pugi::xml_node &cur) {
                        ? Parameter::IN
                        : Parameter::RETURN;
 
-  std::string type = cur.attribute("type").value();
-  auto type_ = Parameter::Type::Void;
+  std::string type_str = cur.attribute("type").value();
+  auto type = Parameter::Type::Void;
 
-  if (type.substr(0, 7) == "EAJava_") {
-    type = type.substr(7);
-    // std::cout << type << std::endl;
-    if (type == "void") {
-      type_ = Parameter::Void;
-    } else if (type == "String__") {
-      type_ = Parameter::Java_String;
+  if (type_str.substr(0, 7) == "EAJava_") {
+    type_str = type_str.substr(7);
+    // std::cout << type_str << std::endl;
+    if (type_str == "void") {
+      type = Parameter::Void;
+    } else if (type_str == "String__") {
+      type = Parameter::Java_String;
     } else {
-      type_ = Parameter::Java_Class;
+      type = Parameter::Java_Class;
     }
   }
-  return new Parameter(id, name, type, type_, direction);
+  return new Parameter(id, name, type_str, type, direction);
 }
 
-Method XMIParser::parse_operation(pugi::xml_node &cur, size_t curidx) {
-  Method node;
-  node.id = cur.attribute("xmi:id").value();
-  node.name = cur.attribute("name").value();
-  node.visibility = Node::get_vis(cur.attribute("visibility").value());
-  node.isAbstract = cur.attribute("isAbstract") ? true : false;
-  for (auto child : cur.children()) {
+Method *XMIParser::parseMethod(pugi::xml_node &cur, size_t curidx) {
+  auto node = new Method();
+  node->id = cur.attribute("xmi:id").value();
+  node->name = cur.attribute("name").value();
+  node->visibility = get_vis(cur.attribute("visibility").value());
+  node->isAbstract = cur.attribute("isAbstract") ? true : false;
+  for (auto &child : cur.children()) {
     auto p = parse_parameter(child);
     if (p->direction == Parameter::RETURN &&
         p->type_ == Parameter::Java_Class) {
       auto &ass = class_map[p->type_str];
       gcdr_->addAssociation(curidx, ass);
     }
-    node.params.emplace_back(p);
+    node->params.emplace_back(p);
   }
   return node;
 }
@@ -88,7 +100,7 @@ void XMIParser::parse_class(pugi::xml_node &cur) {
   curnode_ = &node;
   for (auto &child : cur.children()) {
     if (!strcmp(child.name(), "ownedOperation")) {
-      node.methods.emplace_back(parse_operation(child, node_map[cur]));
+      node.methods.push_back(parseMethod(child, node_map[cur]));
     } else if (!strcmp(child.name(), "ownedAttribute")) {
       if (!child.attribute("association").empty()) {
         auto ass = child.child("type").attribute("xmi:idref").value();
@@ -125,7 +137,7 @@ Graph &XMIParser::parse(const char *file_path) {
     auto &node = gcdr_->node(i);
     node.id_ = child.attribute("xmi:id").value();
     node.name_ = child.attribute("name").value();
-    node.visibility_ = Node::get_vis(child.attribute("visibility").value());
+    node.visibility_ = get_vis(child.attribute("visibility").value());
     node.isAbstract_ = child.attribute("isAbstract") ? true : false;
 
     node_map[child] = i;
