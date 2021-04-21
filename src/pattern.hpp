@@ -245,6 +245,72 @@ public:
     bool behavioral_check() const override;
 };
 
+/**
+ * AGPI(0,1) & CI(0,1)
+ */
+class Prototype : public Pattern {
+public:
+    Node &m_client;
+    Node &m_prototype;
+    Node &m_concrete_prototype;
+    Node &m_concrete_prototype2;
+
+    Prototype(Node &client,
+              Node &prototype,
+              Node &concrete_prototype,
+              Node &concrete_prototype2)
+        : m_client(client), m_prototype(prototype),
+          m_concrete_prototype(concrete_prototype),
+          m_concrete_prototype2(concrete_prototype2) {}
+
+    void print() const override {
+        printf("Prototype<%s, %s, %s, %s>\n", m_client.name(),
+               m_prototype.name(), m_concrete_prototype.name(),
+               m_concrete_prototype2.name());
+    }
+
+    bool behavioral_check() const override;
+};
+
+/**
+ * AGPI(0,1) & ICA(0,1)
+ */
+class Singleton : public Pattern {
+public:
+    Node &m_singleton;
+
+    Singleton(Node &singleton) : m_singleton(singleton) {}
+
+    void print() const override {
+        printf("Singleton<%s>\n", m_singleton.name());
+    }
+
+    bool behavioral_check() const override;
+};
+
+/**
+ * AGPI(0,1) & ICA(0,1)
+ */
+class ResponsibilityChain : public Pattern {
+public:
+    Node &m_handler;
+    Node &m_concrete_handler1;
+    Node &m_concrete_handler2;
+
+    ResponsibilityChain(Node &handler,
+                        Node &concrete_handler1,
+                        Node &concrete_handler2)
+        : m_handler(handler), m_concrete_handler1(concrete_handler1),
+          m_concrete_handler2(concrete_handler2) {}
+
+    void print() const override {
+        printf("ResponsibilityChain<%s, %s, %s>\n", m_handler.name(),
+               m_concrete_handler1.name(), m_concrete_handler2.name());
+    }
+
+    bool behavioral_check() const override;
+};
+
 class Visitor : public Pattern {
 public:
     Node &element;

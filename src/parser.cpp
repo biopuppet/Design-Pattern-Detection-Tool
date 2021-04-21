@@ -12,6 +12,7 @@ static std::unordered_map<std::string, pugi::xml_node> xml_nodes;
 static std::vector<pugi::xml_node> nodes;
 static std::vector<pugi::xml_node> realizations;
 static std::vector<pugi::xml_node> deps;
+static std::map<std::string, size_t> class_map;
 
 /**
  * Map all xmi id to the corresponding xml_node for later references.
@@ -38,24 +39,46 @@ struct simple_walker : pugi::xml_tree_walker {
     }
 };
 
-Parameter XMIParser::parse_parameter(pugi::xml_node &cur) {
-    Parameter node;
-    node.id = cur.attribute("xmi:id").value();
-    node.name = cur.attribute("name").value();
-    node.direction =
-        cur.attribute("direction").value() ? Parameter::IN : Parameter::RETURN;
+Parameter *XMIParser::parse_parameter(pugi::xml_node &cur) {
+    auto id = cur.attribute("xmi:id").value();
+    auto name = cur.attribute("name").value();
+    auto direction = strcmp("return", cur.attribute("direction").value()) ?
+                         Parameter::IN :
+                         Parameter::RETURN;
 
-    return node;
+    std::string type = cur.attribute("type").value();
+    auto m_type = Parameter::Type::Void;
+
+    if (type.substr(0, 7) == "EAJava_") {
+        type = type.substr(7);
+        // std::cout << type << std::endl;
+        if (type == "void") {
+            m_type = Parameter::Void;
+        }
+        else if (type == "String__") {
+            m_type = Parameter::Java_String;
+        }
+        else {
+            m_type = Parameter::Java_Class;
+        }
+    }
+    return new Parameter(id, name, type, m_type, direction);
 }
 
-Method XMIParser::parse_operation(pugi::xml_node &cur) {
+Method XMIParser::parse_operation(pugi::xml_node &cur, size_t curidx) {
     Method node;
     node.id = cur.attribute("xmi:id").value();
     node.name = cur.attribute("name").value();
     node.visibility = Node::get_vis(cur.attribute("visibility").value());
     node.isAbstract = cur.attribute("isAbstract") ? true : false;
     for (auto child : cur.children()) {
-        parse_parameter(child);
+        auto p = parse_parameter(child);
+        if (p->direction == Parameter::RETURN &&
+            p->m_type == Parameter::Java_Class) {
+            auto &ass = class_map[p->type];
+            m_gcdr->addAssociation(curidx, ass);
+        }
+        node.params.emplace_back(*p);
     }
     return node;
 }
@@ -63,9 +86,10 @@ Method XMIParser::parse_operation(pugi::xml_node &cur) {
 void XMIParser::parse_class(pugi::xml_node &cur, Graph &gcdr) {
     // multi inheritance ignored
     auto &node = gcdr.node(node_map[cur]);
+    m_curnode = &node;
     for (auto &child : cur.children()) {
         if (!strcmp(child.name(), "ownedOperation")) {
-            node.methods.emplace_back(parse_operation(child));
+            node.methods.emplace_back(parse_operation(child, node_map[cur]));
         }
         else if (!strcmp(child.name(), "ownedAttribute")) {
             if (!child.attribute("association").empty()) {
@@ -80,8 +104,7 @@ void XMIParser::parse_class(pugi::xml_node &cur, Graph &gcdr) {
         else if (!strcmp(child.name(), "generalization")) {
             auto father_id = child.attribute("general").value();
             auto father = xml_nodes[father_id];
-            auto &e = gcdr.edge(node_map[cur], node_map[father]);
-            e *= Relation::Inheritance;
+            gcdr.addInheritanceSafe(node_map[cur], node_map[father]);
         }
     }
 }
@@ -114,6 +137,7 @@ Graph XMIParser::parse(const char *file_path) {
     doc.traverse(walker);
 
     Graph gcdr_system(nodes.size());
+    m_gcdr = &gcdr_system;
 
     int i = 0;
     for (auto &child : nodes) {
@@ -125,6 +149,7 @@ Graph XMIParser::parse(const char *file_path) {
         node.m_isAbstract = child.attribute("isAbstract") ? true : false;
 
         node_map[child] = i;
+        class_map[node.m_name] = i;
         ++i;
     }
 

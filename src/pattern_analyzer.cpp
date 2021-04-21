@@ -132,6 +132,43 @@ void BuilderAnalyzer::struct_analyze() {
     }
 }
 
+/**
+ * Prototype
+ */
+void PrototypeAnalyzer::struct_analyze() {
+    for (const auto &agpi : spis[SPT_AGPI]) {
+        for (const auto &ci : spis[SPT_CI]) {
+            if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
+                add_pattern(new Prototype(sys[agpi[2]], sys[ci[0]], sys[ci[1]],
+                                          sys[ci[2]]));
+            }
+        }
+    }
+}
+
+/**
+ * Singleton
+ */
+void SingletonAnalyzer::struct_analyze() {
+    for (const auto &sass : spis[SPT_SASS]) {
+        add_pattern(new Singleton(sys[sass[0]]));
+    }
+}
+
+/**
+ * ResponsibilityChain
+ */
+void ResponsibilityChainAnalyzer::struct_analyze() {
+    for (const auto &sass : spis[SPT_SASS]) {
+        for (const auto &ci : spis[SPT_ICA]) {
+            if (sass[0] == ci[0]) {
+                add_pattern(new ResponsibilityChain(sys[ci[0]], sys[ci[1]],
+                                                    sys[ci[2]]));
+            }
+        }
+    }
+}
+
 void VisitorAnalyzer::struct_analyze() {
     for (const auto &icd : spis[SPT_ICD]) {
         for (const auto &dpi : spis[SPT_DPI]) {

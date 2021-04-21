@@ -28,15 +28,24 @@ struct Node;
 struct Parameter {
     std::string id;
     std::string name;
+    std::string type;
     enum Type {
         Void,
         Int,
         Double,
-        Class,
-    } type;
-    Node *class_type;
+        Java_Class,
+        Java_String,
+    } m_type;
     enum Direction { IN, RETURN } direction;
     bool isUnique;
+    Node *class_type;
+
+    Parameter(const char *id,
+              const char *name,
+              std::string &type,
+              Type ttype,
+              Direction dir)
+        : id(id), name(name), type(type), m_type(ttype), direction(dir) {}
 };
 
 struct Method {
@@ -133,6 +142,46 @@ public:
 
     bool hasAssOrAgg(size_t u, size_t v) const {
         return hasAggregation(u, v) || hasAssociation(u, v);
+    }
+
+    void addInheritanceSafe(size_t u, size_t v) {
+        edge(u, v) *= Relation::Inheritance;
+    }
+
+    void addAssociationSafe(size_t u, size_t v) {
+        edge(u, v) *= Relation::Association;
+    }
+
+    void addAggregationSafe(size_t u, size_t v) {
+        edge(u, v) *= Relation::Aggregation;
+    }
+
+    void addDependencySafe(size_t u, size_t v) {
+        edge(u, v) *= Relation::Dependency;
+    }
+
+    void addInheritance(size_t u, size_t v) {
+        if (!hasInheritance(u, v)) {
+            addInheritanceSafe(u, v);
+        }
+    }
+
+    void addAssociation(size_t u, size_t v) {
+        if (!hasAssociation(u, v)) {
+            addAssociationSafe(u, v);
+        }
+    }
+
+    void addAggregation(size_t u, size_t v) {
+        if (!hasAggregation(u, v)) {
+            addAggregationSafe(u, v);
+        }
+    }
+
+    void addDependency(size_t u, size_t v) {
+        if (!hasDependency(u, v)) {
+            addDependencySafe(u, v);
+        }
     }
 };
 

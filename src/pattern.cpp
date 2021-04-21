@@ -85,3 +85,27 @@ bool Builder::behavioral_check() const {
     }
     return false;
 }
+
+bool Prototype::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}
+
+bool Singleton::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}
+
+bool ResponsibilityChain::behavioral_check() const {
+    std::vector<Method> result;
+    if (result.size()) {
+        return true;
+    }
+    return false;
+}

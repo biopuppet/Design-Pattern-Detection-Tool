@@ -109,6 +109,28 @@ public:
     void struct_analyze() override;
 };
 
+class PrototypeAnalyzer : public PatternAnalyzer {
+public:
+    PrototypeAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
+class SingletonAnalyzer : public PatternAnalyzer {
+public:
+    SingletonAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
+class ResponsibilityChainAnalyzer : public PatternAnalyzer {
+public:
+    ResponsibilityChainAnalyzer(const SubPatternDetector &spd)
+        : PatternAnalyzer(spd) {}
+
+    void struct_analyze() override;
+};
+
 class VisitorAnalyzer : public PatternAnalyzer {
 public:
     VisitorAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {}
