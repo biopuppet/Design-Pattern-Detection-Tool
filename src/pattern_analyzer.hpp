@@ -184,6 +184,38 @@ class MementoAnalyzer : public PatternAnalyzer {
   void struct_analyze() override;
 };
 
+class ObserverAnalyzer : public PatternAnalyzer {
+ public:
+  explicit ObserverAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
+class StateAnalyzer : public PatternAnalyzer {
+ public:
+  explicit StateAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
+class StrategyAnalyzer : public PatternAnalyzer {
+ public:
+  explicit StrategyAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
+class TemplateAnalyzer : public PatternAnalyzer {
+ public:
+  explicit TemplateAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
 class VisitorAnalyzer : public PatternAnalyzer {
  public:
   explicit VisitorAnalyzer(const SubPatternDetector &spd)

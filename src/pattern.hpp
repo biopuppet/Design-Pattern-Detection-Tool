@@ -427,6 +427,102 @@ class Memento : public Pattern {
   bool behavioral_check() const override;
 };
 
+/**
+ * AGPI(0,1) & DPI(0,1)
+ */
+class Observer : public Pattern {
+ public:
+  Node &subject_;
+  Node &concrete_subject_;
+  Node &observer_;
+  Node &concrete_observer_;
+
+  Observer(Node &subject, Node &concrete_subject, Node &observer,
+           Node &concrete_observer)
+      : subject_(subject),
+        concrete_subject_(concrete_subject),
+        observer_(observer),
+        concrete_observer_(concrete_observer) {}
+
+  void print() const override {
+    printf("Observer<%s, %s, %s, %s>\n", subject_.name(),
+           concrete_subject_.name(), observer_.name(),
+           concrete_observer_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
+/**
+ * AGPI(0,1) & DPI(0,1)
+ */
+class State : public Pattern {
+ public:
+  Node &context_;
+  Node &state_;
+  Node &concrete_state1_;
+  Node &concrete_state2_;
+
+  State(Node &context, Node &state, Node &concrete_state1,
+        Node &concrete_state2)
+      : context_(context),
+        state_(state),
+        concrete_state1_(concrete_state1),
+        concrete_state2_(concrete_state2) {}
+
+  void print() const override {
+    printf("State<%s, %s, %s, %s>\n", context_.name(), state_.name(),
+           concrete_state1_.name(), concrete_state2_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
+/**
+ * AGPI(0,1) & DPI(0,1)
+ */
+class Strategy : public Pattern {
+ public:
+  Node &context_;
+  Node &strategy_;
+  Node &concrete_strategy1_;
+  Node &concrete_strategy2_;
+
+  Strategy(Node &context, Node &strategy, Node &concrete_strategy1,
+           Node &concrete_strategy2)
+      : context_(context),
+        strategy_(strategy),
+        concrete_strategy1_(concrete_strategy1),
+        concrete_strategy2_(concrete_strategy2) {}
+
+  void print() const override {
+    printf("Strategy<%s, %s, %s, %s>\n", context_.name(), strategy_.name(),
+           concrete_strategy1_.name(), concrete_strategy2_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
+/**
+ * AGPI(0,1) & DPI(0,1)
+ */
+class Template : public Pattern {
+ public:
+  Node &abstract_;
+  Node &concrete1_;
+  Node &concrete2_;
+
+  Template(Node &abstract, Node &concrete1, Node &concrete2)
+      : abstract_(abstract), concrete1_(concrete1), concrete2_(concrete2) {}
+
+  void print() const override {
+    printf("Template<%s, %s, %s>\n", abstract_.name(), concrete1_.name(),
+           concrete2_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
 class Visitor : public Pattern {
  public:
   Node &element;

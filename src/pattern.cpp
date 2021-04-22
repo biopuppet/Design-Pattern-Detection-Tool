@@ -30,14 +30,6 @@ bool Adapter::behavioral_check() const {
   return false;
 }
 
-bool Visitor::behavioral_check() const {
-  std::vector<Method *> result;
-  if (result.size()) {
-    return true;
-  }
-  return false;
-}
-
 bool Composite::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -143,6 +135,46 @@ bool Mediator::behavioral_check() const {
 }
 
 bool Memento::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool Observer::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool State::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool Strategy::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool Template::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool Visitor::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
     return true;

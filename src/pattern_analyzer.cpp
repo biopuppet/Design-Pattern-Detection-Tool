@@ -244,6 +244,63 @@ void MementoAnalyzer::struct_analyze() {
 }
 
 /**
+ * Observer
+ * AGPI && DPI
+ */
+void ObserverAnalyzer::struct_analyze() {
+  for (const auto &agpi : spis[SPT_AGPI]) {
+    for (const auto &icd : spis[SPT_ICD]) {
+      if (agpi[0] == icd[0] && agpi[1] == icd[1] && agpi[2] != icd[2] &&
+          // ConcreteSubject --> Subject
+          sys.hasInheritance(icd[2], agpi[2])) {
+        add_pattern(
+            new Observer(sys[agpi[2]], sys[icd[2]], sys[icd[0]], sys[icd[1]]));
+      }
+    }
+  }
+}
+
+/**
+ * State
+ * AGPI && DPI
+ */
+void StateAnalyzer::struct_analyze() {
+  for (const auto &agpi : spis[SPT_AGPI]) {
+    for (const auto &ci : spis[SPT_CI]) {
+      if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
+        add_pattern(
+            new State(sys[agpi[2]], sys[ci[0]], sys[ci[1]], sys[ci[2]]));
+      }
+    }
+  }
+}
+
+/**
+ * Strategy
+ * AGPI && DPI
+ */
+void StrategyAnalyzer::struct_analyze() {
+  for (const auto &agpi : spis[SPT_AGPI]) {
+    for (const auto &ci : spis[SPT_CI]) {
+      if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
+        add_pattern(
+            new Strategy(sys[agpi[2]], sys[ci[0]], sys[ci[1]], sys[ci[2]]));
+      }
+    }
+  }
+}
+
+/**
+ * Template
+ * AGPI && DPI
+ */
+void TemplateAnalyzer::struct_analyze() {
+  for (const auto &ci : spis[SPT_CI]) {
+    add_pattern(new Template(sys[ci[0]], sys[ci[1]], sys[ci[2]]));
+  }
+}
+
+/**
  * Visitor
  */
 void VisitorAnalyzer::struct_analyze() {
