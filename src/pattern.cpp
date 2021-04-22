@@ -3,6 +3,14 @@
 #include <algorithm>
 #include <iostream>
 
+bool Adapter::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
 bool Proxy::behavioral_check() const {
   // Looking for 3 identical method signature
   std::vector<Method *> result;
@@ -16,14 +24,6 @@ bool Proxy::behavioral_check() const {
   for (auto &it : result) {
     std::cout << "Proxy request: " << it->name << std::endl;
   }
-  if (result.size()) {
-    return true;
-  }
-  return false;
-}
-
-bool Adapter::behavioral_check() const {
-  std::vector<Method *> result;
   if (result.size()) {
     return true;
   }

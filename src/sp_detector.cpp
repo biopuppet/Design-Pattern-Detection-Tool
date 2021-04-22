@@ -39,6 +39,7 @@ void SubPatternDetector::detect_all() {
   detect_sp_instances(agpi);
   detect_sp_instances(ipd);
   detect_sp_instances(dpi);
+  std::cout << std::endl;
 }
 
 void SubPatternDetector::combine_cv_1(const SubPattern &subp,

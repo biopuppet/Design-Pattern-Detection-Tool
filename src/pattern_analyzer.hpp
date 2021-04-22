@@ -29,7 +29,7 @@ class PatternAnalyzer {
   PatternAnalyzer &operator=(const PatternAnalyzer &) = delete;
 
   virtual ~PatternAnalyzer() {
-    for (auto p : patterns_) {
+    for (auto &p : patterns_) {
       delete p;
     }
   }

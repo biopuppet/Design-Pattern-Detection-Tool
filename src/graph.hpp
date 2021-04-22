@@ -54,7 +54,9 @@ struct Method {
 
 struct MethodCmp {
   // TODO: Check parameters
-  bool operator()(Method *a, Method *b) { return a->name != b->name; }
+  bool operator()(const Method *a, const Method *b) {
+    return a->name != b->name;
+  }
 };
 
 struct Node {
