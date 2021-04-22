@@ -19,9 +19,14 @@ static const char *edge2str(size_t e) {
       return "agg|inherits";
     case Relation::Dependency *Relation::Inheritance:
       return "dep|inherits";
+    case Relation::Dependency *Relation::Association:
+      return "dep|ass";
+    case Relation::Dependency *Relation::Aggregation:
+      return "dep|agg";
     default:
       break;
   }
+  std::cerr << "Unknown edge: " << e << std::endl;
   return "unknown";
 }
 

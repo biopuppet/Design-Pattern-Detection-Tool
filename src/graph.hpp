@@ -64,7 +64,7 @@ struct Node {
   bool isAbstract_;  // bit-mask?
 
   // Attributes: property, ...
-  std::vector<Attribute> attrs;
+  std::vector<Attribute *> attrs;
 
   // Methods
   std::vector<Method *> methods;

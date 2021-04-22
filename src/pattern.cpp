@@ -109,3 +109,43 @@ bool ResponsibilityChain::behavioral_check() const {
   }
   return false;
 }
+
+bool Command::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool Interpreter::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool Iterator::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool Mediator::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool Memento::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}

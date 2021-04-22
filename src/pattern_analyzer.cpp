@@ -106,7 +106,7 @@ void FlyweightAnalyzer::struct_analyze() {
 void FacadeAnalyzer::struct_analyze() {
   for (const auto &ica1 : spis[SPT_ICA]) {
     for (const auto &ica2 : spis[SPT_ICA]) {
-      if (ica1[0] == ica2[0] && ica1[1] == ica2[1] && ica1[2] != ica2[2]) {
+      if (ica1[2] != ica2[2] && ica1[0] == ica2[0] && ica1[1] == ica2[1]) {
         add_pattern(
             new Facade(sys[ica1[0]], sys[ica1[1]], sys[ica1[2]], sys[ica2[2]]));
       }
@@ -165,17 +165,97 @@ void ResponsibilityChainAnalyzer::struct_analyze() {
   }
 }
 
+/**
+ * Command
+ */
+void CommandAnalyzer::struct_analyze() {
+  for (const auto &agpi : spis[SPT_AGPI]) {
+    for (const auto &ica : spis[SPT_ICA]) {
+      if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
+        add_pattern(
+            new Command(sys[agpi[2]], sys[ica[0]], sys[ica[1]], sys[ica[2]]));
+      }
+    }
+  }
+}
+
+/**
+ * Interpreter
+ */
+void InterpreterAnalyzer::struct_analyze() {
+  for (const auto &iagg : spis[SPT_IAGG]) {
+    for (const auto &ipd : spis[SPT_IPD]) {
+      if (iagg[0] == ipd[0] && iagg[1] != ipd[1] && iagg[1] != ipd[2]) {
+        add_pattern(new Interpreter(sys[ipd[2]], sys[ipd[0]], sys[ipd[1]],
+                                    sys[iagg[1]]));
+      }
+    }
+  }
+}
+
+/**
+ * Iterator
+ * ICA & ICD
+ */
+void IteratorAnalyzer::struct_analyze() {
+  for (const auto &ica : spis[SPT_ICA]) {
+    for (const auto &icd : spis[SPT_ICD]) {
+      if (ica[0] != icd[0] && ica[1] == icd[2] && ica[2] == icd[1]) {
+        add_pattern(
+            new Iterator(sys[ica[0]], sys[ica[1]], sys[icd[0]], sys[icd[1]]));
+      }
+    }
+  }
+}
+
+/**
+ * Mediator
+ * ICA & CI
+ */
+void MediatorAnalyzer::struct_analyze() {
+  for (const auto &ica : spis[SPT_ICA]) {
+    for (const auto &ci : spis[SPT_CI]) {
+      if (ica[2] == ci[1] && ica[1] != ci[0] && ica[1] != ci[2] &&
+          ica[0] != ci[0] && ica[0] != ci[2] &&
+          // Colleague --> Mediator
+          sys.hasAssociation(ci[0], ica[0]) &&
+          // ConcreteMediator --> ConcreteColleague2
+          sys.hasAssociation(ica[1], ci[2])) {
+        add_pattern(new Mediator(sys[ica[0]], sys[ica[1]], sys[ci[0]],
+                                 sys[ci[1]], sys[ci[2]]));
+      }
+    }
+  }
+}
+
+/**
+ * Memento
+ * AGPI && DPI
+ */
+void MementoAnalyzer::struct_analyze() {
+  for (const auto &agpi : spis[SPT_AGPI]) {
+    for (const auto &dpi : spis[SPT_DPI]) {
+      if (agpi[0] == dpi[0] && agpi[1] == dpi[1] && agpi[2] != dpi[2]) {
+        add_pattern(
+            new Memento(sys[dpi[0]], sys[dpi[1]], sys[agpi[2]], sys[dpi[2]]));
+      }
+    }
+  }
+}
+
+/**
+ * Visitor
+ */
 void VisitorAnalyzer::struct_analyze() {
   for (const auto &icd : spis[SPT_ICD]) {
     for (const auto &dpi : spis[SPT_DPI]) {
-      if (icd[0] == dpi[0] && icd[1] == dpi[1] &&
-          icd[2] != dpi[2]
+      if (icd[0] == dpi[0] && icd[1] == dpi[1] && icd[2] != dpi[2] &&
           // visitor --> concrete element
-          && sys.hasDependency(dpi[0], icd[2])
+          sys.hasDependency(dpi[0], icd[2]) &&
           // concrete element --> visitor
-          && sys.hasDependency(icd[2], dpi[0])
+          sys.hasDependency(icd[2], dpi[0]) &&
           // concrete element --|> element
-          && sys.hasInheritance(icd[2], dpi[2])) {
+          sys.hasInheritance(icd[2], dpi[2])) {
         add_pattern(
             new Visitor(sys[dpi[2]], sys[dpi[0]], sys[icd[2]], sys[dpi[1]]));
       }

@@ -299,6 +299,134 @@ class ResponsibilityChain : public Pattern {
   bool behavioral_check() const override;
 };
 
+/**
+ * AGPI(0,1) & ICA(0,1)
+ */
+class Command : public Pattern {
+ public:
+  Node &invoker_;
+  Node &command_;
+  Node &concrete_command_;
+  Node &receiver_;
+
+  Command(Node &invoker, Node &command, Node &concrete_command, Node &receiver)
+      : invoker_(invoker),
+        command_(command),
+        concrete_command_(concrete_command),
+        receiver_(receiver) {}
+
+  void print() const override {
+    printf("Command<%s, %s, %s, %s>\n", invoker_.name(), command_.name(),
+           concrete_command_.name(), receiver_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
+/**
+ * IAGG(0,1) & CI(0,1) & IPD
+ */
+class Interpreter : public Pattern {
+ public:
+  Node &content_;
+  Node &abstract_expr_;
+  Node &terminal_expr_;
+  Node &nonterminal_expr_;
+
+  Interpreter(Node &content, Node &abstract_expr, Node &terminal_expr,
+              Node &nonterminal_expr)
+      : content_(content),
+        abstract_expr_(abstract_expr),
+        terminal_expr_(terminal_expr),
+        nonterminal_expr_(nonterminal_expr) {}
+
+  void print() const override {
+    printf("Interpreter<%s, %s, %s, %s>\n", content_.name(),
+           abstract_expr_.name(), terminal_expr_.name(),
+           nonterminal_expr_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
+/**
+ * AGPI(0,1) & ICA(0,1)
+ */
+class Iterator : public Pattern {
+ public:
+  Node &iterator_;
+  Node &concrete_iterator_;
+  Node &aggregate_;
+  Node &aggregate_iterator_;
+
+  Iterator(Node &iterator, Node &concrete_iterator, Node &aggregate,
+           Node &aggregate_iterator)
+      : iterator_(iterator),
+        concrete_iterator_(concrete_iterator),
+        aggregate_(aggregate),
+        aggregate_iterator_(aggregate_iterator) {}
+
+  void print() const override {
+    printf("Iterator<%s, %s, %s, %s>\n", iterator_.name(),
+           concrete_iterator_.name(), aggregate_.name(),
+           aggregate_iterator_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
+/**
+ * IPAS(0,1) & ICA(0,1) & CI
+ */
+class Mediator : public Pattern {
+ public:
+  Node &mediator_;
+  Node &concrete_mediator_;
+  Node &colleague_;
+  Node &concrete_colleague1_;
+  Node &concrete_colleague2_;
+
+  Mediator(Node &mediator, Node &concrete_mediator, Node &colleague,
+           Node &concrete_colleague1, Node &concrete_colleague2)
+      : mediator_(mediator),
+        concrete_mediator_(concrete_mediator),
+        colleague_(colleague),
+        concrete_colleague1_(concrete_colleague1),
+        concrete_colleague2_(concrete_colleague2) {}
+
+  void print() const override {
+    printf("Mediator<%s, %s, %s, %s, %s>\n", mediator_.name(),
+           concrete_mediator_.name(), colleague_.name(),
+           concrete_colleague1_.name(), concrete_colleague2_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
+/**
+ * AGPI(0,1) & DPI(0,1)
+ */
+class Memento : public Pattern {
+ public:
+  Node &memento_;
+  Node &memento_imp_;
+  Node &caretaker_;
+  Node &originator_;
+
+  Memento(Node &memento, Node &memento_imp, Node &caretaker, Node &originator)
+      : memento_(memento),
+        memento_imp_(memento_imp),
+        caretaker_(caretaker),
+        originator_(originator) {}
+
+  void print() const override {
+    printf("Memento<%s, %s, %s, %s>\n", memento_.name(), memento_imp_.name(),
+           caretaker_.name(), originator_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
 class Visitor : public Pattern {
  public:
   Node &element;

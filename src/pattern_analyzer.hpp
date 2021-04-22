@@ -144,6 +144,46 @@ class ResponsibilityChainAnalyzer : public PatternAnalyzer {
   void struct_analyze() override;
 };
 
+class CommandAnalyzer : public PatternAnalyzer {
+ public:
+  explicit CommandAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
+class InterpreterAnalyzer : public PatternAnalyzer {
+ public:
+  explicit InterpreterAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
+class IteratorAnalyzer : public PatternAnalyzer {
+ public:
+  explicit IteratorAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
+class MediatorAnalyzer : public PatternAnalyzer {
+ public:
+  explicit MediatorAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
+class MementoAnalyzer : public PatternAnalyzer {
+ public:
+  explicit MementoAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
 class VisitorAnalyzer : public PatternAnalyzer {
  public:
   explicit VisitorAnalyzer(const SubPatternDetector &spd)
