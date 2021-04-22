@@ -3,31 +3,27 @@
 #include <cstring>
 #include <iostream>
 
-static const char *edge2str(size_t e) {
-  switch (e) {
-    case Relation::Association:
-      return "ass";
-    case Relation::Aggregation:
-      return "agg";
-    case Relation::Dependency:
-      return "dep";
-    case Relation::Inheritance:
-      return "inherits";
-    case Relation::Association *Relation::Inheritance:
-      return "ass|inherits";
-    case Relation::Aggregation *Relation::Inheritance:
-      return "agg|inherits";
-    case Relation::Dependency *Relation::Inheritance:
-      return "dep|inherits";
-    case Relation::Dependency *Relation::Association:
-      return "dep|ass";
-    case Relation::Dependency *Relation::Aggregation:
-      return "dep|agg";
-    default:
+static std::string edge2str(size_t e) {
+  std::string s = "";
+  while (e) {
+    if (e % Relation::Association == 0) {
+      e /= Relation::Association;
+      s += "ass";
+    } else if (e % Relation::Aggregation == 0) {
+      e /= Relation::Aggregation;
+      s += "agg";
+    } else if (e % Relation::Dependency == 0) {
+      e /= Relation::Dependency;
+      s += "dep";
+    } else if (e % Relation::Inheritance == 0) {
+      e /= Relation::Inheritance;
+      s += "ihr";
+    } else {
       break;
+    }
+    s += "|";
   }
-  std::cerr << "Unknown edge: " << e << std::endl;
-  return "unknown";
+  return s;
 }
 
 size_t Graph::cw_in(size_t v) const {

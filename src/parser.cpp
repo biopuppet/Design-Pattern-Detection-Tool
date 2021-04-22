@@ -153,6 +153,10 @@ Graph &XMIParser::parse() {
   for (auto &r : deps) {
     auto client = r.attribute("client").value();
     auto supplier = r.attribute("supplier").value();
+    // std::cerr << xml_nodes[client].attribute("name").value() << std::endl;
+    // std::cerr << xml_nodes[supplier].attribute("name").value() << std::endl;
+    // std::cerr << node_map[xml_nodes[client]] << std::endl;
+    // std::cerr << node_map[xml_nodes[supplier]] << std::endl;
     gcdr_->addDependencySafe(node_map[xml_nodes[client]],
                              node_map[xml_nodes[supplier]]);
   }
