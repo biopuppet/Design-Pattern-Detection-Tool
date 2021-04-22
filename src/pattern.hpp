@@ -216,6 +216,35 @@ class Facade : public Pattern {
 /**
  * AGPI(0,1) & ICA(0,1)
  */
+class AbstractFactory : public Pattern {
+ public:
+  Node &abstract_factory_;
+  Node &concrete_factory_;
+  Node &product_;
+  Node &concrete_product1_;
+  Node &concrete_product2_;
+
+  AbstractFactory(Node &abstract_factory, Node &concrete_factory, Node &product,
+                  Node &concrete_product1, Node &concrete_product2)
+      : abstract_factory_(abstract_factory),
+        concrete_factory_(concrete_factory),
+        product_(product),
+        concrete_product1_(concrete_product1),
+        concrete_product2_(concrete_product2) {}
+
+  void print() const override {
+    printf("AbstractFactory<%s, %s, %s, %s, %s>\n", abstract_factory_.name(),
+           concrete_factory_.name(), product_.name(), concrete_product1_.name(),
+           concrete_product2_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
+/**
+ * Builder
+ * AGPI(0,1) & ICA(0,1)
+ */
 class Builder : public Pattern {
  public:
   Node &builder_;
@@ -238,6 +267,33 @@ class Builder : public Pattern {
 };
 
 /**
+ * Factory
+ * DCI(0,1) & ICD(0,1)
+ */
+class Factory : public Pattern {
+ public:
+  Node &product_;
+  Node &concrete_product_;
+  Node &creator_;
+  Node &concrete_creator_;
+
+  Factory(Node &product, Node &concrete_product, Node &creator,
+          Node &concrete_creator)
+      : product_(product),
+        concrete_product_(concrete_product),
+        creator_(creator),
+        concrete_creator_(concrete_creator) {}
+
+  void print() const override {
+    printf("Factory<%s, %s, %s, %s>\n", product_.name(),
+           concrete_product_.name(), creator_.name(), concrete_creator_.name());
+  }
+
+  bool behavioral_check() const override;
+};
+
+/**
+ * Prototype
  * AGPI(0,1) & CI(0,1)
  */
 class Prototype : public Pattern {

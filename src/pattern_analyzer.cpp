@@ -115,6 +115,22 @@ void FacadeAnalyzer::struct_analyze() {
 }
 
 /**
+ * AbstractFactory
+ */
+void AbstractFactoryAnalyzer::struct_analyze() {
+  for (const auto &icd : spis[SPT_ICD]) {
+    for (const auto &ci : spis[SPT_CI]) {
+      if (icd[2] == ci[1] && icd[1] != ci[2] && icd[1] != ci[0] &&
+          icd[0] != ci[2] && icd[0] != ci[0] &&
+          sys.hasDependency(icd[1], ci[2])) {
+        add_pattern(new AbstractFactory(sys[icd[0]], sys[icd[1]], sys[ci[0]],
+                                        sys[ci[1]], sys[ci[2]]));
+      }
+    }
+  }
+}
+
+/**
  * Builder
  */
 void BuilderAnalyzer::struct_analyze() {
@@ -123,6 +139,20 @@ void BuilderAnalyzer::struct_analyze() {
       if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
         add_pattern(
             new Builder(sys[ica[0]], sys[ica[1]], sys[agpi[2]], sys[ica[2]]));
+      }
+    }
+  }
+}
+
+/**
+ * Factory
+ */
+void FactoryAnalyzer::struct_analyze() {
+  for (const auto &dci : spis[SPT_DCI]) {
+    for (const auto &icd : spis[SPT_ICD]) {
+      if (dci[0] != icd[0] && dci[1] == icd[2] && dci[2] == icd[1]) {
+        add_pattern(
+            new Factory(sys[dci[0]], sys[dci[1]], sys[icd[0]], sys[icd[1]]));
       }
     }
   }

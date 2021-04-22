@@ -70,7 +70,23 @@ bool Facade::behavioral_check() const {
   return false;
 }
 
+bool AbstractFactory::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
 bool Builder::behavioral_check() const {
+  std::vector<Method *> result;
+  if (result.size()) {
+    return true;
+  }
+  return false;
+}
+
+bool Factory::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
     return true;

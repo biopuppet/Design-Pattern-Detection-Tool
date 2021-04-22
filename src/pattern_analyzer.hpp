@@ -112,9 +112,25 @@ class FacadeAnalyzer : public PatternAnalyzer {
   void struct_analyze() override;
 };
 
+class AbstractFactoryAnalyzer : public PatternAnalyzer {
+ public:
+  explicit AbstractFactoryAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
 class BuilderAnalyzer : public PatternAnalyzer {
  public:
   explicit BuilderAnalyzer(const SubPatternDetector &spd)
+      : PatternAnalyzer(spd) {}
+
+  void struct_analyze() override;
+};
+
+class FactoryAnalyzer : public PatternAnalyzer {
+ public:
+  explicit FactoryAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
