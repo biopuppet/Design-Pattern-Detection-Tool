@@ -2,16 +2,13 @@ message(STATUS "CXX : ${CMAKE_CXX_COMPILER}")
 
 set(WARN_FLAGS "-std=c++11 -Wall")
 
-if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
-  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
-  set(WARN_FLAGS "${WARN_FLAGS} ")
-endif()
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
-if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
-  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
-  set(WARN_FLAGS "${WARN_FLAGS} -Wextra -Wshadow -Wpointer-arith -Winline -Wunreachable-code -Wredundant-decls")
+if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
+  set(WARN_FLAGS "${WARN_FLAGS} -Wextra -Wshadow ")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES GNU)
+  set(WARN_FLAGS "${WARN_FLAGS} -Wextra -Wshadow -Wpointer-arith -Wunreachable-code -Wredundant-decls")
 endif()
 
 if (${cmake_build_type_tolower} STREQUAL "debug")

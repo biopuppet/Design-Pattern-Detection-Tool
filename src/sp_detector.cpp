@@ -39,6 +39,10 @@ void SubPatternDetector::detect_all() {
   detect_sp_instances(agpi);
   detect_sp_instances(ipd);
   detect_sp_instances(dpi);
+
+  for (size_t i = 0; i < SPT_NUM; ++i) {
+    std::cout << spis[i].size() << std::endl;
+  }
   std::cout << std::endl;
 }
 

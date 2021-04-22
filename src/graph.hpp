@@ -26,9 +26,9 @@ struct Attribute {};
 
 struct Node;
 struct Parameter {
-  std::string id;
-  std::string name;
-  std::string type_str;
+  std::string id_;
+  std::string name_;
+  std::string type_str_;
   enum Type {
     Void,
     Int,
@@ -36,12 +36,12 @@ struct Parameter {
     Java_Class,
     Java_String,
   } type_;
-  enum Direction { IN, RETURN } direction;
-  bool isUnique;
+  enum Direction { IN, RETURN } dir_;
+  bool isUnique_;
 
-  Parameter(const char *id, const char *name, std::string &type, Type ttype,
+  Parameter(const char *id, const char *name, std::string &type_str, Type type,
             Direction dir)
-      : id(id), name(name), type_str(type), type_(ttype), direction(dir) {}
+      : id_(id), name_(name), type_str_(type_str), type_(type), dir_(dir) {}
 };
 
 struct Method {

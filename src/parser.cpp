@@ -81,9 +81,9 @@ Method *XMIParser::parseMethod(pugi::xml_node &cur, size_t curidx) {
   node->isAbstract = cur.attribute("isAbstract") ? true : false;
   for (auto &child : cur.children()) {
     auto p = parse_parameter(child);
-    if (p->direction == Parameter::RETURN &&
+    if (p->dir_ == Parameter::RETURN &&
         p->type_ == Parameter::Java_Class) {
-      auto &ass = class_map[p->type_str];
+      auto &ass = class_map[p->type_str_];
       gcdr_->addAssociation(curidx, ass);
     }
     node->params.emplace_back(p);
