@@ -143,43 +143,43 @@ class Graph {
     return hasAggregation(u, v) || hasAssociation(u, v);
   }
 
-  void addInheritanceSafe(size_t u, size_t v) {
+  void addInheritanceUnsafe(size_t u, size_t v) {
     edge(u, v) *= Relation::Inheritance;
   }
 
-  void addAssociationSafe(size_t u, size_t v) {
+  void addAssociationUnsafe(size_t u, size_t v) {
     edge(u, v) *= Relation::Association;
   }
 
-  void addAggregationSafe(size_t u, size_t v) {
+  void addAggregationUnsafe(size_t u, size_t v) {
     edge(u, v) *= Relation::Aggregation;
   }
 
-  void addDependencySafe(size_t u, size_t v) {
+  void addDependencyUnsafe(size_t u, size_t v) {
     edge(u, v) *= Relation::Dependency;
   }
 
   void addInheritance(size_t u, size_t v) {
     if (!hasInheritance(u, v)) {
-      addInheritanceSafe(u, v);
+      addInheritanceUnsafe(u, v);
     }
   }
 
   void addAssociation(size_t u, size_t v) {
     if (!hasAssociation(u, v)) {
-      addAssociationSafe(u, v);
+      addAssociationUnsafe(u, v);
     }
   }
 
   void addAggregation(size_t u, size_t v) {
     if (!hasAggregation(u, v)) {
-      addAggregationSafe(u, v);
+      addAggregationUnsafe(u, v);
     }
   }
 
   void addDependency(size_t u, size_t v) {
     if (!hasDependency(u, v)) {
-      addDependencySafe(u, v);
+      addDependencyUnsafe(u, v);
     }
   }
 };

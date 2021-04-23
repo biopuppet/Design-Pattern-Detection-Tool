@@ -81,8 +81,7 @@ Method *XMIParser::parseMethod(pugi::xml_node &cur, size_t curidx) {
   node->isAbstract = cur.attribute("isAbstract") ? true : false;
   for (auto &child : cur.children()) {
     auto p = parse_parameter(child);
-    if (p->dir_ == Parameter::RETURN &&
-        p->type_ == Parameter::Java_Class) {
+    if (p->dir_ == Parameter::RETURN && p->type_ == Parameter::Java_Class) {
       auto &ass = class_map[p->type_str_];
       gcdr_->addAssociation(curidx, ass);
     }
@@ -102,15 +101,15 @@ void XMIParser::parse_class(pugi::xml_node &cur) {
       if (!child.attribute("association").empty()) {
         auto ass = child.child("type").attribute("xmi:idref").value();
         if (!strcmp("shared", child.attribute("aggregation").value())) {
-          gcdr_->addAggregationSafe(node_map[cur], node_map[xml_nodes[ass]]);
+          gcdr_->addAggregationUnsafe(node_map[cur], node_map[xml_nodes[ass]]);
         } else {
-          gcdr_->addAssociationSafe(node_map[cur], node_map[xml_nodes[ass]]);
+          gcdr_->addAssociationUnsafe(node_map[cur], node_map[xml_nodes[ass]]);
         }
       }
     } else if (!strcmp(child.name(), "generalization")) {
       auto father_id = child.attribute("general").value();
       auto father = xml_nodes[father_id];
-      gcdr_->addInheritanceSafe(node_map[cur], node_map[father]);
+      gcdr_->addInheritanceUnsafe(node_map[cur], node_map[father]);
     }
   }
 }
@@ -146,8 +145,8 @@ Graph &XMIParser::parse() {
   for (auto &r : realizations) {
     auto client = r.attribute("client").value();
     auto supplier = r.attribute("supplier").value();
-    gcdr_->addInheritanceSafe(node_map[xml_nodes[client]],
-                              node_map[xml_nodes[supplier]]);
+    gcdr_->addInheritanceUnsafe(node_map[xml_nodes[client]],
+                                node_map[xml_nodes[supplier]]);
   }
 
   for (auto &r : deps) {
@@ -157,8 +156,8 @@ Graph &XMIParser::parse() {
     // std::cerr << xml_nodes[supplier].attribute("name").value() << std::endl;
     // std::cerr << node_map[xml_nodes[client]] << std::endl;
     // std::cerr << node_map[xml_nodes[supplier]] << std::endl;
-    gcdr_->addDependencySafe(node_map[xml_nodes[client]],
-                             node_map[xml_nodes[supplier]]);
+    gcdr_->addDependencyUnsafe(node_map[xml_nodes[client]],
+                               node_map[xml_nodes[supplier]]);
   }
 
   // in-class property relations
