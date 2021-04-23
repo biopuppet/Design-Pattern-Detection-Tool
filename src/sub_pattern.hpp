@@ -5,34 +5,25 @@
 
 enum SubPatternType {
   SPT_NONE = -1,
-  SPT_ICA = 0,
-  SPT_CI,
-  SPT_IAGG,
-  SPT_IPAG,
-  SPT_IPAS,
-  SPT_SASS,
-  SPT_MLI,
-  SPT_IIAGG,
-  SPT_IASS,
-  SPT_ICD,
-  SPT_DCI,
-  SPT_SAGG,
-  SPT_AGPI,
-  SPT_IPD,
-  SPT_DPI,
+#define SUBPATTERN(U, L) SPT_##U,
+#include "subpattern.def"
   SPT_NUM,
 };
 
 /**
  * Note: If there are multiple edges,
- *  use multiplication instead of multi assignment, like IAGG, IASS.
+ *  use multiplication instead of assignments, like IAGG, IASS.
  */
 class SubPattern {
- public:
+ protected:
   const std::string name_;
   Graph g_;
 
-  SubPattern(const char *name, size_t size) : name_(name), g_(size) {}
+ public:
+  explicit SubPattern(const char *name, size_t size) : name_(name), g_(size) {}
+
+  SubPattern(const SubPattern &) = delete;
+  SubPattern &operator=(const SubPattern &) = delete;
 
   virtual ~SubPattern() {}
 

@@ -33,21 +33,8 @@ class SubPatternDetector {
   void combine_cv_2(const SubPattern &sp, const CandidateVertexList &cvs);
   void combine_cv_1(const SubPattern &sp, const CandidateVertexList &cvs);
 
-  static const ICA ica;
-  static const CI ci;
-  static const IAGG iagg;
-  static const IPAG ipag;
-  static const IPAS ipas;
-  static const SASS sass;
-  static const MLI mli;
-  static const IIAGG iiagg;
-  static const IASS iass;
-  static const ICD icd;
-  static const DCI dci;
-  static const SAGG sagg;
-  static const AGPI agpi;
-  static const IPD ipd;
-  static const DPI dpi;
+#define SUBPATTERN(U, L) static const U L;
+#include "subpattern.def"
 };
 
 #endif  // !DPDT_SP_DETECTOR_H

@@ -1,44 +1,14 @@
 #include "sp_detector.hpp"
 
-#include <array>
 #include <iostream>
 #include <vector>
 
-#include "graph.hpp"
-#include "sub_pattern.hpp"
-
-const ICA SubPatternDetector::ica;
-const CI SubPatternDetector::ci;
-const IAGG SubPatternDetector::iagg;
-const IPAG SubPatternDetector::ipag;
-const IPAS SubPatternDetector::ipas;
-const SASS SubPatternDetector::sass;
-const MLI SubPatternDetector::mli;
-const IIAGG SubPatternDetector::iiagg;
-const IASS SubPatternDetector::iass;
-const ICD SubPatternDetector::icd;
-const DCI SubPatternDetector::dci;
-const SAGG SubPatternDetector::sagg;
-const AGPI SubPatternDetector::agpi;
-const IPD SubPatternDetector::ipd;
-const DPI SubPatternDetector::dpi;
+#define SUBPATTERN(U, L) const U SubPatternDetector::L;
+#include "subpattern.def"
 
 void SubPatternDetector::detect_all() {
-  detect_sp_instances(ica);
-  detect_sp_instances(ci);
-  detect_sp_instances(iagg);
-  detect_sp_instances(ipag);
-  detect_sp_instances(ipas);
-  detect_sp_instances(sass);
-  detect_sp_instances(mli);
-  detect_sp_instances(iiagg);
-  detect_sp_instances(iass);
-  detect_sp_instances(icd);
-  detect_sp_instances(dci);
-  detect_sp_instances(sagg);
-  detect_sp_instances(agpi);
-  detect_sp_instances(ipd);
-  detect_sp_instances(dpi);
+#define SUBPATTERN(U, L) detect_sp_instances(L);
+#include "subpattern.def"
 
   for (size_t i = 0; i < SPT_NUM; ++i) {
     std::cout << spis[i].size() << std::endl;

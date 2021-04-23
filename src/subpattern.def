@@ -1,0 +1,25 @@
+/**
+ * Copyright (C) 2021 Liu Fengbo <biopuppet@outlook.com>
+ */
+
+#ifndef SUBPATTERN
+#define SUBPATTERN(U, L)
+#endif
+
+SUBPATTERN(ICA, ica)
+SUBPATTERN(CI, ci)
+SUBPATTERN(IAGG, iagg)
+SUBPATTERN(IPAG, ipag)
+SUBPATTERN(IPAS, ipas)
+SUBPATTERN(SASS, sass)
+SUBPATTERN(MLI, mli)
+SUBPATTERN(IIAGG, iiagg)
+SUBPATTERN(IASS, iass)
+SUBPATTERN(ICD, icd)
+SUBPATTERN(DCI, dci)
+SUBPATTERN(SAGG, sagg)
+SUBPATTERN(AGPI, agpi)
+SUBPATTERN(IPD, ipd)
+SUBPATTERN(DPI, dpi)
+
+#undef SUBPATTERN
