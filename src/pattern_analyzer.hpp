@@ -1,6 +1,7 @@
 #ifndef DPDT_PATTERN_ANALYZER_H
 #define DPDT_PATTERN_ANALYZER_H
 
+#include <iostream>
 #include <unordered_map>
 #include <vector>
 
@@ -39,10 +40,15 @@ class PatternAnalyzer {
   virtual void struct_analyze() = 0;
 
   virtual void behavioral_check() {
+    if (!patterns_.size()) {
+      return;
+    }
+    std::cout << "Total: " << patterns_.size() << std::endl;
     for (const auto &p : patterns_) {
       p->print();
       real_.push_back(p->behavioral_check());
     }
+    std::cout << std::endl;
   }
 
   virtual void print() {

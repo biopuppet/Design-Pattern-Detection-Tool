@@ -66,6 +66,16 @@ Parameter *XMIParser::parse_parameter(pugi::xml_node &cur) {
       type = Parameter::Void;
     } else if (type_str == "String__") {
       type = Parameter::Java_String;
+    } else if (type_str == "int") {
+      type = Parameter::Java_int;
+    } else if (type_str == "Hashtable") {
+      type = Parameter::Java_Hashtable;
+    } else if (type_str == "long") {
+      type = Parameter::Java_long;
+    } else if (type_str == "boolean") {
+      type = Parameter::Java_boolean;
+    } else if (type_str == "double") {
+      type = Parameter::Java_double;
     } else {
       type = Parameter::Java_Class;
     }
@@ -81,8 +91,13 @@ Method *XMIParser::parseMethod(pugi::xml_node &cur, size_t curidx) {
   node->isAbstract = cur.attribute("isAbstract") ? true : false;
   for (auto &child : cur.children()) {
     auto p = parse_parameter(child);
-    if (p->dir_ == Parameter::RETURN && p->type_ == Parameter::Java_Class) {
+    if (p->dir_ == Parameter::RETURN && p->type_ == Parameter::Java_Class &&
+        class_map.count(p->type_str_)) {
       auto &ass = class_map[p->type_str_];
+      // std::cout << node->name << std::endl;
+      // std::cout << gcdr_->node(curidx).name() << std::endl;
+      // std::cout << curidx << " --> " << ass << std::endl;
+      // std::cout << gcdr_->node(ass).name() << std::endl;
       gcdr_->addAssociation(curidx, ass);
     }
     node->params.emplace_back(p);

@@ -33,8 +33,13 @@ struct Parameter {
     Void,
     Int,
     Double,
-    Java_Class,
+    Java_int,
+    Java_long,
+    Java_double,
+    Java_boolean,
     Java_String,
+    Java_Hashtable,
+    Java_Class,
   } type_;
   enum Direction { IN, RETURN } dir_;
   bool isUnique_;
