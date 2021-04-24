@@ -40,6 +40,18 @@ class SubPattern {
   }
 
   virtual SubPatternType type() const = 0;
+
+  static const char *getname(size_t spt) {
+    switch (spt) {
+#define SUBPATTERN(U, L) \
+  case SPT_##U:          \
+    return #U;
+#include "subpattern.def"
+      default:
+        break;
+    }
+    return nullptr;
+  }
 };
 
 class ICA : public SubPattern {

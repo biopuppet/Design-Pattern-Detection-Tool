@@ -23,6 +23,7 @@ class Pattern {
 // is much more safe and robust in terms of invalid indication.
 
 /**
+ * Adapter
  *
  */
 class Adapter : public Pattern {

@@ -19,8 +19,12 @@ class SubPatternDetector {
   // Sub-pattern instance set
   std::vector<SPRefList> spis{SPT_NUM};
 
+  // dump user option
+  bool dump_sp_;
+
  public:
-  explicit SubPatternDetector(Graph &sys) : system(sys) {}
+  explicit SubPatternDetector(Graph &sys, bool dump_sp = false)
+      : system(sys), dump_sp_(dump_sp) {}
 
   SubPatternDetector(const SubPatternDetector &) = delete;
   SubPatternDetector &operator=(const SubPatternDetector &) = delete;

@@ -9,13 +9,15 @@
 
 static std::string pattern;
 static std::string xmi_file;
+static bool dump_graph = false, dump_sp = false;
 
 static void print_usage(const char *argv0) {
   printf(
       "Usage: %s [option...] [XMI file]\n"
       "Options:\n"
       " -p <adapter/...>  Select which design pattern to match.\n"
-      " --dump-gcdr       Dump Graph graph.\n"
+      " --dump-graph      Dump GCDR graph in form of adjacent lists.\n"
+      " --dump-sp         Dump sub patterns.\n"
       " -h, --help        Display this information.\n"
       " --version         Display version.\n",
       argv0);
@@ -28,7 +30,8 @@ static void print_version() {
 }
 
 static int parse(int argc, char *argv[]) {
-  argh::parser cmdl({"-v", "--version", "-h", "--help", "-p"});
+  argh::parser cmdl(
+      {"-v", "--version", "-h", "--help", "-p", "--dump-graph", "--dump-sp"});
   cmdl.parse(argc, argv, argh::parser::PREFER_PARAM_FOR_UNREG_OPTION);
 
   if (cmdl[{"-v", "--version"}]) {
@@ -40,6 +43,12 @@ static int parse(int argc, char *argv[]) {
   }
 
   else {
+    if (cmdl["--dump-graph"]) {
+      dump_graph = true;
+    }
+    if (cmdl["--dump-sp"]) {
+      dump_sp = true;
+    }
     auto p = cmdl("-p");
     p >> pattern;
   }
@@ -62,8 +71,9 @@ int main(int argc, char **argv) {
 
   XMIParser parser{xmi_file};
   Graph &system = parser.parse();
+  if (dump_graph) system.print_gcdr();
 
-  SubPatternDetector spd{system};
+  SubPatternDetector spd{system, dump_sp};
   spd.detect_all();
 
   auto pa = PatternAnalyzer::createPatternAnalyzer(spd, pattern);

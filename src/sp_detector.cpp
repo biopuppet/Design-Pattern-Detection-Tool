@@ -10,8 +10,17 @@ void SubPatternDetector::detect_all() {
 #define SUBPATTERN(U, L) detect_sp_instances(L);
 #include "subpattern.def"
 
-  for (size_t i = 0; i < SPT_NUM; ++i) {
-    std::cout << spis[i].size() << std::endl;
+  if (dump_sp_) {
+    for (size_t i = 0; i < SPT_NUM; ++i) {
+      std::cout << SubPattern::getname(i) << " (" << spis[i].size() << ")\n";
+      for (const auto &spi : spis[i]) {
+        std::cout << SubPattern::getname(i) << ": ";
+        for (const auto &it : spi) {
+          std::cout << system[it].name() << " ";
+        }
+        std::cout << "\n";
+      }
+    }
   }
   std::cout << std::endl;
 }
@@ -24,7 +33,7 @@ void SubPatternDetector::combine_cv_1(const SubPattern &subp,
     if (system.edge(vd, vd) % sp_e) {
       continue;
     }
-    printf("%s(%s)\n", subp.name(), system[vd].name());
+    // printf("%s(%s)\n", subp.name(), system[vd].name());
     spis[subp.type()].push_back({vd});
   }
 }
@@ -39,8 +48,8 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
       if (system.edge(vd1, vd2) % sp_e1 || system.edge(vd2, vd1) % sp_e2) {
         continue;
       }
-      printf("%s(%s %s)\n", subp.name(), system[vd1].name(),
-             system[vd2].name());
+      // printf("%s(%s %s)\n", subp.name(), system[vd1].name(),
+      //  system[vd2].name());
       spis[subp.type()].push_back({vd1, vd2});
     }
   }
@@ -67,8 +76,8 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
             system.edge(vd3, vd2) % sp_es[5]) {
           continue;
         }
-        printf("%s(%s %s %s)\n", subp.name(), system[vd1].name(),
-               system[vd2].name(), system[vd3].name());
+        // printf("%s(%s %s %s)\n", subp.name(), system[vd1].name(),
+        //  system[vd2].name(), system[vd3].name());
         spis[subp.type()].push_back({vd1, vd2, vd3});
       }
     }

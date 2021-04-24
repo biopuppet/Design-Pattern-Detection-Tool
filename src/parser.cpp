@@ -165,7 +165,5 @@ Graph &XMIParser::parse() {
     parse_class(child);
   }
 
-  gcdr_->print_gcdr();
-
   return *gcdr_;
 }
