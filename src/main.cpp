@@ -15,8 +15,10 @@ static void print_usage(const char *argv0) {
   printf(
       "Usage: %s [option...] [XMI file]\n"
       "Options:\n"
-      " -p, --pattern <adapter/...>  Select which design pattern to match, match all on default.\n"
-      " --dump-graph                 Dump GCDR graph in form of adjacent lists.\n"
+      " -p, --pattern <adapter/...>  Select which design pattern to match, "
+      "match all on default.\n"
+      " --dump-graph                 Dump GCDR graph in form of adjacent "
+      "lists.\n"
       " --dump-sp                    Dump sub patterns info.\n"
       " -h, --help                   Display this information.\n"
       " -v, --version                Display version.\n",
@@ -25,7 +27,7 @@ static void print_usage(const char *argv0) {
 
 static void print_version() {
   puts(
-      "DPDT(Design Pattern Detection Tool) v0.1 \n"
+      "DPDT(Design Pattern Detection Tool) v0.1\n"
       "Copyright (C) 2021 Liu Fengbo <biopuppet@outlook.com>");
 }
 
@@ -54,15 +56,11 @@ static int parse(int argc, char *argv[]) {
   }
 
   auto pas = cmdl.pos_args().size();
-  if (cmdl.pos_args().size() <= 1) {
-    fputs("No input XMI file.\n", stderr);
+  if (pas <= 1) {
+    std::cerr << "No input XMI file." << std::endl;
     return -1;
   }
-
-  /* TODO: Add multi xmi file support? */
-  // for (auto &pos_arg : cmdl) {
   xmi_file = cmdl.pos_args()[pas - 1];
-  // }
 
   return 0;
 }

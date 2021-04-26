@@ -3,9 +3,29 @@
 #include <algorithm>
 #include <iostream>
 
+using MethodList = std::vector<Method *>;
+
+static MethodList intersected(const MethodList &m1, const MethodList &m2) {
+  MethodList res;
+  for (const auto &it1 : m1) {
+    for (const auto &it2 : m2) {
+      if (it1->name == it2->name) {
+        res.emplace_back(it1);
+      }
+    }
+  }
+  return res;
+}
+
 bool Adapter::behavioral_check() const {
-  std::vector<Method *> result;
-  if (result.size()) {
+  auto result = intersected(target_.methods, adapter_.methods);
+
+  for (auto &it : result) {
+    std::cout << "request: " << it->name << std::endl;
+  }
+
+  bool indep = intersected(result, adaptee_.methods).size();
+  if (result.size() && !indep) {
     return true;
   }
   return false;
@@ -13,18 +33,12 @@ bool Adapter::behavioral_check() const {
 
 bool Proxy::behavioral_check() const {
   // Looking for 3 identical method signature
-  std::vector<Method *> result;
-  auto &sub = subject_.methods;
-  auto &pro = proxy_.methods;
-  auto &real = real_subject_.methods;
-  std::set_intersection(pro.begin(), pro.end(), sub.begin(), sub.end(),
-                        std::inserter(result, result.begin()), MethodCmp());
-  std::set_intersection(real.begin(), real.end(), result.begin(), result.end(),
-                        result.begin(), MethodCmp());
-  for (auto &it : result) {
+  auto res = intersected(subject_.methods, proxy_.methods);
+  res = intersected(res, real_subject_.methods);
+  for (auto &it : res) {
     std::cout << "Proxy request: " << it->name << std::endl;
   }
-  if (result.size()) {
+  if (res.size()) {
     return true;
   }
   return false;
