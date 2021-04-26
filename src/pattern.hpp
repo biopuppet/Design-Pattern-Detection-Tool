@@ -1,7 +1,7 @@
 #ifndef DPDT_PATTERN_H
 #define DPDT_PATTERN_H
 
-#include <ostream>
+#include <iostream>
 
 #include "graph.hpp"
 

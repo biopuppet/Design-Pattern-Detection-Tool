@@ -62,7 +62,7 @@ void AdapterAnalyzer::struct_analyze() {
 void CompositeAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     if (sys.hasAssOrAgg(ci[2], ci[0])) {
-      add_pattern(new Composite(sys[ci[0]], sys[ci[1]], sys[ci[2]]));
+      add_pattern(new Composite(sys[ci[0]], sys[ci[2]], sys[ci[1]]));
     }
   }
 }
@@ -324,11 +324,13 @@ void StrategyAnalyzer::struct_analyze() {
 
 /**
  * Template
- * AGPI && DPI
+ * CI & !Proxy
  */
 void TemplateAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
-    add_pattern(new Template(sys[ci[0]], sys[ci[1]], sys[ci[2]]));
+    if (!sys.hasAssOrAgg(ci[1], ci[0]) && !sys.hasAssOrAgg(ci[2], ci[0])) {
+      add_pattern(new Template(sys[ci[0]], sys[ci[1]], sys[ci[2]]));
+    }
   }
 }
 

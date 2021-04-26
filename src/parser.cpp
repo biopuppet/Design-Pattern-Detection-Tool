@@ -83,7 +83,7 @@ Parameter *XMIParser::parse_parameter(pugi::xml_node &cur) {
   return new Parameter(id, name, type_str, type, direction);
 }
 
-Method *XMIParser::parseMethod(pugi::xml_node &cur, size_t curidx) {
+Method *XMIParser::parse_method(pugi::xml_node &cur, size_t curidx) {
   auto node = new Method();
   node->id = cur.attribute("xmi:id").value();
   node->name = cur.attribute("name").value();
@@ -105,22 +105,41 @@ Method *XMIParser::parseMethod(pugi::xml_node &cur, size_t curidx) {
   return node;
 }
 
+Attribute *XMIParser::parse_attribute(pugi::xml_node &cur, size_t curidx) {
+  auto node = new Attribute();
+  node->id = cur.attribute("xmi:id").value();
+  node->name = cur.attribute("name").value();
+  node->visibility = get_vis(cur.attribute("visibility").value());
+  // association property
+  if (!cur.attribute("association").empty()) {
+    auto ass = cur.child("type").attribute("xmi:idref").value();
+    if (!strcmp("shared", cur.attribute("aggregation").value())) {
+      gcdr_->addAggregationUnsafe(curidx, node_map[xml_nodes[ass]]);
+    } else {
+      gcdr_->addAssociationUnsafe(curidx, node_map[xml_nodes[ass]]);
+    }
+    auto low = cur.child("lowerValue").attribute("xmi:type").value();
+    auto up = cur.child("upperValue").attribute("xmi:type").value();
+    if (!strcmp(low, "uml:LiteralInteger")) {
+      auto low_val = cur.child("lowerValue").attribute("value").as_int();
+      if (low_val == 0 && !strcmp(up, "uml:LiteralUnlimitedNatural")) {
+        node->type = Attribute::List;
+        node->associate = &gcdr_->node(node_map[xml_nodes[ass]]);
+      }
+    }
+  }
+  return node;
+}
+
 void XMIParser::parse_class(pugi::xml_node &cur) {
   // multi inheritance ignored
   auto &node = gcdr_->node(node_map[cur]);
   curnode_ = &node;
   for (auto &child : cur.children()) {
     if (!strcmp(child.name(), "ownedOperation")) {
-      node.methods.push_back(parseMethod(child, node_map[cur]));
+      node.methods.push_back(parse_method(child, node_map[cur]));
     } else if (!strcmp(child.name(), "ownedAttribute")) {
-      if (!child.attribute("association").empty()) {
-        auto ass = child.child("type").attribute("xmi:idref").value();
-        if (!strcmp("shared", child.attribute("aggregation").value())) {
-          gcdr_->addAggregationUnsafe(node_map[cur], node_map[xml_nodes[ass]]);
-        } else {
-          gcdr_->addAssociationUnsafe(node_map[cur], node_map[xml_nodes[ass]]);
-        }
-      }
+      node.attrs.push_back(parse_attribute(child, node_map[cur]));
     } else if (!strcmp(child.name(), "generalization")) {
       auto father_id = child.attribute("general").value();
       auto father = xml_nodes[father_id];

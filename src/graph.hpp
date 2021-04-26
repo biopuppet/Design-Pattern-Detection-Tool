@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+struct Node;
+
 /**
  * Use prime number for composite relation factoring
  */
@@ -22,9 +24,18 @@ enum class Visibility {
   PACKAGE,  // Java
 };
 
-struct Attribute {};
+struct Attribute {
+  std::string id;
+  std::string name;
+  Visibility visibility;
+  // association
+  enum Type {
+    Single,
+    List,
+  } type;
+  Node *associate;
+};
 
-struct Node;
 struct Parameter {
   std::string id_;
   std::string name_;

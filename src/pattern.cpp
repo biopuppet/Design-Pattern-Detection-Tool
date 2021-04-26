@@ -17,6 +17,9 @@ static MethodList intersected(const MethodList &m1, const MethodList &m2) {
   return res;
 }
 
+/**
+ * Target.[Method] = Adapter.[Method] → Adaptee.[Method]
+ */
 bool Adapter::behavioral_check() const {
   auto result = intersected(target_.methods, adapter_.methods);
 
@@ -44,9 +47,24 @@ bool Proxy::behavioral_check() const {
   return false;
 }
 
+/**
+ * Component.[Method] = Composite.[Method] → Component.[Method]
+ */
 bool Composite::behavioral_check() const {
-  std::vector<Method *> result;
-  if (result.size()) {
+  auto result = intersected(component_.methods, composite_.methods);
+  auto result2 = intersected(result, leaf_.methods);
+  for (auto &it : result2) {
+    std::cout << "method: " << it->name << std::endl;
+  }
+
+  bool agg = false;
+  for (const auto &it : composite_.attrs) {
+    if (it->type == Attribute::List && it->associate == &component_) {
+      agg = true;
+      std::cout << it->name << " ";
+    }
+  }
+  if (result2.size() && agg) {
     return true;
   }
   return false;

@@ -20,7 +20,8 @@ class XMIParser {
   Graph &parse();
   void parse_class(pugi::xml_node &cur);
   Parameter *parse_parameter(pugi::xml_node &cur);
-  Method *parseMethod(pugi::xml_node &cur, size_t curidx);
+  Method *parse_method(pugi::xml_node &cur, size_t curidx);
+  Attribute *parse_attribute(pugi::xml_node &cur, size_t curidx);
 };
 
 #endif  // !DPDT_PARSER_H
