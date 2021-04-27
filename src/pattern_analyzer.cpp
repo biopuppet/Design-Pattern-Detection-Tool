@@ -28,6 +28,18 @@ PatternAnalyzer *PatternAnalyzer::createPatternAnalyzer(
   return nullptr;
 }
 
+void AdapterAnalyzer::struct_analyze() {
+  for (const auto &ica : spis[SPT_ICA]) {
+    // ICA && !CI, different from Proxy
+    if (!sys.hasInheritance(ica[2], ica[0]) 
+        // && !sys.hasAssOrAgg(ica[2], ica[0])
+        // && !sys.hasDependency(ica[2], ica[0])
+        ) {
+      add_pattern(new Adapter(sys[ica[0]], sys[ica[1]], sys[ica[2]]));
+    }
+  }
+}
+
 void ProxyAnalyzer::struct_analyze() {
   for (const auto &ica : spis[SPT_ICA]) {
     for (const auto &ci : spis[SPT_CI]) {
@@ -44,17 +56,6 @@ void ProxyAnalyzer::struct_analyze() {
         add_pattern(
             new Proxy(sys[ci[0]], sys[ci[1]], sys[ci[2]], Proxy::RefSubject));
       }
-    }
-  }
-}
-
-void AdapterAnalyzer::struct_analyze() {
-  for (const auto &ica : spis[SPT_ICA]) {
-    // ICA && !CI, different from Proxy
-    if (!sys.hasInheritance(ica[2], ica[0]) &&
-        !sys.hasAssOrAgg(ica[2], ica[0]) &&
-        !sys.hasDependency(ica[2], ica[0])) {
-      add_pattern(new Adapter(sys[ica[0]], sys[ica[1]], sys[ica[2]]));
     }
   }
 }

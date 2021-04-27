@@ -79,7 +79,12 @@ bool Composite::behavioral_check() const {
  *     = ConcreteDecorator.[Method] → Component.[Method]
  */
 bool Decorator::behavioral_check() const {
-  std::vector<Method *> result;
+  auto result = intersected(component_.methods, concrete_component_.methods);
+  auto result2 = intersected(result, decorator_.methods);
+  auto result3 = intersected(result2, concrete_decorator_.methods);
+  for (auto &it : result3) {
+    std::cout << "method: " << it->name << std::endl;
+  }
   if (result.size()) {
     return true;
   }
