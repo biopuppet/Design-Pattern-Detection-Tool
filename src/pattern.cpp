@@ -34,12 +34,15 @@ bool Adapter::behavioral_check() const {
   return false;
 }
 
+/**
+ * Subject.[Method] = Proxy.[Method] → RealSubject.[Method]
+ */
 bool Proxy::behavioral_check() const {
   // Looking for 3 identical method signature
   auto res = intersected(subject_.methods, proxy_.methods);
   res = intersected(res, real_subject_.methods);
   for (auto &it : res) {
-    std::cout << "Proxy request: " << it->name << std::endl;
+    std::cout << "request: " << it->name << std::endl;
   }
   if (res.size()) {
     return true;
@@ -70,6 +73,11 @@ bool Composite::behavioral_check() const {
   return false;
 }
 
+/**
+ * (1) Component.[Method] = Decorator.[Method] → Component.[Method]
+ * (2) Component.[Method] = Decorator.[Method]
+ *     = ConcreteDecorator.[Method] → Component.[Method]
+ */
 bool Decorator::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -78,6 +86,10 @@ bool Decorator::behavioral_check() const {
   return false;
 }
 
+/**
+ * Abstraction.[Method] = Ref inedAbstraction.[Method]
+ *  → Implementor.[Method] = ConImplementor.[Method]
+ */
 bool Bridge::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -86,6 +98,10 @@ bool Bridge::behavioral_check() const {
   return false;
 }
 
+/**
+ * FlyweightFactory.[Method] ⇒ Flyweight,
+ * FlyweightFactory.[Method] → ConcreteFlyweight.[Constructor]
+ */
 bool Flyweight::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -94,6 +110,9 @@ bool Flyweight::behavioral_check() const {
   return false;
 }
 
+/**
+ * Facade.[Method] = ConcreteFacade.[Method] → SubSystem.[Method]
+ */
 bool Facade::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -102,6 +121,10 @@ bool Facade::behavioral_check() const {
   return false;
 }
 
+/**
+ * AbstractFactory.[Method] = ConFactory.[Method] ⇒ Product
+ * ConFactory.[Method] → ConProduct.[ConstrucationMethod]
+ */
 bool AbstractFactory::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -110,6 +133,10 @@ bool AbstractFactory::behavioral_check() const {
   return false;
 }
 
+/**
+ * Builder.[Method] = ConBuilder.[Method] ⇒ Product
+ * Director.[Method] → (Builder.[Method] = ConBuilder.[Method])
+ */
 bool Builder::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -118,6 +145,9 @@ bool Builder::behavioral_check() const {
   return false;
 }
 
+/**
+ * Creator.[Mehtod] = ConcreteCreator.[Mehod] ⇒ Product
+ */
 bool Factory::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -126,6 +156,9 @@ bool Factory::behavioral_check() const {
   return false;
 }
 
+/**
+ * ConcretePrototype ∼ {Cloneable}
+ */
 bool Prototype::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -134,6 +167,9 @@ bool Prototype::behavioral_check() const {
   return false;
 }
 
+/**
+ *  Singleton.[Constructor] : private/protected/static public
+ */
 bool Singleton::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -142,6 +178,12 @@ bool Singleton::behavioral_check() const {
   return false;
 }
 
+/**
+ * Handler.[Method] = ConcreteHandlerB.[Method]
+ *  = ConcreteHandlerA.[Mehtod] → Handler.[Method];
+ * Handler.[Method] = ConcreteHandlerA.[Method]
+ *  = ConcreteHandlerB.[Method] → Handler.[Method]
+ */
 bool ResponsibilityChain::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -150,6 +192,10 @@ bool ResponsibilityChain::behavioral_check() const {
   return false;
 }
 
+/**
+ * Commander.[Method] = ConcreteCommand.[Method] → Receiver.[Mehtod]
+ * Invoker.[Method] → Command.[Method] = ConcreteCommand.[Method]
+ */
 bool Command::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -158,6 +204,10 @@ bool Command::behavioral_check() const {
   return false;
 }
 
+/**
+ * AbstractExpression.[Method] = TerminalExpression.[Method]
+ *  = NonerminalExpression.[Method] → Receiver.[Method]
+ */
 bool Interpreter::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -166,6 +216,9 @@ bool Interpreter::behavioral_check() const {
   return false;
 }
 
+/**
+ * ConcreteIterator.[Method] ⇒ ConcreteAggregate.Collection.Object
+ */
 bool Iterator::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -174,6 +227,10 @@ bool Iterator::behavioral_check() const {
   return false;
 }
 
+/**
+ * Colleague.[Method] ⇒ Mediator,
+ * Mediator.[Method] = ConMediator.[Method] → Colleague.[Method]
+ */
 bool Mediator::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -182,6 +239,10 @@ bool Mediator::behavioral_check() const {
   return false;
 }
 
+/**
+ * Caretaker.[Method] ⇒ Memento,
+ * Original.[Method] → ConMemento.[Method]
+ */
 bool Memento::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -190,6 +251,9 @@ bool Memento::behavioral_check() const {
   return false;
 }
 
+/**
+ * Subject.[Method] → Observer.[Method] = ConObserver.[Method]
+ */
 bool Observer::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -198,6 +262,10 @@ bool Observer::behavioral_check() const {
   return false;
 }
 
+/**
+ * State.[Method] = ConStateA.[Method] → ConStateB.[Constructor]
+ * State.[Method] = ConStateB.[Method] → ConstateA.[Constructor]
+ */
 bool State::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -206,6 +274,10 @@ bool State::behavioral_check() const {
   return false;
 }
 
+/**
+ * Context.[Method] → Strategy.[Method] = ConStrategyA.[Method]
+ * Context.[Method] → Strategy.[Method] = ConStrategyB.[Method]
+ */
 bool Strategy::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -214,6 +286,9 @@ bool Strategy::behavioral_check() const {
   return false;
 }
 
+/**
+ * AbstractClass.[Method] → AbstractClass.[Method] = ConcreteClass.[Method]
+ */
 bool Template::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {
@@ -222,6 +297,9 @@ bool Template::behavioral_check() const {
   return false;
 }
 
+/**
+ * Element.[Method] = ConElement.[Method] → Visitor.[Method]
+ */
 bool Visitor::behavioral_check() const {
   std::vector<Method *> result;
   if (result.size()) {

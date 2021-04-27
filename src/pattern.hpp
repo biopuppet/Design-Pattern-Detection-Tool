@@ -32,10 +32,6 @@ class Adapter : public Pattern {
   Node &adapter_;
   Node &adaptee_;
 
-  Method *target_request_;
-  Method *adapter_request_;
-  Method *adaptee_specific_request_;
-
   Adapter(Node &target, Node &adapter, Node &adaptee)
       : target_(target), adapter_(adapter), adaptee_(adaptee) {}
 
@@ -48,7 +44,7 @@ class Adapter : public Pattern {
 };
 
 /**
- *
+ * Proxy
  */
 class Proxy : public Pattern {
  public:
