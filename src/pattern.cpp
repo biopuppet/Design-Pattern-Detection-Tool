@@ -92,7 +92,7 @@ bool Decorator::behavioral_check() const {
 }
 
 /**
- * Abstraction.[Method] = Ref inedAbstraction.[Method]
+ * Abstraction.[Method] = RefinedAbstraction.[Method]
  *  → Implementor.[Method] = ConImplementor.[Method]
  */
 bool Bridge::behavioral_check() const {

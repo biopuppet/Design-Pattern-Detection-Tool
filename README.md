@@ -23,8 +23,9 @@ written in C++11.
         }
     }
     ```
-    The XMI file does not contain any behavoiral info inside a method.
-    Only method signature and relations if set manually.
+    The XMI file doesn't have any behavioral info of a method except method signatures and relations.
+    已完成XMI文件解析，并生成对应矩阵表示，根据预定义的子模式识别出所有15种子模式，随后识别出了子模式实例中的全部设计模式结构。
+    根据行为模型（方法签名等）对识别出的设计模式实例进行行为分析并过滤，完善输入输出，并进行测试。最后设计展示方案。
     
 - Redefined Operation
   - Mannually alter UML or it is my job?
