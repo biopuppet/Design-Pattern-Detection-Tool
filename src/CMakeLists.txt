@@ -52,12 +52,6 @@ set(ALL_SOURCE_FILES
     main.cpp
 )
 
-# LINK_DIRECTORIES(${PROJECT_BINARY_DIR}/lib)
-
-add_library(pugixml STATIC
-    pugixml.cpp
-)
-
 add_executable(dpdt
     ${ALL_SOURCE_FILES} 
     ${ANTLR_JLexer_CXX_OUTPUTS}
@@ -65,7 +59,7 @@ add_executable(dpdt
     ${ANTLR_JListener_CXX_OUTPUTS}
 )
 
-TARGET_LINK_LIBRARIES(dpdt pugixml antlr4_static)
+TARGET_LINK_LIBRARIES(dpdt antlr4_static)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)

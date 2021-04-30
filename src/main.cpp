@@ -4,7 +4,6 @@
 #include "argh.h"
 #include "parser.hpp"
 #include "pattern_analyzer.hpp"
-#include "pugixml.hpp"
 #include "sp_detector.hpp"
 
 static std::string pattern;
