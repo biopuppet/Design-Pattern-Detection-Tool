@@ -19,8 +19,24 @@ endif()
 
 message(STATUS "CXX Flags: " "${CMAKE_CXX_FLAGS}")
 
+set(GRAMMAR_DIR "${PROJECT_SOURCE_DIR}/grammar")
+
+# Call macro to add lexer and grammar to your build dependencies.
+antlr_target(JLexer ${GRAMMAR_DIR}/Java8Lexer.g4 LEXER
+             PACKAGE antlrcpptest)
+antlr_target(SampleGrammarParser ${GRAMMAR_DIR}/Java8Parser.g4 PARSER
+             PACKAGE antlrcpptest
+             DEPENDS_ANTLR JLexer
+             COMPILE_FLAGS -lib ${ANTLR_JLexer_OUTPUT_DIR})
+
+# include generated files in project environment
+include_directories(${ANTLR_JLexer_OUTPUT_DIR})
+include_directories(${ANTLR_SampleGrammarParser_OUTPUT_DIR})
+
+
 include_directories(
   ${PROJECT_SOURCE_DIR}/include
+  ${ANTLR4_INCLUDE_DIRS}
 )
 
 set(ALL_SOURCE_FILES 
@@ -42,7 +58,7 @@ add_executable(dpdt
     ${ALL_SOURCE_FILES}
 )
 
-TARGET_LINK_LIBRARIES(dpdt pugixml)
+TARGET_LINK_LIBRARIES(dpdt pugixml antlr4_static)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)

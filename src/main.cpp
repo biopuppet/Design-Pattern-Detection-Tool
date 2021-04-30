@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <antlr4-runtime.h>
 
 #include "argh.h"
 #include "parser.hpp"
