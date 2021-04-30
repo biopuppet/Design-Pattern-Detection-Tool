@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <antlr4-runtime.h>
 
 #include "argh.h"
 #include "parser.hpp"
@@ -9,7 +8,7 @@
 #include "sp_detector.hpp"
 
 static std::string pattern;
-static std::string xmi_file;
+static std::string src_file;
 static bool dump_graph = false, dump_sp = false;
 
 static void print_usage(const char *argv0) {
@@ -32,7 +31,7 @@ static void print_version() {
       "Copyright (C) 2021 Liu Fengbo <biopuppet@outlook.com>");
 }
 
-static int parse(int argc, char *argv[]) {
+static int parse_option(int argc, char *argv[]) {
   argh::parser cmdl({"-p", "--pattern"});
   cmdl.parse(argc, argv, argh::parser::PREFER_FLAG_FOR_UNREG_OPTION);
 
@@ -61,16 +60,17 @@ static int parse(int argc, char *argv[]) {
     std::cerr << "No input XMI file." << std::endl;
     return -1;
   }
-  xmi_file = cmdl.pos_args()[pas - 1];
+  src_file = cmdl.pos_args()[pas - 1];
 
   return 0;
 }
 
 int main(int argc, char **argv) {
-  if (parse(argc, argv)) return 0;
+  if (parse_option(argc, argv)) return 0;
 
-  XMIParser parser{xmi_file};
+  SrcParser parser{src_file};
   Graph &system = parser.parse();
+#if 0
   if (dump_graph) system.print_gcdr();
 
   SubPatternDetector spd{system, dump_sp};
@@ -80,6 +80,6 @@ int main(int argc, char **argv) {
   pa->struct_analyze();
   pa->behavioral_check();
   delete pa;
-
+#endif
   return 0;
 }

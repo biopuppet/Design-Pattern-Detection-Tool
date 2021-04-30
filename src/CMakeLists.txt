@@ -27,7 +27,9 @@ antlr_target(JLexer ${GRAMMAR_DIR}/Java8Lexer.g4 LEXER
 antlr_target(JParser ${GRAMMAR_DIR}/Java8Parser.g4 PARSER
              PACKAGE antlrcpptest
              DEPENDS_ANTLR JLexer
-             COMPILE_FLAGS -lib ${ANTLR_JLexer_OUTPUT_DIR})
+             COMPILE_FLAGS -lib ${ANTLR_JLexer_OUTPUT_DIR}
+            LISTENER
+            VISITOR)
 
 # include generated files in project environment
 include_directories(${ANTLR_JLexer_OUTPUT_DIR})
@@ -60,6 +62,7 @@ add_executable(dpdt
     ${ALL_SOURCE_FILES} 
     ${ANTLR_JLexer_CXX_OUTPUTS}
     ${ANTLR_JParser_CXX_OUTPUTS}
+    ${ANTLR_JListener_CXX_OUTPUTS}
 )
 
 TARGET_LINK_LIBRARIES(dpdt pugixml antlr4_static)
