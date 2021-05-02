@@ -1,6 +1,8 @@
 #ifndef DPDT_PARSER_H
 #define DPDT_PARSER_H
 
+#include <stack>
+
 #include "Java8ParserBaseListener.h"
 #include "graph.hpp"
 
@@ -17,6 +19,21 @@ class DpdtJava8Listener : public Java8ParserBaseListener {
       Java8Parser::NormalClassDeclarationContext * /*ctx*/) override;
   void exitNormalClassDeclaration(
       Java8Parser::NormalClassDeclarationContext * /*ctx*/) override;
+  void enterConstantDeclaration(
+      Java8Parser::ConstantDeclarationContext * /*ctx*/) override;
+  void exitConstantDeclaration(
+      Java8Parser::ConstantDeclarationContext * /*ctx*/) override;
+  void enterFieldDeclaration(
+      Java8Parser::FieldDeclarationContext * /*ctx*/) override;
+  void exitFieldDeclaration(
+      Java8Parser::FieldDeclarationContext * /*ctx*/) override;
+
+  Node *curNode() const { return nodestack_.top(); }
+  void popNode() { nodestack_.pop(); }
+  void pushNode(Node *node) { nodestack_.push(node); }
+
+ private:
+  std::stack<Node *> nodestack_;
 };
 
 class SrcParser {

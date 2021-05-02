@@ -12,8 +12,8 @@ struct Node;
 enum Relation {
   None = 1,
   Association = 2,
-  Inheritance = 3,
-  Aggregation = 2,  // TODO: Change back to 5
+  Aggregation = 2,  // TODO: Change back to 3
+  Inheritance = 5,
   Dependency = 7,
 };
 
@@ -65,19 +65,20 @@ class QualType {
 };
 
 struct Attribute {
-  std::string id;
-  std::string name;
-  QualType qt;
+  const std::string name_;
+  const std::string type_str_;
+  QualType qual_;
   // association
   enum Type {
     Single,
-    List,
-  } type;
-  Node *associate;
+    Array,
+  } type_;
+  Attribute(const std::string &name, const std::string &type_str, QualType qual,
+            Type type = Type::Single)
+      : name_(name), type_str_(type_str), qual_(qual), type_(type) {}
 };
 
 struct Parameter {
-  std::string id_;
   std::string name_;
   std::string type_str_;
   enum Type {
@@ -95,13 +96,11 @@ struct Parameter {
   enum Direction { IN, RETURN } dir_;
   bool isUnique_;
 
-  Parameter(const char *id, const char *name, std::string &type_str, Type type,
-            Direction dir)
-      : id_(id), name_(name), type_str_(type_str), type_(type), dir_(dir) {}
+  Parameter(const char *name, std::string &type_str, Type type, Direction dir)
+      : name_(name), type_str_(type_str), type_(type), dir_(dir) {}
 };
 
 struct Method {
-  std::string id;
   std::string name;
   Modifier modi;
   bool isAbstract;                  // bit-mask?
@@ -119,6 +118,12 @@ struct Node {
   const std::string name_;
   QualType qual_;
 
+  // Implemented interfaces
+  std::vector<Node *> interfaces_;
+
+  // Extended class
+  Node *parent_;
+
   // Attributes: property, ...
   std::vector<Attribute *> attrs;
 
@@ -129,7 +134,9 @@ struct Node {
   std::vector<Method *> constructors;
 
   Node() {}
-  Node(const std::string &name, QualType qual) : name_(name), qual_(qual) {}
+  Node(const std::string &name, QualType qual,
+       std::vector<Node *> interfaces = std::vector<Node *>(), Node *parent = nullptr)
+      : name_(name), qual_(qual), interfaces_(interfaces), parent_(parent) {}
 
   const char *name() const { return name_.c_str(); }
 };
