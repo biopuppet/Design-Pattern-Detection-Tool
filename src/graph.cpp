@@ -26,6 +26,14 @@ static std::string edge2str(size_t e) {
   return s;
 }
 
+std::ostream &operator<<(std::ostream &os, const QualType &p) {
+  if (p.has(M_PUBLIC))
+    os << "Public ";
+  if (p.has(M_STATIC))
+    os << "Static ";
+  return os;
+}
+
 size_t Graph::cw_in(size_t v) const {
   size_t ret = 1;
   for (size_t i = 0; i < size(); ++i) {

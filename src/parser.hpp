@@ -2,6 +2,16 @@
 #define DPDT_PARSER_H
 
 #include "graph.hpp"
+#include "Java8ParserBaseListener.h"
+
+using namespace antlr4;
+using namespace antlrcpptest;
+
+class DpdtJava8Listener : public Java8ParserBaseListener {
+public:
+  void enterNormalInterfaceDeclaration(Java8Parser::NormalInterfaceDeclarationContext * /*ctx*/) override;
+  void exitNormalInterfaceDeclaration(Java8Parser::NormalInterfaceDeclarationContext * /*ctx*/) override;
+};
 
 class SrcParser {
   Node *curnode_ = nullptr;

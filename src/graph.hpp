@@ -17,17 +17,65 @@ enum Relation {
   Dependency = 7,
 };
 
-enum class Visibility {
-  PRIVATE,
-  PROTECTED,
-  PUBLIC,
-  PACKAGE,  // Java
+enum Modifier {
+  M_NONE = 0x0,
+  // Visibility
+  M_PUBLIC = 0x1,
+  M_PROTECTED = 0x2,
+  M_PRIVATE = 0x4,
+
+  M_ABSTRACT = 0x10,
+  M_STATIC = 0x20,
+  M_FINAL = 0x40,
+  M_SYNCHRONIZED = 0x80,
+  M_NATIVE = 0x100,
+  // field
+  M_TRANSIENT = 0x200,
+  M_VOLATILE = 0x400,
+};
+
+class QualType {
+public:
+  QualType(unsigned type = Modifier::M_NONE) : type_(type) {}
+
+  unsigned getType() const { return type_; }
+
+  void setType(const unsigned mod) {
+    type_ |= mod;
+  }
+
+  void setType(const unsigned m1, const unsigned m2) {
+    setType(m1 | m2);
+  }
+
+  template <typename... Ms>
+  void setType(const unsigned m1, const unsigned m2, const Ms... ms) {
+    setType(m1 | m2, ms...);
+  }  
+
+  bool has(Modifier mod) const {
+    return type_ & mod;
+  }
+
+  bool hasOneOf(Modifier m1, Modifier m2) const {
+    return has(m1) || has(m2);
+  }
+
+  template <typename... Ms>
+  bool hasOneOf(Modifier m1, Modifier m2, Ms... ms) const {
+      return has(m1) || hasOneOf(m2, ms...);
+  }
+
+  friend std::ostream &operator<<(std::ostream &os, const QualType &p);
+
+private:
+  unsigned type_;
 };
 
 struct Attribute {
   std::string id;
   std::string name;
-  Visibility visibility;
+  QualType qt;
   // association
   enum Type {
     Single,
@@ -63,7 +111,7 @@ struct Parameter {
 struct Method {
   std::string id;
   std::string name;
-  Visibility visibility;
+  Modifier modi;
   bool isAbstract;                  // bit-mask?
   std::vector<Parameter *> params;  // including return value
 };
@@ -76,10 +124,8 @@ struct MethodCmp {
 };
 
 struct Node {
-  std::string id_;
-  std::string name_;
-  Visibility visibility_;
-  bool isAbstract_;  // bit-mask?
+  const std::string name_;
+  QualType qual_;
 
   // Attributes: property, ...
   std::vector<Attribute *> attrs;
@@ -91,9 +137,8 @@ struct Node {
   std::vector<Method *> constructors;
 
   Node() {}
-  Node(const char *id, const char *name = "",
-       Visibility v = Visibility::PRIVATE, bool isAbstract = false)
-      : id_(id), name_(name), visibility_(v), isAbstract_(isAbstract) {}
+  Node(const std::string &name, QualType qual)
+      :  name_(name), qual_(qual) {}
 
   const char *name() const { return name_.c_str(); }
 };
