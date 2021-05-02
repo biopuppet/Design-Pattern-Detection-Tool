@@ -135,7 +135,8 @@ struct Node {
 
   Node() {}
   Node(const std::string &name, QualType qual,
-       std::vector<Node *> interfaces = std::vector<Node *>(), Node *parent = nullptr)
+       std::vector<Node *> interfaces = std::vector<Node *>(),
+       Node *parent = nullptr)
       : name_(name), qual_(qual), interfaces_(interfaces), parent_(parent) {}
 
   const char *name() const { return name_.c_str(); }

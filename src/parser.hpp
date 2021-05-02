@@ -39,10 +39,10 @@ class DpdtJava8Listener : public Java8ParserBaseListener {
 class SrcParser {
   Graph *gcdr_;
 
-  const std::string src_;
+  std::vector<std::string> srcs_;
 
  public:
-  explicit SrcParser(const std::string &file) : src_(file) {}
+  explicit SrcParser(std::vector<std::string> &file) : srcs_(file) {}
 
   SrcParser(const SrcParser &) = delete;
   SrcParser &operator=(const SrcParser &) = delete;

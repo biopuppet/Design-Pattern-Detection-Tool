@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <istream>
 #include <map>
 #include <string>
 
@@ -20,7 +21,7 @@ static const std::map<const std::string, Modifier> modifiers = {
 };
 
 /**
- * 
+ *
  */
 void DpdtJava8Listener::enterNormalInterfaceDeclaration(
     Java8Parser::NormalInterfaceDeclarationContext *ctx) {
@@ -148,22 +149,25 @@ void DpdtJava8Listener::exitFieldDeclaration(
     Java8Parser::FieldDeclarationContext *ctx) {}
 
 Graph &SrcParser::parse() {
-  std::ifstream stream;
-  stream.open(src_);
+  for (const auto &src : srcs_) {
+    std::ifstream stream;
+    stream.open(src);
 
-  ANTLRInputStream input(stream);
-  Java8Lexer lexer(&input);
-  CommonTokenStream tokens(&lexer);
-  Java8Parser parser(&tokens);
+    ANTLRInputStream input(stream);
+    Java8Lexer lexer(&input);
+    CommonTokenStream tokens(&lexer);
+    Java8Parser parser(&tokens);
 
-  // Java8Parser::CompilationUnitContext *cu = parser.compilationUnit();
-  // std::cout << cu->toStringTree(&parser, true) << std::endl;
+    // Java8Parser::CompilationUnitContext *cu = parser.compilationUnit();
+    // std::cout << cu->toStringTree(&parser, true) << std::endl;
 
-  DpdtJava8Listener listener;
-  tree::ParseTree *tree = parser.compilationUnit();
-  tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
+    DpdtJava8Listener listener;
+    tree::ParseTree *tree = parser.compilationUnit();
+    tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
+    stream.close();
+  }
 
-  stream.close();
+  // stream.close();
   gcdr_ = new Graph(nodes);
   return *gcdr_;
 }

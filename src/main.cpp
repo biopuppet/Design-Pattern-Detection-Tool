@@ -6,9 +6,43 @@
 // #include "pattern_analyzer.hpp"
 #include "sp_detector.hpp"
 
+extern "C" {
+#include <dirent.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+}
+
 static std::string pattern;
-static std::string src_file;
+static std::vector<std::string> src_file_dirs;
+static std::vector<std::string> src_files;
 static bool dump_graph = false, dump_sp = false;
+
+static void getAllFiles(std::string path, std::vector<std::string> &files) {
+  DIR *dir;
+  struct dirent *ptr;
+  if ((dir = opendir(path.c_str())) == NULL) {
+    files.push_back(path);
+    return;
+  }
+  while ((ptr = readdir(dir)) != NULL) {
+    if (strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0)
+      continue;
+    else if (ptr->d_type == 8)  // file
+      files.push_back(path + "/" + ptr->d_name);
+    else if (ptr->d_type == 10)  // link file
+      continue;
+    else if (ptr->d_type == 4) {
+      // files.push_back(ptr->d_name);//dir
+      getAllFiles(path + "/" + ptr->d_name, files);
+    }
+  }
+  closedir(dir);
+}
 
 static void print_usage(const char *argv0) {
   printf(
@@ -59,15 +93,19 @@ static int parse_option(int argc, char *argv[]) {
     std::cerr << "No input XMI file." << std::endl;
     return -1;
   }
-  src_file = cmdl.pos_args()[pas - 1];
-
+  src_file_dirs = cmdl.pos_args();
+  src_file_dirs.erase(src_file_dirs.begin());
   return 0;
 }
 
 int main(int argc, char **argv) {
   if (parse_option(argc, argv)) return 0;
 
-  SrcParser parser{src_file};
+  for (const auto &src : src_file_dirs) {
+    getAllFiles(src, src_files);
+  }
+
+  SrcParser parser{src_files};
   Graph &system = parser.parse();
 #if 0
   if (dump_graph) system.print_gcdr();
