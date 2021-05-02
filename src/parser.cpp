@@ -6,8 +6,8 @@
 #include <map>
 #include <string>
 
-#include "Java8Lexer.h"
-#include "Java8Parser.h"
+#include "JavaLexer.h"
+#include "JavaParser.h"
 #include "antlr4-runtime.h"
 
 using namespace antlr4;
@@ -19,12 +19,12 @@ static const std::map<const std::string, Modifier> modifiers = {
     {"public", M_PUBLIC}, {"protected", M_PROTECTED}, {"private", M_PRIVATE},
     {"static", M_STATIC}, {"abstract", M_ABSTRACT},
 };
-
+#if 0
 /**
  *
  */
-void DpdtJava8Listener::enterNormalInterfaceDeclaration(
-    Java8Parser::NormalInterfaceDeclarationContext *ctx) {
+void DpdtJavaListener::enterNormalInterfaceDeclaration(
+    JavaParser::NormalInterfaceDeclarationContext *ctx) {
   // std::cout << ctx->getText() << std::endl;
   auto interval = ctx->getSourceInterval();
   std::cout << interval.toString() << std::endl;
@@ -57,13 +57,13 @@ void DpdtJava8Listener::enterNormalInterfaceDeclaration(
   pushNode(node);
 }
 
-void DpdtJava8Listener::exitNormalInterfaceDeclaration(
-    Java8Parser::NormalInterfaceDeclarationContext *ctx) {
+void DpdtJavaListener::exitNormalInterfaceDeclaration(
+    JavaParser::NormalInterfaceDeclarationContext *ctx) {
   popNode();
 }
 
-void DpdtJava8Listener::enterNormalClassDeclaration(
-    Java8Parser::NormalClassDeclarationContext *ctx) {
+void DpdtJavaListener::enterNormalClassDeclaration(
+    JavaParser::NormalClassDeclarationContext *ctx) {
   // std::cout << ctx->getText() << std::endl;
   auto interval = ctx->getSourceInterval();
   std::cout << interval.toString() << std::endl;
@@ -103,13 +103,13 @@ void DpdtJava8Listener::enterNormalClassDeclaration(
   pushNode(node);
 }
 
-void DpdtJava8Listener::exitNormalClassDeclaration(
-    Java8Parser::NormalClassDeclarationContext *ctx) {
+void DpdtJavaListener::exitNormalClassDeclaration(
+    JavaParser::NormalClassDeclarationContext *ctx) {
   popNode();
 }
 
-void DpdtJava8Listener::enterConstantDeclaration(
-    Java8Parser::ConstantDeclarationContext *ctx) {
+void DpdtJavaListener::enterConstantDeclaration(
+    JavaParser::ConstantDeclarationContext *ctx) {
   QualType qual;
   for (const auto &it : ctx->constantModifier()) {
     const auto mod = it->getText();
@@ -122,11 +122,11 @@ void DpdtJava8Listener::enterConstantDeclaration(
   // auto type = ctx->unannType();
 }
 
-void DpdtJava8Listener::exitConstantDeclaration(
-    Java8Parser::ConstantDeclarationContext *ctx) {}
+void DpdtJavaListener::exitConstantDeclaration(
+    JavaParser::ConstantDeclarationContext *ctx) {}
 
-void DpdtJava8Listener::enterFieldDeclaration(
-    Java8Parser::FieldDeclarationContext *ctx) {
+void DpdtJavaListener::enterFieldDeclaration(
+    JavaParser::FieldDeclarationContext *ctx) {
   QualType qual;
   for (const auto &it : ctx->fieldModifier()) {
     const auto mod = it->getText();
@@ -148,8 +148,10 @@ void DpdtJava8Listener::enterFieldDeclaration(
   }
 }
 
-void DpdtJava8Listener::exitFieldDeclaration(
-    Java8Parser::FieldDeclarationContext *ctx) {}
+void DpdtJavaListener::exitFieldDeclaration(
+    JavaParser::FieldDeclarationContext *ctx) {}
+
+#endif
 
 Graph &SrcParser::parse() {
   for (auto &src : srcs_) {
@@ -157,16 +159,16 @@ Graph &SrcParser::parse() {
     stream.open(src);
 
     ANTLRInputStream input(stream);
-    Java8Lexer lexer(&input);
+    JavaLexer lexer(&input);
     CommonTokenStream tokens(&lexer);
-    Java8Parser parser(&tokens);
+    JavaParser parser(&tokens);
 
-    // Java8Parser::CompilationUnitContext *cu = parser.compilationUnit();
-    // std::cout << cu->toStringTree(&parser, true) << std::endl;
+    JavaParser::CompilationUnitContext *cu = parser.compilationUnit();
+    std::cout << cu->toStringTree(&parser, true) << std::endl;
 
-    DpdtJava8Listener listener;
-    tree::ParseTree *tree = parser.compilationUnit();
-    tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
+    // DpdtJavaListener listener;
+    // tree::ParseTree *tree = parser.compilationUnit();
+    // tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
     stream.close();
   }
 
