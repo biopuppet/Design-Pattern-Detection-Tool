@@ -23,9 +23,8 @@ set(GRAMMAR_DIR "${PROJECT_SOURCE_DIR}/grammar")
 
 # Call macro to add lexer and grammar to your build dependencies.
 antlr_target(JLexer ${GRAMMAR_DIR}/JavaLexer.g4 LEXER
-             PACKAGE antlrcpptest)
+             )
 antlr_target(JParser ${GRAMMAR_DIR}/JavaParser.g4 PARSER
-             PACKAGE antlrcpptest
              DEPENDS_ANTLR JLexer
              COMPILE_FLAGS -lib ${ANTLR_JLexer_OUTPUT_DIR}
             LISTENER # Optional

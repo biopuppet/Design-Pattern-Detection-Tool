@@ -7,34 +7,38 @@
 #include "graph.hpp"
 
 using namespace antlr4;
-using namespace antlrcpptest;
 
-// class DpdtJavaListener : public JavaParserBaseListener {
-//  public:
-//   void enterNormalInterfaceDeclaration(
-//       JavaParser::NormalInterfaceDeclarationContext * /*ctx*/) override;
-//   void exitNormalInterfaceDeclaration(
-//       JavaParser::NormalInterfaceDeclarationContext * /*ctx*/) override;
-//   void enterNormalClassDeclaration(
-//       JavaParser::NormalClassDeclarationContext * /*ctx*/) override;
-//   void exitNormalClassDeclaration(
-//       JavaParser::NormalClassDeclarationContext * /*ctx*/) override;
-//   void enterConstantDeclaration(
-//       JavaParser::ConstantDeclarationContext * /*ctx*/) override;
-//   void exitConstantDeclaration(
-//       JavaParser::ConstantDeclarationContext * /*ctx*/) override;
-//   void enterFieldDeclaration(
-//       JavaParser::FieldDeclarationContext * /*ctx*/) override;
-//   void exitFieldDeclaration(
-//       JavaParser::FieldDeclarationContext * /*ctx*/) override;
+class DpdtJavaListener : public JavaParserBaseListener {
+ public:
+  void enterTypeDeclaration(
+      JavaParser::TypeDeclarationContext * /*ctx*/) override;
+  void exitTypeDeclaration(
+      JavaParser::TypeDeclarationContext * /*ctx*/) override;
+  void enterInterfaceDeclaration(
+      JavaParser::InterfaceDeclarationContext * /*ctx*/) override;
+  void exitInterfaceDeclaration(
+      JavaParser::InterfaceDeclarationContext * /*ctx*/) override;
+  void enterClassDeclaration(
+      JavaParser::ClassDeclarationContext * /*ctx*/) override;
+  void exitClassDeclaration(
+      JavaParser::ClassDeclarationContext * /*ctx*/) override;
+  // void enterConstDeclaration(
+  //     JavaParser::ConstDeclarationContext * /*ctx*/) override;
+  // void exitConstDeclaration(
+  //     JavaParser::ConstDeclarationContext * /*ctx*/) override;
+  // void enterFieldDeclaration(
+  //     JavaParser::FieldDeclarationContext * /*ctx*/) override;
+  // void exitFieldDeclaration(
+  //     JavaParser::FieldDeclarationContext * /*ctx*/) override;
 
-//   Node *curNode() const { return nodestack_.top(); }
-//   void popNode() { nodestack_.pop(); }
-//   void pushNode(Node *node) { nodestack_.push(node); }
+  Node *curNode() const { return nodestack_.top(); }
+  void popNode() { nodestack_.pop(); }
+  void pushNode(Node *node) { nodestack_.push(node); }
 
-//  private:
-//   std::stack<Node *> nodestack_;
-// };
+ private:
+  std::stack<Node *> nodestack_;
+  QualType curqual_;
+};
 
 class SrcParser {
   Graph *gcdr_;
