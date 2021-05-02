@@ -27,10 +27,8 @@ static std::string edge2str(size_t e) {
 }
 
 std::ostream &operator<<(std::ostream &os, const QualType &p) {
-  if (p.has(M_PUBLIC))
-    os << "Public ";
-  if (p.has(M_STATIC))
-    os << "Static ";
+  if (p.has(M_PUBLIC)) os << "Public ";
+  if (p.has(M_STATIC)) os << "Static ";
   return os;
 }
 
@@ -57,8 +55,8 @@ void Graph::print_gcdr() const {
       if (edge(i, j) == 1) {
         continue;
       }
-      std::cout << nodes_[i].name() << " --" << edge2str(edge(i, j)) << "--> "
-                << nodes_[j].name() << std::endl;
+      std::cout << node(i)->name() << " --" << edge2str(edge(i, j)) << "--> "
+                << node(j)->name() << std::endl;
     }
   }
   std::cout << std::endl;

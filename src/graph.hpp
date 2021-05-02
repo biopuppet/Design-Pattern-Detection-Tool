@@ -35,40 +35,32 @@ enum Modifier {
 };
 
 class QualType {
-public:
+ public:
   QualType(unsigned type = Modifier::M_NONE) : type_(type) {}
 
   unsigned getType() const { return type_; }
 
-  void setType(const unsigned mod) {
-    type_ |= mod;
-  }
+  void setType(const unsigned mod) { type_ |= mod; }
 
-  void setType(const unsigned m1, const unsigned m2) {
-    setType(m1 | m2);
-  }
+  void setType(const unsigned m1, const unsigned m2) { setType(m1 | m2); }
 
   template <typename... Ms>
   void setType(const unsigned m1, const unsigned m2, const Ms... ms) {
     setType(m1 | m2, ms...);
-  }  
-
-  bool has(Modifier mod) const {
-    return type_ & mod;
   }
 
-  bool hasOneOf(Modifier m1, Modifier m2) const {
-    return has(m1) || has(m2);
-  }
+  bool has(Modifier mod) const { return type_ & mod; }
+
+  bool hasOneOf(Modifier m1, Modifier m2) const { return has(m1) || has(m2); }
 
   template <typename... Ms>
   bool hasOneOf(Modifier m1, Modifier m2, Ms... ms) const {
-      return has(m1) || hasOneOf(m2, ms...);
+    return has(m1) || hasOneOf(m2, ms...);
   }
 
   friend std::ostream &operator<<(std::ostream &os, const QualType &p);
 
-private:
+ private:
   unsigned type_;
 };
 
@@ -137,8 +129,7 @@ struct Node {
   std::vector<Method *> constructors;
 
   Node() {}
-  Node(const std::string &name, QualType qual)
-      :  name_(name), qual_(qual) {}
+  Node(const std::string &name, QualType qual) : name_(name), qual_(qual) {}
 
   const char *name() const { return name_.c_str(); }
 };
@@ -147,17 +138,22 @@ struct Node {
  * Graph is a complete directed graph.
  */
 class Graph {
+  using NodeList = std::vector<Node *>;
+
   // Graph size, length, # of nodes
   const size_t n_;
 
   // Associated class nodes
-  std::vector<Node> nodes_;
+  NodeList *nodes_{nullptr};
 
   // 1-dim implementation of adjacency matrix
   std::vector<size_t> matrix_;
 
  public:
-  explicit Graph(size_t n) : n_(n), nodes_(n), matrix_(n * n, 1) {}
+  explicit Graph(size_t n) : n_(n), nodes_(nullptr), matrix_(n * n, 1) {}
+
+  explicit Graph(NodeList &nodes)
+      : n_(nodes.size()), nodes_(&nodes), matrix_(n_ * n_, 1) {}
 
   Graph(const Graph &) = delete;
   Graph &operator=(const Graph &) = delete;
@@ -166,15 +162,17 @@ class Graph {
 
   size_t &edge(size_t u, size_t v) { return matrix_.at(u * n_ + v); }
 
-  Node &node(size_t index) { return nodes_.at(index); }
+  Node *node(size_t index) { return nodes_ ? nodes_->at(index) : nullptr; }
 
-  const Node &node(size_t index) const { return nodes_.at(index); }
+  const Node *node(size_t index) const {
+    return nodes_ ? nodes_->at(index) : nullptr;
+  }
 
-  Node &operator[](size_t index) { return node(index); }
+  Node *operator[](size_t index) { return node(index); }
 
   size_t size() const { return n_; }
 
-  size_t num_nodes() const { return nodes_.size(); }
+  size_t num_nodes() const { return n_; }
 
   size_t num_edges() const { return n_ * n_; }
 

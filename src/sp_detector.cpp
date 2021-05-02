@@ -16,7 +16,7 @@ void SubPatternDetector::detect_all() {
       for (const auto &spi : spis[i]) {
         std::cout << SubPattern::getname(i) << ": ";
         for (const auto &it : spi) {
-          std::cout << system[it].name() << " ";
+          std::cout << system[it]->name() << " ";
         }
         std::cout << "\n";
       }

@@ -2,8 +2,8 @@
 
 #include <cstring>
 #include <iostream>
-#include <string>
 #include <map>
+#include <string>
 
 #include "Java8Lexer.h"
 #include "Java8Parser.h"
@@ -14,11 +14,8 @@ using namespace antlrcpptest;
 
 static std::vector<Node *> nodes;
 static const std::map<const std::string, Modifier> modifiers = {
-  {"public", M_PUBLIC},
-  {"protected", M_PROTECTED},
-  {"private", M_PRIVATE},
-  {"static", M_STATIC},
-  {"abstract", M_ABSTRACT},
+    {"public", M_PUBLIC}, {"protected", M_PROTECTED}, {"private", M_PRIVATE},
+    {"static", M_STATIC}, {"abstract", M_ABSTRACT},
 };
 
 // static Modifier get_vis(const char *s) {
@@ -31,9 +28,11 @@ static const std::map<const std::string, Modifier> modifiers = {
 //   else
 //     return Modifier::PRIVATE;
 // }
-
-void DpdtJava8Listener::enterNormalInterfaceDeclaration(Java8Parser::NormalInterfaceDeclarationContext *ctx)
-{
+/**
+ * TODO: Add nested interface/class support, stack impl
+ */
+void DpdtJava8Listener::enterNormalInterfaceDeclaration(
+    Java8Parser::NormalInterfaceDeclarationContext *ctx) {
   std::cout << ctx->getText() << std::endl;
   auto interval = ctx->getSourceInterval();
   std::cout << interval.toString() << std::endl;
@@ -47,7 +46,8 @@ void DpdtJava8Listener::enterNormalInterfaceDeclaration(Java8Parser::NormalInter
     }
   }
   if (ctx->extendsInterfaces()) {
-    auto parents = ctx->extendsInterfaces()->interfaceTypeList()->interfaceType();
+    auto parents =
+        ctx->extendsInterfaces()->interfaceTypeList()->interfaceType();
     for (const auto &parent : parents) {
       std::cout << "Parent: " << parent->getText() << std::endl;
     }
@@ -57,11 +57,40 @@ void DpdtJava8Listener::enterNormalInterfaceDeclaration(Java8Parser::NormalInter
   nodes.emplace_back(node);
 }
 
-void DpdtJava8Listener::exitNormalInterfaceDeclaration(Java8Parser::NormalInterfaceDeclarationContext *ctx)
-{
+void DpdtJava8Listener::exitNormalInterfaceDeclaration(
+    Java8Parser::NormalInterfaceDeclarationContext *ctx) {}
 
+void DpdtJava8Listener::enterNormalClassDeclaration(
+    Java8Parser::NormalClassDeclarationContext *ctx) {
+  std::cout << ctx->getText() << std::endl;
+  auto interval = ctx->getSourceInterval();
+  std::cout << interval.toString() << std::endl;
+  auto ident = ctx->Identifier()->getText();
+  QualType qual;
+  for (const auto &it : ctx->classModifier()) {
+    const auto mod = it->getText();
+    // std::cout << "Mod: " <<  << std::endl;
+    if (modifiers.count(mod)) {
+      qual.setType(modifiers.at(mod));
+    }
+  }
+  if (ctx->superclass()) {
+    auto parent = ctx->superclass();
+    std::cout << "Parent: " << parent->getText() << std::endl;
+  }
+  if (ctx->superinterfaces()) {
+    auto parents = ctx->superinterfaces()->interfaceTypeList()->interfaceType();
+    for (const auto &parent : parents) {
+      std::cout << "Parent: " << parent->getText() << std::endl;
+    }
+  }
+  // std::cout << qual << std::endl;
+  auto node = new Node(ident, qual);
+  nodes.emplace_back(node);
 }
 
+void DpdtJava8Listener::exitNormalClassDeclaration(
+    Java8Parser::NormalClassDeclarationContext *ctx) {}
 
 Graph &SrcParser::parse() {
   std::ifstream stream;
@@ -76,10 +105,10 @@ Graph &SrcParser::parse() {
   // std::cout << cu->toStringTree(&parser, true) << std::endl;
 
   DpdtJava8Listener listener;
-  tree::ParseTree *tree = parser.compilationUnit(); 
+  tree::ParseTree *tree = parser.compilationUnit();
   tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
 
   stream.close();
-  gcdr_ = new Graph(4);
+  gcdr_ = new Graph(nodes);
   return *gcdr_;
 }

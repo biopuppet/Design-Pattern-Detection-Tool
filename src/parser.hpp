@@ -1,21 +1,25 @@
 #ifndef DPDT_PARSER_H
 #define DPDT_PARSER_H
 
-#include "graph.hpp"
 #include "Java8ParserBaseListener.h"
+#include "graph.hpp"
 
 using namespace antlr4;
 using namespace antlrcpptest;
 
 class DpdtJava8Listener : public Java8ParserBaseListener {
-public:
-  void enterNormalInterfaceDeclaration(Java8Parser::NormalInterfaceDeclarationContext * /*ctx*/) override;
-  void exitNormalInterfaceDeclaration(Java8Parser::NormalInterfaceDeclarationContext * /*ctx*/) override;
+ public:
+  void enterNormalInterfaceDeclaration(
+      Java8Parser::NormalInterfaceDeclarationContext * /*ctx*/) override;
+  void exitNormalInterfaceDeclaration(
+      Java8Parser::NormalInterfaceDeclarationContext * /*ctx*/) override;
+  void enterNormalClassDeclaration(
+      Java8Parser::NormalClassDeclarationContext * /*ctx*/) override;
+  void exitNormalClassDeclaration(
+      Java8Parser::NormalClassDeclarationContext * /*ctx*/) override;
 };
 
 class SrcParser {
-  Node *curnode_ = nullptr;
-
   Graph *gcdr_;
 
   const std::string src_;
