@@ -80,17 +80,20 @@ void DpdtJava8Listener::enterNormalClassDeclaration(
   Node *parent = nullptr;
   std::vector<Node *> interfaces;
   if (ctx->superclass()) {
-    auto sc = ctx->superclass()->getText();
+    auto sc = ctx->superclass()->classType()->getText();
     std::cout << "Parent: " << sc << std::endl;
-    assert(nodemap.count(sc));
-    parent = nodemap.at(sc);
+    // May be an language builtin type
+    if (nodemap.count(sc)) {
+      parent = nodemap.at(sc);
+    }
   }
   if (ctx->superinterfaces()) {
     auto itfs = ctx->superinterfaces()->interfaceTypeList()->interfaceType();
     for (const auto &itf : itfs) {
-      std::cout << "Parent: " << itf->getText() << std::endl;
-      assert(nodemap.count(itf->getText()));
-      interfaces.emplace_back(nodemap.at(itf->getText()));
+      auto name = itf->classType()->getText();
+      std::cout << "Parent: " << name << std::endl;
+      assert(nodemap.count(name));
+      interfaces.emplace_back(nodemap.at(name));
     }
   }
   // std::cout << qual << std::endl;
@@ -149,7 +152,7 @@ void DpdtJava8Listener::exitFieldDeclaration(
     Java8Parser::FieldDeclarationContext *ctx) {}
 
 Graph &SrcParser::parse() {
-  for (const auto &src : srcs_) {
+  for (auto &src : srcs_) {
     std::ifstream stream;
     stream.open(src);
 
