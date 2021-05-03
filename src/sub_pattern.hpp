@@ -177,6 +177,16 @@ class AGPI : public SubPattern {
   SubPatternType type() const override { return SubPatternType::SPT_AGPI; }
 };
 
+class ASPI : public SubPattern {
+ public:
+  ASPI() : SubPattern("ASPI", 3) {
+    g_.edge(2, 0) = Relation::Association;
+    g_.edge(1, 0) = Relation::Inheritance;
+  }
+
+  SubPatternType type() const override { return SubPatternType::SPT_ASPI; }
+};
+
 class IPD : public SubPattern {
  public:
   IPD() : SubPattern("IPD", 3) {

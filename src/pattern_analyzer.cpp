@@ -80,12 +80,16 @@ void DecoratorAnalyzer::struct_analyze() {
   }
 }
 
+/**
+ * The offical relation is aggregation(IPAG),
+ * but it's implemented with one reference, i.e. IPAS.
+ */
 void BridgeAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
-    for (const auto &ipag : spis[SPT_IPAG]) {
-      if (ipag[2] == ci[0] && ipag[1] != ci[2] && ipag[2] != ci[1] &&
-          ci[1] != ipag[1] && ci[2] != ipag[2]) {
-        add_pattern(new Bridge(*sys[ipag[0]], *sys[ipag[1]], *sys[ipag[2]],
+    for (const auto &ipas : spis[SPT_IPAS]) {
+      if (ipas[2] == ci[0] && ipas[1] != ci[2] && ipas[2] != ci[1] &&
+          ci[1] != ipas[1] && ci[2] != ipas[2]) {
+        add_pattern(new Bridge(*sys[ipas[0]], *sys[ipas[1]], *sys[ipas[2]],
                                *sys[ci[1]], *sys[ci[2]]));
       }
     }
@@ -313,11 +317,11 @@ void StateAnalyzer::struct_analyze() {
  * AGPI && DPI
  */
 void StrategyAnalyzer::struct_analyze() {
-  for (const auto &agpi : spis[SPT_AGPI]) {
+  for (const auto &aspi : spis[SPT_ASPI]) {
     for (const auto &ci : spis[SPT_CI]) {
-      if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
+      if (aspi[0] == ci[0] && aspi[1] == ci[1] && aspi[2] != ci[2]) {
         add_pattern(
-            new Strategy(*sys[agpi[2]], *sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
+            new Strategy(*sys[aspi[2]], *sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
       }
     }
   }

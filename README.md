@@ -43,6 +43,38 @@ written in C++11, using ANTLR4 for source parsing.
 - Client
   - manipulates objects in the composition through the Component interface.
 
+### Bridge
+![](res/bridge-01.png)
+- Abstraction (Window)
+  - defines the abstraction’s interface.
+  - maintains a reference to an object of type Implementor.
+
+- RefmedAbstraction (IconWindow)
+  - Extends the interface defined by Abstraction.
+
+- Implementor (WindowImp)
+  - defines the interface for implementation classes. This interface doesn’t have to correspond exactly to Abstraction’s interface; in fact the two interfaces can be quite different. Typically the Implementor interface provides only primitive operations, and Abstraction defines higher-level operations based on these primitives.
+
+- ConcreteImplementor (XWindowImp, PMWindowImp)
+  - implements the Implementor interface and defines its concrete implementation.
+
+### Strategy
+![](res/strategy-01.png)
+- Strategy (Compositor)
+  - declares an interface common to all supported algorithms. Context uses this interface to call the algorithm defined by a ConcreteStrategy.
+
+- ConcreteStrategy (SimpleCompositor, TeXCompositor, ArrayCompositor)
+  - implements the algorithm using the Strategy interface.
+
+- Context (Composition)
+  - is configured with a ConcreteStrategy object.
+  - maintains a reference to a Strategy object.
+  - may define an interface that lets Strategy access its data.
+
+#### Collaborations
+- Strategy and Context interact to implement the chosen algorithm. A context may pass all data required by the algorithm to the strategy when the algorithm is called. Alternatively, the context can pass itself as an argument to Strategy operations. That lets the strategy call back on the context as required.
+
+- A context forwards requests from its clients to its strategy. Clients usually create and pass a ConcreteStrategy object to the context; thereafter, clients interact with the context exclusively. There is often a family of ConcreteStrategy classes for a client to choose from.
 
 ## Q&A
 - Association, aggregation and dependency usually share much similarities in specific code. How to separate them by an xmi file?
