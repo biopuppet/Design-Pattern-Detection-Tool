@@ -73,11 +73,13 @@ struct Attribute {
   unsigned dim_;
   Attribute(const std::string &name, const std::string &type_str, QualType qual,
             const std::string &listof, unsigned dim = 0)
-      : name_(name), type_str_(type_str), qual_(qual), listof_(listof), dim_(dim) {}
+      : name_(name),
+        type_str_(type_str),
+        qual_(qual),
+        listof_(listof),
+        dim_(dim) {}
 
-  bool isList() const {
-    return dim_ > 0;
-  }
+  bool isList() const { return dim_ > 0; }
 };
 
 struct Parameter {
@@ -137,21 +139,12 @@ struct Node {
   // Explicit construction methods that share the same name with its class.
   std::vector<Method *> constructors;
 
-  Node(const std::string &name, QualType qual)
-      : name_(name), qual_(qual) {}
+  Node(const std::string &name, QualType qual) : name_(name), qual_(qual) {}
 
-  void addInterface(const std::string &name) {
-    itf_names_.emplace_back(name);
-  }
-  void addInterface(Node *interface) {
-    interfaces_.emplace_back(interface);
-  }  
-  void setParent(const std::string &name) {
-    parent_name_ = name;
-  }
-  void setParent(Node *parent) {
-    parent_ = parent;
-  }
+  void addInterface(const std::string &name) { itf_names_.emplace_back(name); }
+  void addInterface(Node *interface) { interfaces_.emplace_back(interface); }
+  void setParent(const std::string &name) { parent_name_ = name; }
+  void setParent(Node *parent) { parent_ = parent; }
 
   const char *name() const { return name_.c_str(); }
   bool hasParent() const { return parent_ != nullptr; }
@@ -206,9 +199,7 @@ class Graph {
 
   void print_gcdr() const;
 
-  bool has(size_t u, size_t v, size_t r) const {
-    return edge(u, v) % r == 0;
-  }
+  bool has(size_t u, size_t v, size_t r) const { return edge(u, v) % r == 0; }
 
   bool hasInheritance(size_t u, size_t v) const {
     return edge(u, v) % Relation::Inheritance == 0;

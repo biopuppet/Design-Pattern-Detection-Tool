@@ -53,8 +53,8 @@ void ProxyAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     for (const auto &iass : spis[SPT_IASS]) {
       if (ci[0] == iass[0] && ci[2] == iass[1]) {
-        add_pattern(
-            new Proxy(*sys[ci[0]], *sys[ci[1]], *sys[ci[2]], Proxy::RefSubject));
+        add_pattern(new Proxy(*sys[ci[0]], *sys[ci[1]], *sys[ci[2]],
+                              Proxy::RefSubject));
       }
     }
   }
@@ -73,8 +73,8 @@ void DecoratorAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
       if (mli[0] == ci[0] && mli[1] == ci[2] && mli[2] != ci[1] &&
           sys.hasAssOrAgg(ci[2], ci[0])) {
-        add_pattern(
-            new Decorator(*sys[mli[0]], *sys[ci[1]], *sys[ci[2]], *sys[mli[2]]));
+        add_pattern(new Decorator(*sys[mli[0]], *sys[ci[1]], *sys[ci[2]],
+                                  *sys[mli[2]]));
       }
     }
   }
@@ -96,8 +96,8 @@ void FlyweightAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     for (const auto &agpi : spis[SPT_AGPI]) {
       if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-        add_pattern(
-            new Flyweight(*sys[agpi[2]], *sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
+        add_pattern(new Flyweight(*sys[agpi[2]], *sys[ci[0]], *sys[ci[1]],
+                                  *sys[ci[2]]));
       }
     }
   }
@@ -110,8 +110,8 @@ void FacadeAnalyzer::struct_analyze() {
   for (const auto &ica1 : spis[SPT_ICA]) {
     for (const auto &ica2 : spis[SPT_ICA]) {
       if (ica1[2] != ica2[2] && ica1[0] == ica2[0] && ica1[1] == ica2[1]) {
-        add_pattern(
-            new Facade(*sys[ica1[0]], *sys[ica1[1]], *sys[ica1[2]], *sys[ica2[2]]));
+        add_pattern(new Facade(*sys[ica1[0]], *sys[ica1[1]], *sys[ica1[2]],
+                               *sys[ica2[2]]));
       }
     }
   }
@@ -140,8 +140,8 @@ void BuilderAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &ica : spis[SPT_ICA]) {
       if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
-        add_pattern(
-            new Builder(*sys[ica[0]], *sys[ica[1]], *sys[agpi[2]], *sys[ica[2]]));
+        add_pattern(new Builder(*sys[ica[0]], *sys[ica[1]], *sys[agpi[2]],
+                                *sys[ica[2]]));
       }
     }
   }
@@ -154,8 +154,8 @@ void FactoryAnalyzer::struct_analyze() {
   for (const auto &dci : spis[SPT_DCI]) {
     for (const auto &icd : spis[SPT_ICD]) {
       if (dci[0] != icd[0] && dci[1] == icd[2] && dci[2] == icd[1]) {
-        add_pattern(
-            new Factory(*sys[dci[0]], *sys[dci[1]], *sys[icd[0]], *sys[icd[1]]));
+        add_pattern(new Factory(*sys[dci[0]], *sys[dci[1]], *sys[icd[0]],
+                                *sys[icd[1]]));
       }
     }
   }
@@ -168,8 +168,8 @@ void PrototypeAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &ci : spis[SPT_CI]) {
       if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-        add_pattern(
-            new Prototype(*sys[agpi[2]], *sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
+        add_pattern(new Prototype(*sys[agpi[2]], *sys[ci[0]], *sys[ci[1]],
+                                  *sys[ci[2]]));
       }
     }
   }
@@ -205,8 +205,8 @@ void CommandAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &ica : spis[SPT_ICA]) {
       if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
-        add_pattern(
-            new Command(*sys[agpi[2]], *sys[ica[0]], *sys[ica[1]], *sys[ica[2]]));
+        add_pattern(new Command(*sys[agpi[2]], *sys[ica[0]], *sys[ica[1]],
+                                *sys[ica[2]]));
       }
     }
   }
@@ -234,8 +234,8 @@ void IteratorAnalyzer::struct_analyze() {
   for (const auto &ica : spis[SPT_ICA]) {
     for (const auto &icd : spis[SPT_ICD]) {
       if (ica[0] != icd[0] && ica[1] == icd[2] && ica[2] == icd[1]) {
-        add_pattern(
-            new Iterator(*sys[ica[0]], *sys[ica[1]], *sys[icd[0]], *sys[icd[1]]));
+        add_pattern(new Iterator(*sys[ica[0]], *sys[ica[1]], *sys[icd[0]],
+                                 *sys[icd[1]]));
       }
     }
   }
@@ -269,8 +269,8 @@ void MementoAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &dpi : spis[SPT_DPI]) {
       if (agpi[0] == dpi[0] && agpi[1] == dpi[1] && agpi[2] != dpi[2]) {
-        add_pattern(
-            new Memento(*sys[dpi[0]], *sys[dpi[1]], *sys[agpi[2]], *sys[dpi[2]]));
+        add_pattern(new Memento(*sys[dpi[0]], *sys[dpi[1]], *sys[agpi[2]],
+                                *sys[dpi[2]]));
       }
     }
   }
@@ -286,8 +286,8 @@ void ObserverAnalyzer::struct_analyze() {
       if (agpi[0] == icd[0] && agpi[1] == icd[1] && agpi[2] != icd[2] &&
           // ConcreteSubject --> Subject
           sys.hasInheritance(icd[2], agpi[2])) {
-        add_pattern(
-            new Observer(*sys[agpi[2]], *sys[icd[2]], *sys[icd[0]], *sys[icd[1]]));
+        add_pattern(new Observer(*sys[agpi[2]], *sys[icd[2]], *sys[icd[0]],
+                                 *sys[icd[1]]));
       }
     }
   }
@@ -348,8 +348,8 @@ void VisitorAnalyzer::struct_analyze() {
           sys.hasDependency(icd[2], dpi[0]) &&
           // concrete element --|> element
           sys.hasInheritance(icd[2], dpi[2])) {
-        add_pattern(
-            new Visitor(*sys[dpi[2]], *sys[dpi[0]], *sys[icd[2]], *sys[dpi[1]]));
+        add_pattern(new Visitor(*sys[dpi[2]], *sys[dpi[0]], *sys[icd[2]],
+                                *sys[dpi[1]]));
       }
     }
   }

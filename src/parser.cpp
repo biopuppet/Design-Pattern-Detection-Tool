@@ -4,9 +4,9 @@
 #include <iostream>
 #include <istream>
 #include <map>
+#include <set>
 #include <string>
 #include <unordered_map>
-#include <set>
 #include <unordered_set>
 
 #include "JavaLexer.h"
@@ -23,7 +23,10 @@ static const std::map<const std::string, Modifier> modifiers = {
     {"static", M_STATIC}, {"abstract", M_ABSTRACT},   {"final", M_FINAL},
 };
 static const std::set<std::string> list_types = {
-  "List", "ArrayList", "LinkedList", "Vector",
+    "List",
+    "ArrayList",
+    "LinkedList",
+    "Vector",
 };
 
 /**
@@ -145,11 +148,16 @@ void DpdtJavaListener::enterFieldDeclaration(
   auto vards = ctx->variableDeclarators()->variableDeclarator();
   auto type = ctx->typeType()->getText();
   std::cout << "Field type: " << type << std::endl;
- 
+
   auto node_type = ctx->typeType()->classOrInterfaceType();
-  std::string listof = type;
+  auto builtin_type = ctx->typeType()->primitiveType();
+  std::string listof;
   size_t dim = 0;
+  if (builtin_type) {
+    listof = builtin_type->getText();
+  }
   if (node_type) {
+    listof = node_type->getText();
     // node_type->typeArguments()
     for (size_t i = 0; i < node_type->IDENTIFIER().size(); ++i) {
       auto ident = node_type->IDENTIFIER(i);
@@ -168,7 +176,7 @@ void DpdtJavaListener::enterFieldDeclaration(
   for (const auto &var : vards) {
     auto name = var->variableDeclaratorId()->IDENTIFIER()->getText();
     dim += var->variableDeclaratorId()->LBRACK().size();
-    std::cout << "var: " << name << dim << listof <<  std::endl;
+    std::cout << "var: " << name << dim << listof << std::endl;
     auto attr = new Attribute(name, type, qual, listof, dim);
     curNode()->attrs_.emplace_back(attr);
   }
@@ -212,7 +220,7 @@ Graph *SrcParser::parse() {
     for (const auto &it : node->itf_names_) {
       if (nodemap.count(it)) {
         node->addInterface(nodemap[it]);
-      } 
+      }
     }
     auto parent = node->getParent();
     if (parent) {
@@ -222,13 +230,12 @@ Graph *SrcParser::parse() {
       gcdr_->addInheritanceUnsafe(i, nodeidx.at(it));
     }
     for (const auto &it : node->attrs_) {
-      if (nodemap.count(it->listof_) &&
-          nodeidx.count(nodemap[it->listof_])) {
+      if (nodemap.count(it->listof_) && nodeidx.count(nodemap[it->listof_])) {
         if (it->isList()) {
           gcdr_->addAggregationUnsafe(i, nodeidx[nodemap[it->listof_]]);
         } else {
           gcdr_->addAssociationUnsafe(i, nodeidx[nodemap[it->listof_]]);
-        } 
+        }
       }
     }
   }
