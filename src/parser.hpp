@@ -47,11 +47,14 @@ class SrcParser {
 
  public:
   explicit SrcParser(std::vector<std::string> &file) : srcs_(file) {}
+  ~SrcParser() {
+    if (gcdr_) delete gcdr_;
+  }
 
   SrcParser(const SrcParser &) = delete;
   SrcParser &operator=(const SrcParser &) = delete;
 
-  Graph &parse();
+  Graph *parse();
 };
 
 #endif  // !DPDT_PARSER_H

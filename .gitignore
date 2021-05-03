@@ -31,3 +31,9 @@ tags
 *.swp
 
 grammar/.antlr/
+
+# Java
+*.form
+*.properties
+*.dat
+test/*/*.png

@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
   }
 
   SrcParser parser{src_files};
-  Graph &system = parser.parse();
+  auto system = parser.parse();
 #if 0
   if (dump_graph) system.print_gcdr();
 

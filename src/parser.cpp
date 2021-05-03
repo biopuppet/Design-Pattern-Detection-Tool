@@ -16,7 +16,7 @@ static std::vector<Node *> nodes;
 static std::map<const std::string, Node *> nodemap;
 static const std::map<const std::string, Modifier> modifiers = {
     {"public", M_PUBLIC}, {"protected", M_PROTECTED}, {"private", M_PRIVATE},
-    {"static", M_STATIC}, {"abstract", M_ABSTRACT}, {"final", M_FINAL},
+    {"static", M_STATIC}, {"abstract", M_ABSTRACT},   {"final", M_FINAL},
 };
 
 /**
@@ -37,8 +37,7 @@ void DpdtJavaListener::enterTypeDeclaration(
  *
  */
 void DpdtJavaListener::exitTypeDeclaration(
-    JavaParser::TypeDeclarationContext *ctx) {
-}
+    JavaParser::TypeDeclarationContext *ctx) {}
 
 /**
  *
@@ -49,23 +48,24 @@ void DpdtJavaListener::enterInterfaceDeclaration(
   auto interval = ctx->getSourceInterval();
   std::cout << interval.toString() << std::endl;
   auto ident = ctx->IDENTIFIER()->getText();
-  // TODO: Type parameters
   std::cout << ident << std::endl;
-  
+  // TODO: Type parameters
+
   std::vector<Node *> interfaces;
   if (ctx->typeList()) {
-    auto parents =
-        ctx->typeList()->typeType();
+    auto parents = ctx->typeList()->typeType();
     for (const auto &parent : parents) {
-      std::cout << "Parent: " << parent->getText() << std::endl;
-      assert(nodemap.count(parent->getText()));
-      interfaces.emplace_back(nodemap.at(parent->getText()));
+      auto ps = parent->getText();
+      std::cout << "Parent: " << ps << std::endl;
+      if (nodemap.count(ps)) {
+        interfaces.emplace_back(nodemap.at(ps));
+      }
     }
   }
   // std::cout << qual << std::endl;
   auto node = new Node(ident, curqual_, interfaces);
   nodes.emplace_back(node);
-  nodemap[ctx->IDENTIFIER()->getText()] = node;
+  nodemap[ident] = node;
   pushNode(node);
 }
 
@@ -93,18 +93,18 @@ void DpdtJavaListener::enterClassDeclaration(
     }
   }
   if (ctx->typeList()) {
-    auto parents =
-        ctx->typeList()->typeType();
+    auto parents = ctx->typeList()->typeType();
     for (const auto &parent : parents) {
-      std::cout << "Parent: " << parent->getText() << std::endl;
-      assert(nodemap.count(parent->getText()));
-      interfaces.emplace_back(nodemap.at(parent->getText()));
+      auto ps = parent->getText();
+      std::cout << "Parent: " << ps << std::endl;
+      assert(nodemap.count(ps));
+      interfaces.emplace_back(nodemap.at(ps));
     }
   }
   // std::cout << qual << std::endl;
   auto node = new Node(ident, curqual_, interfaces, parent);
   nodes.emplace_back(node);
-  nodemap[ctx->IDENTIFIER()->getText()] = node;
+  nodemap[ident] = node;
   pushNode(node);
 }
 
@@ -158,26 +158,30 @@ void DpdtJavaListener::exitFieldDeclaration(
     JavaParser::FieldDeclarationContext *ctx) {}
 #endif
 
-Graph &SrcParser::parse() {
+Graph *SrcParser::parse() {
   for (auto &src : srcs_) {
     std::ifstream stream;
     stream.open(src);
+    try {
+      ANTLRInputStream input(stream);
+      JavaLexer lexer(&input);
+      CommonTokenStream tokens(&lexer);
+      JavaParser parser(&tokens);
 
-    ANTLRInputStream input(stream);
-    JavaLexer lexer(&input);
-    CommonTokenStream tokens(&lexer);
-    JavaParser parser(&tokens);
+      // JavaParser::CompilationUnitContext *cu = parser.compilationUnit();
+      // std::cout << cu->toStringTree(&parser, true) << std::endl;
 
-    // JavaParser::CompilationUnitContext *cu = parser.compilationUnit();
-    // std::cout << cu->toStringTree(&parser, true) << std::endl;
-
-    DpdtJavaListener listener;
-    tree::ParseTree *tree = parser.compilationUnit();
-    tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
+      DpdtJavaListener listener;
+      tree::ParseTree *tree = parser.compilationUnit();
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
+    } catch (std::exception &e) {
+      fprintf(stderr, "ANTLR4 parsing error: %s\n", e.what());
+      return nullptr;
+    }
     stream.close();
   }
 
   // stream.close();
   gcdr_ = new Graph(nodes);
-  return *gcdr_;
+  return gcdr_;
 }
