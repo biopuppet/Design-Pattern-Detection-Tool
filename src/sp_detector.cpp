@@ -12,7 +12,9 @@ void SubPatternDetector::detect_all() {
 
   if (dump_sp_) {
     for (size_t i = 0; i < SPT_NUM; ++i) {
-      std::cout << SubPattern::getname(i) << " (" << spis[i].size() << ")\n";
+      if (spis[i].size()) {
+        std::cout << SubPattern::getname(i) << " (" << spis[i].size() << ")\n";
+      }
       for (const auto &spi : spis[i]) {
         std::cout << SubPattern::getname(i) << ": ";
         for (const auto &it : spi) {
