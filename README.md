@@ -102,7 +102,34 @@ written in C++11, using ANTLR4 for source parsing.
 The following interaction diagram illustrates how Builder and Director cooperate with a client.
 ![](res/builder-02.png)
 
+### Command
+![](res/command-02.png)
+#### Participants
+![](res/command-01.png)
+- Command
+  - declares an interface for executing an operation.
 
+- ConcreteCommand (PasteCommand, OpenCommand)
+  - defines a binding between a Receiver object and an action.
+  - implements Execute by invoking the corresponding operation(s) on Receiver.
+
+- Client (Application)
+  - creates a ConcreteCommand object and sets its receiver.
+
+- Invoker (Menultem)
+  - asks the command to carry out the request.
+
+- Receiver (Document, Application)
+  - knows how to perform the operations associated with carrying out a request. Any class may serve as a Receiver.
+
+#### Collaborations
+- The client creates a ConcreteCommand object and specifies its receiver.
+- An Invoker object stores the ConcreteCommand object.
+- The invoker issues a request by calling Execute on the command. When commands are undoable, ConcreteCommand stores state for undoing the command prior to invoking Execute.
+- The ConcreteCommand object invokes operations on its receiver to carry out the request.
+
+The following diagram shows the interactions between these objects. It illustrates how Command decouples the invoker from the receiver (and the request it carries out).
+![](res/command-03.png)
 
 ## Q&A
 - Association, aggregation and dependency usually share much similarities in specific code. How to separate them by an xmi file?
