@@ -97,8 +97,9 @@ void DpdtJavaListener::enterClassDeclaration(
     for (const auto &parent : parents) {
       auto ps = parent->getText();
       std::cout << "Parent: " << ps << std::endl;
-      assert(nodemap.count(ps));
-      interfaces.emplace_back(nodemap.at(ps));
+      if (nodemap.count(ps)) {
+        interfaces.emplace_back(nodemap.at(ps));
+      }
     }
   }
   // std::cout << qual << std::endl;

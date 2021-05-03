@@ -687,7 +687,7 @@ public class FishSolver extends AbstractSolver {
             Options.getInstance().setMaxFins(oldMaxFins);
             Options.getInstance().setMaxEndoFins(oldEndoFins);
             if (steps.size() > 0) {
-                  ndSiameseFish(steps);
+                findSiameseFish(steps);
                 Collections.sort(steps);
                 return steps.get(0);
             }
@@ -1262,7 +1262,7 @@ public class FishSolver extends AbstractSolver {
             Integer oldIndex = deletesMap.get(del);
             SolutionStep tmpStep = null;
             if (oldIndex != null) {
-                tmpStep = stStep = stldIndex.intValue());
+                tmpStep = steps.get(oldIndex.intValue());
             }
             if (tmpStep == null || globalStep.getType().compare(tmpStep.getType()) < 0) {
                 if (oldIndex != null) {

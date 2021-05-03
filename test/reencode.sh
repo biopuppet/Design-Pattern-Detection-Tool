@@ -2,12 +2,12 @@
 
 reencode_file() {
   # echo $1
-  iconv -f $(file -b --mime-encoding $1) -t utf-8 $1 -o $1
-  if [ $? != 0 ]; then
+  # iconv -f $(file -b --mime-encoding $1) -t utf-8 $1 -o $1
+  # if [ $? != 0 ]; then
     # Wild guess
-    echo "Using wild guess windows-1252.."
+    # echo "Using wild guess windows-1252.."
     iconv -f windows-1252 -t utf-8 $1 -o $1
-  fi
+  # fi
 }
 
 function getdir(){

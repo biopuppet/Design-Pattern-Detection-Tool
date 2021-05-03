@@ -735,7 +735,7 @@ public class Sudoku2 implements Cloneable {
                         if (cands1[i] == 0 && isCandidate(cellIndex, i)) {
                             setCandidate(row, col, i, false);
                         } else if (cands1[i] == 1 && ! isCandidate(cellIndex, i)) {
-                            s  sandidate(row, col, i, true);
+                            setCandidate(row, col, i, true);
                         }
                     }
                 }
@@ -1634,9 +1634,7 @@ public class Sudoku2 implements Cloneable {
         return setCell(getIndex(line, col), value, isFixed, true);
     }
 
-}
-
-**
+    /**
      * Sets or a value in or deletes a value from a cell.
      * Delegates to {@link #setCell(int, int, boolean, boolean) }.
      * @param index

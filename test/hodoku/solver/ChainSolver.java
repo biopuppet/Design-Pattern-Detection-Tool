@@ -763,7 +763,8 @@ public class ChainSolver extends AbstractSolver {
         //int endIndex = (lastLink / 10) % 100;
         int endIndex = Chain.getSCellIndex(lastLink);
         // Mindestlänge: 3 Links
-        if (endIndex != startIndex)startIndex)    // kein Loop
+        if (endIndex != startIndex) {
+            // kein Loop
             return;
         }
         // auf Looptyp prüfen

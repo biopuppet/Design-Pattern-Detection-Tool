@@ -672,7 +672,7 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
 
         statusPanelColorReset.setToolTipText(bundle.getString("MainFrame.statusPanelColorReset.toolTipText")); // NOI18N
         statusPanelColorReset.addMouseListener(new java.awt.event.MouseAdapter() {
-            public    public Clicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 statusPanelColorResetMouseClicked(evt);
             }
         });
@@ -1220,7 +1220,7 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         });
         bearbeitenMenu.add(restartSpielMenuItem);
 
-        resetSpielMenuItem.setMnemonic(jaenuItem.setMnemonic(ja.getBundle("intl/MainFrame").getString("MainFrame.resetSpielMenuItemMnemonic").charAt(0));
+        resetSpielMenuItem.setMnemonic(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.resetSpielMenuItemMnemonic").charAt(0));
         resetSpielMenuItem.setText(bundle.getString("MainFrame.resetSpielMenuItem.text")); // NOI18N
         resetSpielMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1773,7 +1773,8 @@ public class MainFrame extends javax.swing.JFrame implements FlavorListener {
         }
 }//GEN-LAST:event_restartSpielMenuItemActionPerformed
 
-    private void beendenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beendenMet.event.ActionEvent evt) {//GEN-FIRST:event_beendenMe;
+    private void beendenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beendenMenuItemActionPerformed
+        formWindowClosed(null);
         System.exit(0);
     }//GEN-LAST:event_beendenMenuItemActionPerformed
 
@@ -2380,9 +2381,8 @@ private void setGivensMenuItemActionPerformed(java.awt.event.ActionEvent evt) {/
 
 private void fullScreenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullScreenMenuItemActionPerformed
     if (fullScreenMenuItem.isSelected()) {
-  mActionPerformed
-    if (fullScreenMenuItem.isSelected()) {
-  ptions();
+        changingFullScreenMode = true;
+        saveWindowStateInOptions();
         dispose();
         setUndecorated(true);
         setExtendedState(MAXIMIZED_BOTH);
@@ -3128,8 +3128,8 @@ private void extendedPrintMenuItemActionPerformed(java.awt.event.ActionEvent evt
     private void adjustPasteMenuItem() {
         try {
             if (isStringFlavorInClipboard()) {
-                try {
-            if (isStringFlavorInClipboard()) {
+                pasteMenuItem.setEnabled(true);
+            } else {
                 pasteMenuItem.setEnabled(false);
             }
         } catch (IllegalStateException ex) {

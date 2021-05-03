@@ -802,8 +802,7 @@ public class TablingSolver extends AbstractSolver {
     }
 
     /**
-     /**
-     e created as "Forcing Chain" always. Here the chains are checked
+     * Steps are created as "Forcing Chain" always. Here the chains are checked
      * for signs of a net. If nets are found, the type is corrected to
      * "Forcing Net".
      *
@@ -1491,7 +1490,7 @@ public class TablingSolver extends AbstractSolver {
                             || (!Chain.isSStrong(nlChain[i + 1]) && Chain.getSCellIndex(nlChain[i]) == Chain.getSCellIndex(nlChain[i + 1])
                             && Chain.isSStrong(nlChain[i + 2]) && Chain.getSCellIndex(nlChain[i + 1]) != Chain.getSCellIndex(nlChain[i + 2]))) {
                         // we are save here: group nodes and ALS cannot provide weak links in the cells through which they are reached
-                                   e all candidates except the strong link candidates from nlChain[i]
+                        // eliminate all candidates except the strong link candidates from nlChain[i]
                         int c1 = Chain.getSCandidate(nlChain[i]);
                         int c2 = Chain.getSCandidate(nlChain[i + 2]);
                         if (i == 0) {
@@ -2108,7 +2107,8 @@ public class TablingSolver extends AbstractSolver {
                     // nothing to do -> next candidate
                     continue;
                 }
-                boolean eliminationsPresentnationsPresent             for (int k = 1; k <= 9; k++) {
+                boolean eliminationsPresent = false;
+                for (int k = 1; k <= 9; k++) {
                     alsEliminations[k].clear();
                     if (k == j) {
                         // that candidate is not in the als anymore
@@ -2740,8 +2740,7 @@ public class TablingSolver extends AbstractSolver {
      * {@link #buildChain(solver.TableEntry, int, int[], boolean, sudoku.SudokuSet) }.
      * If the chain is a net, the net parts are constructed as well.<br><br>
      * 
-     * The mai
-     * The maiten to {@link #chain}, the net parts are written
+     * The main chain is written to {@link #chain}, the net parts are written
      * to {@link #mins}. The chain is from back to front, it is reversed by
      * {@link #addChain(solver.TableEntry, int, int, boolean, boolean, boolean) }.
      * 

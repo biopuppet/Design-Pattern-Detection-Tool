@@ -1031,7 +1031,8 @@ public class ConfigGeneralPanel extends javax.swing.JPanel {
         Graphics g = img.getGraphics();
         g.setColor(color);
         g.fillRect(0, 0, 10, 10);
-        button.setIcon(new ImageIcon(img));n(img));  if (UIManager.getLookAndFeel().getName().equals("CDE/Motif")) {
+        button.setIcon(new ImageIcon(img));
+        if (UIManager.getLookAndFeel().getName().equals("CDE/Motif")) {
             button.setBackground(color);
         }
     }
