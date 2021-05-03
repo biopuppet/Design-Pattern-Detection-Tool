@@ -6,6 +6,8 @@
 #include <map>
 #include <string>
 #include <unordered_map>
+#include <set>
+#include <unordered_set>
 
 #include "JavaLexer.h"
 #include "JavaParser.h"
@@ -19,6 +21,9 @@ static std::unordered_map<Node *, size_t> nodeidx;
 static const std::map<const std::string, Modifier> modifiers = {
     {"public", M_PUBLIC}, {"protected", M_PROTECTED}, {"private", M_PRIVATE},
     {"static", M_STATIC}, {"abstract", M_ABSTRACT},   {"final", M_FINAL},
+};
+static const std::set<std::string> list_types = {
+  "List", "ArrayList", "LinkedList", "Vector",
 };
 
 /**
@@ -135,17 +140,36 @@ void DpdtJavaListener::exitClassDeclaration(
 
 void DpdtJavaListener::enterFieldDeclaration(
     JavaParser::FieldDeclarationContext *ctx) {
+  assert(curNode() != nullptr);
   QualType qual;
   auto vards = ctx->variableDeclarators()->variableDeclarator();
   auto type = ctx->typeType()->getText();
   std::cout << "Field type: " << type << std::endl;
+ 
+  auto node_type = ctx->typeType()->classOrInterfaceType();
+  std::string listof = type;
+  size_t dim = 0;
+  if (node_type) {
+    // node_type->typeArguments()
+    for (size_t i = 0; i < node_type->IDENTIFIER().size(); ++i) {
+      auto ident = node_type->IDENTIFIER(i);
+      auto typeargs = node_type->typeArguments(i);
+      auto idstr = ident->getText();
+      // List<...>
+      if (typeargs && list_types.find(idstr) != list_types.end()) {
+        // TODO: Add nested type support
+        // List has only 1 arg
+        dim += 1;
+        listof = typeargs->typeArgument()[0]->getText();
+      }
+    }
+  }
 
-  assert(curNode() != nullptr);
   for (const auto &var : vards) {
-    std::cout << "var: " << var->getText() << std::endl;
     auto name = var->variableDeclaratorId()->IDENTIFIER()->getText();
-    auto dim = var->variableDeclaratorId()->LBRACK().size();
-    auto attr = new Attribute(name, type, qual, dim);
+    dim += var->variableDeclaratorId()->LBRACK().size();
+    std::cout << "var: " << name << dim << listof <<  std::endl;
+    auto attr = new Attribute(name, type, qual, listof, dim);
     curNode()->attrs_.emplace_back(attr);
   }
 }
@@ -198,9 +222,13 @@ Graph *SrcParser::parse() {
       gcdr_->addInheritanceUnsafe(i, nodeidx.at(it));
     }
     for (const auto &it : node->attrs_) {
-      if (nodemap.count(it->type_str_) &&
-          nodeidx.count(nodemap[it->type_str_])) {
-        gcdr_->addAssociationUnsafe(i, nodeidx[nodemap[it->type_str_]]);
+      if (nodemap.count(it->listof_) &&
+          nodeidx.count(nodemap[it->listof_])) {
+        if (it->isList()) {
+          gcdr_->addAggregationUnsafe(i, nodeidx[nodemap[it->listof_]]);
+        } else {
+          gcdr_->addAssociationUnsafe(i, nodeidx[nodemap[it->listof_]]);
+        } 
       }
     }
   }

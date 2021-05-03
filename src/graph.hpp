@@ -12,7 +12,7 @@ struct Node;
 enum Relation {
   None = 1,
   Association = 2,
-  Aggregation = 2,  // TODO: Change back to 3
+  Aggregation = 3,  // TODO: Change back to 3
   Inheritance = 5,
   Dependency = 7,
 };
@@ -69,10 +69,15 @@ struct Attribute {
   const std::string type_str_;
   QualType qual_;
   // association
+  std::string listof_;
   unsigned dim_;
   Attribute(const std::string &name, const std::string &type_str, QualType qual,
-            unsigned dim = 0)
-      : name_(name), type_str_(type_str), qual_(qual), dim_(dim) {}
+            const std::string &listof, unsigned dim = 0)
+      : name_(name), type_str_(type_str), qual_(qual), listof_(listof), dim_(dim) {}
+
+  bool isList() const {
+    return dim_ > 0;
+  }
 };
 
 struct Parameter {

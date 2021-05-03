@@ -62,7 +62,7 @@ void ProxyAnalyzer::struct_analyze() {
 
 void CompositeAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
-    if (sys.hasAssOrAgg(ci[2], ci[0])) {
+    if (sys.hasAggregation(ci[2], ci[0])) {
       add_pattern(new Composite(*sys[ci[0]], *sys[ci[2]], *sys[ci[1]]));
     }
   }
