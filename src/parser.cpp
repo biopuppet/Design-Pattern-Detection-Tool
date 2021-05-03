@@ -74,20 +74,17 @@ void DpdtJavaListener::enterInterfaceDeclaration(
     ident += ctx->typeParameters()->getText();
   }
   std::cout << ident << std::endl;
+  auto node = new Node(ident, curqual_);
 
-  std::vector<Node *> interfaces;
   if (ctx->typeList()) {
     auto parents = ctx->typeList()->typeType();
     for (const auto &parent : parents) {
       auto ps = parent->getText();
       std::cout << "Parent: " << ps << std::endl;
-      if (nodemap.count(ps)) {
-        interfaces.emplace_back(nodemap.at(ps));
-      }
+      node->addInterface(ps);
     }
   }
-  // std::cout << qual << std::endl;
-  auto node = new Node(ident, curqual_, interfaces);
+
   nodeidx.emplace(node, nodes.size());
   nodes.emplace_back(node);
   nodemap[ident] = node;
@@ -110,28 +107,21 @@ void DpdtJavaListener::enterClassDeclaration(
   }
   std::cout << ident << std::endl;
 
-  Node *parent = nullptr;
-  std::vector<Node *> interfaces;
+  auto node = new Node(ident, curqual_);
+
   if (ctx->typeType()) {
-    auto sc = ctx->typeType()->getText();
-    std::cout << "Parent: " << sc << std::endl;
+    node->setParent(ctx->typeType()->getText());
     // May be an language builtin type
-    if (nodemap.count(sc)) {
-      parent = nodemap.at(sc);
-    }
   }
   if (ctx->typeList()) {
     auto parents = ctx->typeList()->typeType();
-    for (const auto &parent : parents) {
-      auto ps = parent->getText();
+    for (const auto &p : parents) {
+      auto ps = p->getText();
       std::cout << "Parent: " << ps << std::endl;
-      if (nodemap.count(ps)) {
-        interfaces.emplace_back(nodemap.at(ps));
-      }
+      node->addInterface(ps);
     }
   }
   // std::cout << qual << std::endl;
-  auto node = new Node(ident, curqual_, interfaces, parent);
   nodeidx.emplace(node, nodes.size());
   nodes.emplace_back(node);
   nodemap[ident] = node;
@@ -192,6 +182,14 @@ Graph *SrcParser::parse() {
   for (size_t i = 0; i < gcdr_->size(); ++i) {
     auto node = gcdr_->node(i);
     assert(node);
+    if (nodemap.count(node->parent_name_)) {
+      node->setParent(nodemap[node->parent_name_]);
+    }
+    for (const auto &it : node->itf_names_) {
+      if (nodemap.count(it)) {
+        node->addInterface(nodemap[it]);
+      } 
+    }
     auto parent = node->getParent();
     if (parent) {
       gcdr_->addInheritanceUnsafe(i, nodeidx.at(parent));
