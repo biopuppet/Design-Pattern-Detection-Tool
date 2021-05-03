@@ -14,6 +14,11 @@ class DpdtJavaListener : public JavaParserBaseListener {
       JavaParser::TypeDeclarationContext * /*ctx*/) override;
   void exitTypeDeclaration(
       JavaParser::TypeDeclarationContext * /*ctx*/) override;
+  void enterClassBodyDeclaration(
+      JavaParser::ClassBodyDeclarationContext * /*ctx*/) override;
+  void exitClassBodyDeclaration(
+      JavaParser::ClassBodyDeclarationContext * /*ctx*/) override;
+
   void enterInterfaceDeclaration(
       JavaParser::InterfaceDeclarationContext * /*ctx*/) override;
   void exitInterfaceDeclaration(
@@ -26,10 +31,10 @@ class DpdtJavaListener : public JavaParserBaseListener {
   //     JavaParser::ConstDeclarationContext * /*ctx*/) override;
   // void exitConstDeclaration(
   //     JavaParser::ConstDeclarationContext * /*ctx*/) override;
-  // void enterFieldDeclaration(
-  //     JavaParser::FieldDeclarationContext * /*ctx*/) override;
-  // void exitFieldDeclaration(
-  //     JavaParser::FieldDeclarationContext * /*ctx*/) override;
+  void enterFieldDeclaration(
+      JavaParser::FieldDeclarationContext * /*ctx*/) override;
+  void exitFieldDeclaration(
+      JavaParser::FieldDeclarationContext * /*ctx*/) override;
 
   Node *curNode() const { return nodestack_.top(); }
   void popNode() { nodestack_.pop(); }

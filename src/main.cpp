@@ -3,7 +3,7 @@
 
 #include "argh.h"
 #include "parser.hpp"
-// #include "pattern_analyzer.hpp"
+#include "pattern_analyzer.hpp"
 #include "sp_detector.hpp"
 
 extern "C" {
@@ -107,16 +107,15 @@ int main(int argc, char **argv) {
 
   SrcParser parser{src_files};
   auto system = parser.parse();
-#if 0
-  if (dump_graph) system.print_gcdr();
+  if (dump_graph) system->print_gcdr();
 
-  SubPatternDetector spd{system, dump_sp};
+  SubPatternDetector spd{*system, dump_sp};
   spd.detect_all();
 
   auto pa = PatternAnalyzer::createPatternAnalyzer(spd, pattern);
   pa->struct_analyze();
   pa->behavioral_check();
   delete pa;
-#endif
+
   return 0;
 }

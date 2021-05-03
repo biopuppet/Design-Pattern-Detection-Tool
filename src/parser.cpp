@@ -5,6 +5,7 @@
 #include <istream>
 #include <map>
 #include <string>
+#include <unordered_map>
 
 #include "JavaLexer.h"
 #include "JavaParser.h"
@@ -14,6 +15,7 @@ using namespace antlr4;
 
 static std::vector<Node *> nodes;
 static std::map<const std::string, Node *> nodemap;
+static std::unordered_map<Node *, size_t> nodeidx;
 static const std::map<const std::string, Modifier> modifiers = {
     {"public", M_PUBLIC}, {"protected", M_PROTECTED}, {"private", M_PRIVATE},
     {"static", M_STATIC}, {"abstract", M_ABSTRACT},   {"final", M_FINAL},
@@ -42,14 +44,36 @@ void DpdtJavaListener::exitTypeDeclaration(
 /**
  *
  */
+void DpdtJavaListener::enterClassBodyDeclaration(
+    JavaParser::ClassBodyDeclarationContext *ctx) {
+  for (const auto &it : ctx->modifier()) {
+    const auto mod = it->getText();
+    // std::cout << "Mod: " <<  << std::endl;
+    if (modifiers.count(mod)) {
+      curqual_.setType(modifiers.at(mod));
+    }
+  }
+}
+
+/**
+ *
+ */
+void DpdtJavaListener::exitClassBodyDeclaration(
+    JavaParser::ClassBodyDeclarationContext *ctx) {}
+
+/**
+ *
+ */
 void DpdtJavaListener::enterInterfaceDeclaration(
     JavaParser::InterfaceDeclarationContext *ctx) {
   // std::cout << ctx->getText() << std::endl;
   auto interval = ctx->getSourceInterval();
   std::cout << interval.toString() << std::endl;
   auto ident = ctx->IDENTIFIER()->getText();
+  if (ctx->typeParameters()) {
+    ident += ctx->typeParameters()->getText();
+  }
   std::cout << ident << std::endl;
-  // TODO: Type parameters
 
   std::vector<Node *> interfaces;
   if (ctx->typeList()) {
@@ -64,6 +88,7 @@ void DpdtJavaListener::enterInterfaceDeclaration(
   }
   // std::cout << qual << std::endl;
   auto node = new Node(ident, curqual_, interfaces);
+  nodeidx.emplace(node, nodes.size());
   nodes.emplace_back(node);
   nodemap[ident] = node;
   pushNode(node);
@@ -80,6 +105,9 @@ void DpdtJavaListener::enterClassDeclaration(
   auto interval = ctx->getSourceInterval();
   std::cout << interval.toString() << std::endl;
   auto ident = ctx->IDENTIFIER()->getText();
+  if (ctx->typeParameters()) {
+    ident += ctx->typeParameters()->getText();
+  }
   std::cout << ident << std::endl;
 
   Node *parent = nullptr;
@@ -104,6 +132,7 @@ void DpdtJavaListener::enterClassDeclaration(
   }
   // std::cout << qual << std::endl;
   auto node = new Node(ident, curqual_, interfaces, parent);
+  nodeidx.emplace(node, nodes.size());
   nodes.emplace_back(node);
   nodemap[ident] = node;
   pushNode(node);
@@ -114,50 +143,25 @@ void DpdtJavaListener::exitClassDeclaration(
   popNode();
 }
 
-#if 0
-void DpdtJavaListener::enterConstDeclaration(
-    JavaParser::ConstDeclarationContext *ctx) {
-  QualType qual;
-  for (const auto &it : ctx->constantModifier()) {
-    const auto mod = it->getText();
-    // std::cout << "Mod: " <<  << std::endl;
-    if (modifiers.count(mod)) {
-      qual.setType(modifiers.at(mod));
-    }
-  }
-  std::cout << "Const type: " << ctx->unannType()->getText() << std::endl;
-  // auto type = ctx->unannType();
-}
-
-void DpdtJavaListener::exitConstDeclaration(
-    JavaParser::ConstDeclarationContext *ctx) {}
-
 void DpdtJavaListener::enterFieldDeclaration(
     JavaParser::FieldDeclarationContext *ctx) {
   QualType qual;
-  for (const auto &it : ctx->fieldModifier()) {
-    const auto mod = it->getText();
-    // std::cout << "Mod: " <<  << std::endl;
-    if (modifiers.count(mod)) {
-      qual.setType(modifiers.at(mod));
-    }
-  }
+  auto vards = ctx->variableDeclarators()->variableDeclarator();
+  auto type = ctx->typeType()->getText();
+  std::cout << "Field type: " << type << std::endl;
 
-  auto type = ctx->unannType();
-  std::cout << "Field type: " << type->getText() << std::endl;
-  auto vars = ctx->variableDeclaratorList()->variableDeclarator();
   assert(curNode() != nullptr);
-  for (const auto &var : vars) {
+  for (const auto &var : vards) {
     std::cout << "var: " << var->getText() << std::endl;
     auto name = var->variableDeclaratorId()->IDENTIFIER()->getText();
-    auto attr = new Attribute(name, type->getText(), qual);
-    curNode()->attrs.emplace_back(attr);
+    auto dim = var->variableDeclaratorId()->LBRACK().size();
+    auto attr = new Attribute(name, type, qual, dim);
+    curNode()->attrs_.emplace_back(attr);
   }
 }
 
 void DpdtJavaListener::exitFieldDeclaration(
     JavaParser::FieldDeclarationContext *ctx) {}
-#endif
 
 Graph *SrcParser::parse() {
   for (auto &src : srcs_) {
@@ -184,5 +188,23 @@ Graph *SrcParser::parse() {
 
   // stream.close();
   gcdr_ = new Graph(nodes);
+
+  for (size_t i = 0; i < gcdr_->size(); ++i) {
+    auto node = gcdr_->node(i);
+    assert(node);
+    auto parent = node->getParent();
+    if (parent) {
+      gcdr_->addInheritanceUnsafe(i, nodeidx.at(parent));
+    }
+    for (const auto &it : node->interfaces_) {
+      gcdr_->addInheritanceUnsafe(i, nodeidx.at(it));
+    }
+    for (const auto &it : node->attrs_) {
+      if (nodemap.count(it->type_str_) &&
+          nodeidx.count(nodemap[it->type_str_])) {
+        gcdr_->addAssociationUnsafe(i, nodeidx[nodemap[it->type_str_]]);
+      }
+    }
+  }
   return gcdr_;
 }

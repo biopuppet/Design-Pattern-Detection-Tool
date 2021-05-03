@@ -69,13 +69,10 @@ struct Attribute {
   const std::string type_str_;
   QualType qual_;
   // association
-  enum Type {
-    Single,
-    Array,
-  } type_;
+  unsigned dim_;
   Attribute(const std::string &name, const std::string &type_str, QualType qual,
-            Type type = Type::Single)
-      : name_(name), type_str_(type_str), qual_(qual), type_(type) {}
+            unsigned dim = 0)
+      : name_(name), type_str_(type_str), qual_(qual), dim_(dim) {}
 };
 
 struct Parameter {
@@ -125,7 +122,7 @@ struct Node {
   Node *parent_;
 
   // Attributes: property, ...
-  std::vector<Attribute *> attrs;
+  std::vector<Attribute *> attrs_;
 
   // Methods
   std::vector<Method *> methods;
@@ -140,6 +137,8 @@ struct Node {
       : name_(name), qual_(qual), interfaces_(interfaces), parent_(parent) {}
 
   const char *name() const { return name_.c_str(); }
+  bool hasParent() const { return parent_ != nullptr; }
+  Node *getParent() { return parent_; }
 };
 
 /**

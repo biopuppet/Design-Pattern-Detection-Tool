@@ -61,10 +61,10 @@ bool Composite::behavioral_check() const {
   }
 
   bool agg = false;
-  for (const auto &it : composite_.attrs) {
-    if (it->type == Attribute::List && it->associate == &component_) {
+  for (const auto &it : composite_.attrs_) {
+    if (it->dim_) {
       agg = true;
-      std::cout << it->name << " ";
+      std::cout << it->name_ << " ";
     }
   }
   if (result2.size() && agg) {
