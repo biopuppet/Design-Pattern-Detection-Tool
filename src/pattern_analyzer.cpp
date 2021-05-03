@@ -141,10 +141,10 @@ void AbstractFactoryAnalyzer::struct_analyze() {
  * Builder
  */
 void BuilderAnalyzer::struct_analyze() {
-  for (const auto &agpi : spis[SPT_AGPI]) {
+  for (const auto &aspi : spis[SPT_ASPI]) {
     for (const auto &ica : spis[SPT_ICA]) {
-      if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
-        add_pattern(new Builder(*sys[ica[0]], *sys[ica[1]], *sys[agpi[2]],
+      if (aspi[0] == ica[0] && aspi[1] == ica[1] && aspi[2] != ica[2]) {
+        add_pattern(new Builder(*sys[ica[0]], *sys[ica[1]], *sys[aspi[2]],
                                 *sys[ica[2]]));
       }
     }

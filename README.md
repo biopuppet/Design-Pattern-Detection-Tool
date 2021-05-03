@@ -76,6 +76,34 @@ written in C++11, using ANTLR4 for source parsing.
 
 - A context forwards requests from its clients to its strategy. Clients usually create and pass a ConcreteStrategy object to the context; thereafter, clients interact with the context exclusively. There is often a family of ConcreteStrategy classes for a client to choose from.
 
+### Builder
+![](res/builder-01.png)
+#### Participants
+- Builder (TextConverter)
+  - specifies an abstract interface for creating parts of a Product object.
+
+- ConcreteBuilder (ASCIIConverter, TeXConverter, TextWidgetConverter)
+  - constructs and assembles parts of the product by implementing the Builder interface.
+  - defines and keeps track of the representation it creates.
+  - provides an interface for retrieving the product (e.g., GetASCIIText, Get-Text Widget).
+
+- Director (RTFReader)
+  - constructs an object using the Builder interface.
+
+- Product (ASCIIText, TeXText, TextWidget)
+  - represents the complex object under construction. ConcreteBuilder builds the product’s internal representation and defines the process by which it’s assembled.
+  - includes classes that define the constituent parts, including interfaces for assembling the parts into the final result.
+
+#### Collaborations
+- The client creates the Director object and configures it with the desired Builder object.
+- Director notifies the builder whenever a part of the product should be built.
+- Builder handles requests from the director and adds parts to the product.
+- The client retrieves the product from the builder.
+The following interaction diagram illustrates how Builder and Director cooperate with a client.
+![](res/builder-02.png)
+
+
+
 ## Q&A
 - Association, aggregation and dependency usually share much similarities in specific code. How to separate them by an xmi file?
     - Solution 1: Mannually add the missing relations before exporting to an xmi file. This tool presumes that all relations are present in the xmi file.
