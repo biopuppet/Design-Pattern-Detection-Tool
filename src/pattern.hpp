@@ -189,22 +189,21 @@ class Flyweight : public Pattern {
 class Facade : public Pattern {
  public:
   Node &facade_;
-  Node &concrete_facade_;
-  Node &subsystem1_;
-  Node &subsystem2_;
-  Node *subsystem3_;
+  std::vector<Node *> subsystems_;
 
-  Facade(Node &facade, Node &concrete_facade, Node &subsystem1,
-         Node &subsystem2, Node *subsystem3 = nullptr)
+  static constexpr size_t LIMIT = 2; 
+
+  Facade(Node &facade, std::vector<Node *> &subsystems)
       : facade_(facade),
-        concrete_facade_(concrete_facade),
-        subsystem1_(subsystem1),
-        subsystem2_(subsystem2),
-        subsystem3_(subsystem3) {}
+        subsystems_(subsystems) {}
 
   void print() const override {
-    printf("Facade<%s, %s, %s, %s>\n", facade_.name(), concrete_facade_.name(),
-           subsystem1_.name(), subsystem2_.name());
+    printf("Facade<%s, ", facade_.name());
+    printf("Subsystems<%s", subsystems_[0]->name());
+    for (size_t i = 1; i < subsystems_.size(); ++i) {
+      printf(", %s", subsystems_[i]->name());
+    }
+    printf(">>\n");
   }
 
   bool behavioral_check() const override;

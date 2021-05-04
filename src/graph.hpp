@@ -179,6 +179,8 @@ class Graph {
 
   size_t &edge(size_t u, size_t v) { return matrix_.at(u * n_ + v); }
 
+  NodeList *nodes() const { return nodes_; }
+
   Node *node(size_t index) { return nodes_ ? nodes_->at(index) : nullptr; }
 
   const Node *node(size_t index) const {
@@ -205,20 +207,20 @@ class Graph {
     return edge(u, v) % Relation::Inheritance == 0;
   }
 
-  bool hasAssociation(size_t u, size_t v) const {
-    return edge(u, v) % Relation::Association == 0;
+  bool hasAssociation(size_t u, size_t v, size_t mult = 1) const {
+    return edge(u, v) % (Relation::Association * mult) == 0;
   }
 
-  bool hasAggregation(size_t u, size_t v) const {
-    return edge(u, v) % Relation::Aggregation == 0;
+  bool hasAggregation(size_t u, size_t v, size_t mult = 1) const {
+    return edge(u, v) % (Relation::Aggregation * mult) == 0;
   }
 
-  bool hasDependency(size_t u, size_t v) const {
-    return edge(u, v) % Relation::Dependency == 0;
+  bool hasDependency(size_t u, size_t v, size_t mult = 1) const {
+    return edge(u, v) % (Relation::Dependency * mult) == 0;
   }
 
-  bool hasAssOrAgg(size_t u, size_t v) const {
-    return hasAggregation(u, v) || hasAssociation(u, v);
+  bool hasAssOrAgg(size_t u, size_t v, size_t mult = 1) const {
+    return hasAggregation(u, v, mult) || hasAssociation(u, v, mult);
   }
 
   void addInheritanceUnsafe(size_t u, size_t v) {

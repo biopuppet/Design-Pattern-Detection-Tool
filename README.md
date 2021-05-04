@@ -131,6 +131,24 @@ The following interaction diagram illustrates how Builder and Director cooperate
 The following diagram shows the interactions between these objects. It illustrates how Command decouples the invoker from the receiver (and the request it carries out).
 ![](res/command-03.png)
 
+### Facade
+![](res/facade-01.png)
+#### Participants
+- Facade (Compiler)
+  - knows which subsystem classes are responsible for a request.
+  - delegates client requests to appropriate subsystem objects.
+
+- subsystem classes (Scanner, Parser, ProgramNode, etc.)
+  - implement subsystem functionality.
+  - handle work assigned by the Facade object.
+  - have no knowledge of the facade; that is, they keep no references to it.
+
+#### Collaborations
+- Clients communicate with the subsystem by sending requests to Facade, which forwards them to the appropriate subsystem object(s). Although the subsystem objects perform the actual work, the facade may have to do work of its own to translate its interface to subsystem interfaces.
+
+- Clients that use the facade don’t have to access its subsystem objects directly.
+
+
 ## Q&A
 - Association, aggregation and dependency usually share much similarities in specific code. How to separate them by an xmi file?
     - Solution 1: Mannually add the missing relations before exporting to an xmi file. This tool presumes that all relations are present in the xmi file.

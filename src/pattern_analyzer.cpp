@@ -107,17 +107,24 @@ void FlyweightAnalyzer::struct_analyze() {
   }
 }
 
-// TODO: Facade implementation undetermined
-// Facade with a concrete facade
-// ICA & ICA (& ICA)
+/**
+ * TODO: Facade implementation undetermined
+ */
 void FacadeAnalyzer::struct_analyze() {
-  for (const auto &ica1 : spis[SPT_ICA]) {
-    for (const auto &ica2 : spis[SPT_ICA]) {
-      if (ica1[2] != ica2[2] && ica1[0] == ica2[0] && ica1[1] == ica2[1]) {
-        add_pattern(new Facade(*sys[ica1[0]], *sys[ica1[1]], *sys[ica1[2]],
-                               *sys[ica2[2]]));
+  for (size_t i = 0; i < sys.size(); ++i) {
+    std::vector<Node *> nodes;
+    for (size_t j = 0; j < sys.size(); ++j) {
+      if (i == j) continue;
+      if (sys.hasAssociation(i, j) 
+      // subsystem has no knowledge of the facade
+      && !sys.hasAssociation(j, i) && !sys.hasDependency(j, i)
+      && !sys.hasInheritance(j, i) && !sys.hasInheritance(i, j)
+      ) {
+        nodes.emplace_back(sys[j]);
       }
     }
+    if (nodes.size() < Facade::LIMIT) continue;
+    add_pattern(new Facade(*sys[i], nodes));
   }
 }
 
