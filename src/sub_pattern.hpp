@@ -35,8 +35,8 @@ class SubPattern {
 
   void add(size_t u, size_t v, size_t r) {
     auto &e = g_.edge(u, v);
-    if (r % e) return;
-    e = r;
+    if (r % e.prime_) return;
+    e.prime_ = r;
   }
 
   virtual SubPatternType type() const = 0;
@@ -57,8 +57,8 @@ class SubPattern {
 class ICA : public SubPattern {
  public:
   ICA() : SubPattern("ICA", 3) {
-    g_.edge(1, 0) = Relation::Inheritance;
-    g_.edge(1, 2) = Relation::Association;
+    g_.edge(1, 0).addInheritance();
+    g_.edge(1, 2).addAssociation();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_ICA; }
@@ -67,8 +67,8 @@ class ICA : public SubPattern {
 class CI : public SubPattern {
  public:
   CI() : SubPattern("CI", 3) {
-    g_.edge(1, 0) = Relation::Inheritance;
-    g_.edge(2, 0) = Relation::Inheritance;
+    g_.edge(1, 0).addInheritance();
+    g_.edge(2, 0).addInheritance();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_CI; }
@@ -77,7 +77,7 @@ class CI : public SubPattern {
 class IAGG : public SubPattern {
  public:
   IAGG() : SubPattern("IAGG", 2) {
-    g_.edge(1, 0) = Relation::Aggregation * Relation::Inheritance;
+    g_.edge(1, 0).add(Relation::Aggregation * Relation::Inheritance);
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_IAGG; }
@@ -86,8 +86,8 @@ class IAGG : public SubPattern {
 class IPAG : public SubPattern {
  public:
   IPAG() : SubPattern("IPAG", 3) {
-    g_.edge(1, 0) = Relation::Inheritance;
-    g_.edge(0, 2) = Relation::Aggregation;
+    g_.edge(1, 0).addInheritance();
+    g_.edge(0, 2).addAggregation();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_IPAG; }
@@ -96,8 +96,8 @@ class IPAG : public SubPattern {
 class IPAS : public SubPattern {
  public:
   IPAS() : SubPattern("IPAS", 3) {
-    g_.edge(0, 2) = Relation::Association;
-    g_.edge(1, 0) = Relation::Inheritance;
+    g_.edge(0, 2).addAssociation();
+    g_.edge(1, 0).addInheritance();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_IPAS; }
@@ -105,7 +105,7 @@ class IPAS : public SubPattern {
 
 class SASS : public SubPattern {
  public:
-  SASS() : SubPattern("SASS", 1) { g_.edge(0, 0) = Relation::Association; }
+  SASS() : SubPattern("SASS", 1) { g_.edge(0, 0).addAssociation(); }
 
   SubPatternType type() const override { return SubPatternType::SPT_SASS; }
 };
@@ -113,8 +113,8 @@ class SASS : public SubPattern {
 class MLI : public SubPattern {
  public:
   MLI() : SubPattern("MLI", 3) {
-    g_.edge(1, 0) = Relation::Inheritance;
-    g_.edge(2, 1) = Relation::Inheritance;
+    g_.edge(1, 0).addInheritance();
+    g_.edge(2, 1).addInheritance();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_MLI; }
@@ -123,9 +123,9 @@ class MLI : public SubPattern {
 class IIAGG : public SubPattern {
  public:
   IIAGG() : SubPattern("IIAGG", 3) {
-    g_.edge(1, 0) = Relation::Inheritance;
-    g_.edge(2, 1) = Relation::Inheritance;
-    g_.edge(2, 0) = Relation::Aggregation;
+    g_.edge(1, 0).addInheritance();
+    g_.edge(2, 1).addInheritance();
+    g_.edge(2, 0).addAggregation();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_IIAGG; }
@@ -134,7 +134,7 @@ class IIAGG : public SubPattern {
 class IASS : public SubPattern {
  public:
   IASS() : SubPattern("IASS", 2) {
-    g_.edge(1, 0) = Relation::Inheritance * Relation::Association;
+    g_.edge(1, 0).add(Relation::Inheritance * Relation::Association);
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_IASS; }
@@ -143,8 +143,8 @@ class IASS : public SubPattern {
 class ICD : public SubPattern {
  public:
   ICD() : SubPattern("ICD", 3) {
-    g_.edge(1, 0) = Relation::Inheritance;
-    g_.edge(1, 2) = Relation::Dependency;
+    g_.edge(1, 0).addInheritance();
+    g_.edge(1, 2).addDependency();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_ICD; }
@@ -153,8 +153,8 @@ class ICD : public SubPattern {
 class DCI : public SubPattern {
  public:
   DCI() : SubPattern("DCI", 3) {
-    g_.edge(1, 0) = Relation::Inheritance;
-    g_.edge(2, 1) = Relation::Dependency;
+    g_.edge(1, 0).addInheritance();
+    g_.edge(2, 1).addDependency();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_DCI; }
@@ -162,7 +162,7 @@ class DCI : public SubPattern {
 
 class SAGG : public SubPattern {
  public:
-  SAGG() : SubPattern("SAGG", 1) { g_.edge(0, 0) = Relation::Aggregation; }
+  SAGG() : SubPattern("SAGG", 1) { g_.edge(0, 0).addAggregation(); }
 
   SubPatternType type() const override { return SubPatternType::SPT_SAGG; }
 };
@@ -170,8 +170,8 @@ class SAGG : public SubPattern {
 class AGPI : public SubPattern {
  public:
   AGPI() : SubPattern("AGPI", 3) {
-    g_.edge(2, 0) = Relation::Aggregation;
-    g_.edge(1, 0) = Relation::Inheritance;
+    g_.edge(2, 0).addAggregation();
+    g_.edge(1, 0).addInheritance();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_AGPI; }
@@ -180,8 +180,8 @@ class AGPI : public SubPattern {
 class ASPI : public SubPattern {
  public:
   ASPI() : SubPattern("ASPI", 3) {
-    g_.edge(2, 0) = Relation::Association;
-    g_.edge(1, 0) = Relation::Inheritance;
+    g_.edge(2, 0).addAssociation();
+    g_.edge(1, 0).addInheritance();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_ASPI; }
@@ -190,8 +190,8 @@ class ASPI : public SubPattern {
 class IPD : public SubPattern {
  public:
   IPD() : SubPattern("IPD", 3) {
-    g_.edge(0, 2) = Relation::Dependency;
-    g_.edge(1, 0) = Relation::Inheritance;
+    g_.edge(0, 2).addDependency();
+    g_.edge(1, 0).addInheritance();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_IPD; }
@@ -200,8 +200,8 @@ class IPD : public SubPattern {
 class DPI : public SubPattern {
  public:
   DPI() : SubPattern("DPI", 3) {
-    g_.edge(2, 0) = Relation::Dependency;
-    g_.edge(1, 0) = Relation::Inheritance;
+    g_.edge(2, 0).addDependency();
+    g_.edge(1, 0).addInheritance();
   }
 
   SubPatternType type() const override { return SubPatternType::SPT_DPI; }

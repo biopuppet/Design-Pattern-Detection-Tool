@@ -151,6 +151,110 @@ struct Node {
   Node *getParent() { return parent_; }
 };
 
+struct Edge {
+  size_t prime_ = Relation::None;
+  bool isImpl_ = false;
+  std::vector<Attribute *> ass_attrs_;
+  std::vector<Attribute *> agg_attrs_;
+  std::vector<Method *> methods_;
+
+  bool has(const Edge &edge) {
+    return prime_ % edge.prime_ == 0;
+  }
+
+  bool has(size_t composite) {
+    return prime_ % composite == 0;
+  }
+
+  void add(size_t composite) {
+    prime_ *= composite;
+  }
+
+  bool hasInheritance() const {
+    return prime_ % Relation::Inheritance == 0;
+  }
+
+  bool isInheritance() const {
+    return prime_ == Relation::Inheritance;
+  }
+
+  bool isImplementation() const {
+    return hasInheritance() && isImpl_;
+  }
+
+  void addInheritance(bool isImpl = false) {
+    prime_ *= Relation::Inheritance;
+    isImpl_ = isImpl;
+  }
+
+  bool hasAssociation(size_t mult = 1) const {
+    return prime_ % (Relation::Association * mult) == 0;
+  }
+  
+  bool isAssociation(size_t mult = 1) const {
+    return prime_ == (Relation::Association * mult);
+  }
+
+  void addAssociation() {
+    prime_ *= Relation::Association;
+  }
+
+  void addAssociation(Attribute *attr) {
+    prime_ *= Relation::Association;
+    ass_attrs_.emplace_back(attr);
+  }
+
+  std::vector<Attribute *> &getAssAttrs() {
+    return ass_attrs_;
+  }
+
+  bool hasAggregation(size_t mult = 1) const {
+    return prime_ % (Relation::Aggregation * mult) == 0;
+  }
+
+  bool isAggregation(size_t mult = 1) const {
+    return prime_ == (Relation::Aggregation * mult);
+  }
+
+  void addAggregation() {
+    prime_ *= Relation::Aggregation;
+  }
+
+  void addAggregation(Attribute *attr) {
+    prime_ *= Relation::Aggregation;
+    agg_attrs_.emplace_back(attr);
+  }
+
+  std::vector<Attribute *> &getAggAttrs() {
+    return agg_attrs_;
+  }
+
+  bool hasDependency(size_t mult = 1) const {
+    return prime_ % (Relation::Dependency * mult) == 0;
+  }
+
+  bool isDependency(size_t mult = 1) const {
+    return prime_ == (Relation::Dependency * mult);
+  }
+
+  void addDependency() {
+    prime_ *= Relation::Dependency;
+  }
+
+  void addDependency(Method *method) {
+    prime_ *= Relation::Dependency;
+    methods_.emplace_back(method);
+  }
+
+  std::vector<Method *> &getDepMethods() {
+    return methods_;
+  }
+
+  bool operator==(const Relation &r) {
+    return r == prime_;
+  }
+};
+
 /**
  * Graph is a complete directed graph.
  */
@@ -164,20 +268,20 @@ class Graph {
   NodeList *nodes_{nullptr};
 
   // 1-dim implementation of adjacency matrix
-  std::vector<size_t> matrix_;
+  std::vector<Edge> matrix_;
 
  public:
-  explicit Graph(size_t n) : n_(n), nodes_(nullptr), matrix_(n * n, 1) {}
+  explicit Graph(size_t n) : n_(n), nodes_(nullptr), matrix_(n * n) {}
 
   explicit Graph(NodeList &nodes)
-      : n_(nodes.size()), nodes_(&nodes), matrix_(n_ * n_, 1) {}
+      : n_(nodes.size()), nodes_(&nodes), matrix_(n_ * n_) {}
 
   Graph(const Graph &) = delete;
   Graph &operator=(const Graph &) = delete;
 
-  size_t edge(size_t u, size_t v) const { return matrix_.at(u * n_ + v); }
+  const Edge &edge(size_t u, size_t v) const { return matrix_.at(u * n_ + v); }
 
-  size_t &edge(size_t u, size_t v) { return matrix_.at(u * n_ + v); }
+  Edge &edge(size_t u, size_t v) { return matrix_.at(u * n_ + v); }
 
   NodeList *nodes() const { return nodes_; }
 
@@ -201,66 +305,40 @@ class Graph {
 
   void print_gcdr() const;
 
-  bool has(size_t u, size_t v, size_t r) const { return edge(u, v) % r == 0; }
-
   bool hasInheritance(size_t u, size_t v) const {
-    return edge(u, v) % Relation::Inheritance == 0;
+    return edge(u, v).hasInheritance();
   }
 
   bool hasAssociation(size_t u, size_t v, size_t mult = 1) const {
-    return edge(u, v) % (Relation::Association * mult) == 0;
+    return edge(u, v).hasAssociation(mult);
   }
 
   bool hasAggregation(size_t u, size_t v, size_t mult = 1) const {
-    return edge(u, v) % (Relation::Aggregation * mult) == 0;
+    return edge(u, v).hasAggregation(mult);
   }
 
   bool hasDependency(size_t u, size_t v, size_t mult = 1) const {
-    return edge(u, v) % (Relation::Dependency * mult) == 0;
+    return edge(u, v).hasDependency(mult);
   }
 
   bool hasAssOrAgg(size_t u, size_t v, size_t mult = 1) const {
     return hasAggregation(u, v, mult) || hasAssociation(u, v, mult);
   }
 
-  void addInheritanceUnsafe(size_t u, size_t v) {
-    edge(u, v) *= Relation::Inheritance;
-  }
-
-  void addAssociationUnsafe(size_t u, size_t v) {
-    edge(u, v) *= Relation::Association;
-  }
-
-  void addAggregationUnsafe(size_t u, size_t v) {
-    edge(u, v) *= Relation::Aggregation;
-  }
-
-  void addDependencyUnsafe(size_t u, size_t v) {
-    edge(u, v) *= Relation::Dependency;
-  }
-
-  void addInheritance(size_t u, size_t v) {
-    if (!hasInheritance(u, v)) {
-      addInheritanceUnsafe(u, v);
-    }
+  void addInheritance(size_t u, size_t v, bool isImpl = false) {
+    edge(u, v).addInheritance(isImpl);
   }
 
   void addAssociation(size_t u, size_t v) {
-    if (!hasAssociation(u, v)) {
-      addAssociationUnsafe(u, v);
-    }
+    edge(u, v).addAssociation();
   }
 
   void addAggregation(size_t u, size_t v) {
-    if (!hasAggregation(u, v)) {
-      addAggregationUnsafe(u, v);
-    }
+    edge(u, v).addAggregation();
   }
 
   void addDependency(size_t u, size_t v) {
-    if (!hasDependency(u, v)) {
-      addDependencyUnsafe(u, v);
-    }
+    edge(u, v).addDependency();
   }
 };
 

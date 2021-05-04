@@ -3,8 +3,9 @@
 #include <cstring>
 #include <iostream>
 
-static std::string edge2str(size_t e) {
+static std::string edge2str(const Edge &edge) {
   std::string s = "";
+  auto e = edge.prime_;
   while (e) {
     if (e % Relation::Association == 0) {
       e /= Relation::Association;
@@ -35,7 +36,7 @@ std::ostream &operator<<(std::ostream &os, const QualType &p) {
 size_t Graph::cw_in(size_t v) const {
   size_t ret = 1;
   for (size_t i = 0; i < size(); ++i) {
-    ret *= edge(i, v);
+    ret *= edge(i, v).prime_;
   }
   return ret;
 }
@@ -43,7 +44,7 @@ size_t Graph::cw_in(size_t v) const {
 size_t Graph::cw_out(size_t v) const {
   size_t ret = 1;
   for (size_t i = 0; i < size(); ++i) {
-    ret *= edge(v, i);
+    ret *= edge(v, i).prime_;
   }
   return ret;
 }
@@ -52,7 +53,7 @@ void Graph::print_gcdr() const {
   auto n = size();
   for (size_t i = 0; i < n; ++i) {
     for (size_t j = 0; j < n; ++j) {
-      if (edge(i, j) == 1) {
+      if (edge(i, j).prime_ == Relation::None) {
         continue;
       }
       std::cout << node(i)->name() << " --" << edge2str(edge(i, j)) << "--> "

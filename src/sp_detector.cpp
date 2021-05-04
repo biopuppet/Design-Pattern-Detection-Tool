@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <array>
 
 #define SUBPATTERN(U, L) const U SubPatternDetector::L;
 #include "subpattern.def"
@@ -32,7 +33,7 @@ void SubPatternDetector::combine_cv_1(const SubPattern &subp,
   auto &sp = subp.gcdr();
   auto sp_e = sp.edge(0, 0);
   for (const auto &vd : cvs[0]) {
-    if (!system.has(vd, vd, sp_e)) {
+    if (!system.edge(vd, vd).has(sp_e)) {
       continue;
     }
     // printf("%s(%s)\n", subp.name(), system[vd].name());
@@ -47,7 +48,7 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
   auto sp_e2 = sp.edge(1, 0);
   for (const auto &vd1 : cvs[0]) {
     for (const auto &vd2 : cvs[1]) {
-      if (!system.has(vd1, vd2, sp_e1) || !system.has(vd2, vd1, sp_e2)) {
+      if (!system.edge(vd1, vd2).has(sp_e1) || !system.edge(vd2, vd1).has(sp_e2)) {
         continue;
       }
       // printf("%s(%s %s)\n", subp.name(), system[vd1].name(),
@@ -60,7 +61,7 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
 void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
   auto &sp = subp.gcdr();
-  size_t sp_es[] = {sp.edge(0, 1), sp.edge(0, 2), sp.edge(1, 0),
+  const std::array<Edge, 6> sp_es = {sp.edge(0, 1), sp.edge(0, 2), sp.edge(1, 0),
                     sp.edge(1, 2), sp.edge(2, 0), sp.edge(2, 1)};
   for (const auto &vd1 : cvs[0]) {
     for (const auto &vd2 : cvs[1]) {
@@ -70,12 +71,12 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
         if (vd1 == vd2 || vd2 == vd3 || vd1 == vd3) {
           continue;
         }
-        if (!system.has(vd1, vd2, sp_es[0]) ||
-            !system.has(vd1, vd3, sp_es[1]) ||
-            !system.has(vd2, vd1, sp_es[2]) ||
-            !system.has(vd2, vd3, sp_es[3]) ||
-            !system.has(vd3, vd1, sp_es[4]) ||
-            !system.has(vd3, vd2, sp_es[5])) {
+        if (!system.edge(vd1, vd2).has(sp_es[0]) ||
+            !system.edge(vd1, vd3).has(sp_es[1]) ||
+            !system.edge(vd2, vd1).has(sp_es[2]) ||
+            !system.edge(vd2, vd3).has(sp_es[3]) ||
+            !system.edge(vd3, vd1).has(sp_es[4]) ||
+            !system.edge(vd3, vd2).has(sp_es[5])) {
           continue;
         }
         // printf("%s(%s %s %s)\n", subp.name(), system[vd1].name(),

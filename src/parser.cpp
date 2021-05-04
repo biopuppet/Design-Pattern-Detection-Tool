@@ -224,17 +224,17 @@ Graph *SrcParser::parse() {
     }
     auto parent = node->getParent();
     if (parent) {
-      gcdr_->addInheritanceUnsafe(i, nodeidx.at(parent));
+      gcdr_->addInheritance(i, nodeidx.at(parent));
     }
     for (const auto &it : node->interfaces_) {
-      gcdr_->addInheritanceUnsafe(i, nodeidx.at(it));
+      gcdr_->addInheritance(i, nodeidx.at(it));
     }
     for (const auto &it : node->attrs_) {
       if (nodemap.count(it->listof_) && nodeidx.count(nodemap[it->listof_])) {
         if (it->isList()) {
-          gcdr_->addAggregationUnsafe(i, nodeidx[nodemap[it->listof_]]);
+          gcdr_->addAggregation(i, nodeidx[nodemap[it->listof_]]);
         } else {
-          gcdr_->addAssociationUnsafe(i, nodeidx[nodemap[it->listof_]]);
+          gcdr_->addAssociation(i, nodeidx[nodemap[it->listof_]]);
         }
       }
     }
