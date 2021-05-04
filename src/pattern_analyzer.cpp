@@ -115,11 +115,10 @@ void FacadeAnalyzer::struct_analyze() {
     std::vector<Node *> nodes;
     for (size_t j = 0; j < sys.size(); ++j) {
       if (i == j) continue;
-      if (sys.hasAssociation(i, j) 
-      // subsystem has no knowledge of the facade
-      && !sys.hasAssociation(j, i) && !sys.hasDependency(j, i)
-      && !sys.hasInheritance(j, i) && !sys.hasInheritance(i, j)
-      ) {
+      if (sys.hasAssociation(i, j)
+          // subsystem has no knowledge of the facade
+          && !sys.hasAssociation(j, i) && !sys.hasDependency(j, i) &&
+          !sys.hasInheritance(j, i) && !sys.hasInheritance(i, j)) {
         nodes.emplace_back(sys[j]);
       }
     }

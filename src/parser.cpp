@@ -29,6 +29,27 @@ static const std::set<std::string> list_types = {
     "Vector",
 };
 
+antlrcpp::Any DpdtJavaVisitor::visitFormalParameters(
+    JavaParser::FormalParametersContext *ctx) {
+  std::vector<Parameter *> params;
+  if (auto fpl = ctx->formalParameterList()) {
+    auto fps = fpl->formalParameter();
+    for (const auto &fp : fps) {
+      auto type = fp->typeType()->getText();
+      auto name = fp->variableDeclaratorId()->IDENTIFIER()->getText();
+      auto param = new Parameter(type, name);
+      params.emplace_back(param);
+    }
+    if (auto fp = fpl->lastFormalParameter()) {
+      auto type = fp->typeType()->getText();
+      auto name = fp->variableDeclaratorId()->IDENTIFIER()->getText();
+      auto param = new Parameter(type, name);
+      params.emplace_back(param);
+    }
+  }
+  return params;
+}
+
 /**
  *
  */
@@ -177,13 +198,44 @@ void DpdtJavaListener::enterFieldDeclaration(
     auto name = var->variableDeclaratorId()->IDENTIFIER()->getText();
     dim += var->variableDeclaratorId()->LBRACK().size();
     std::cout << "var: " << name << dim << listof << std::endl;
-    auto attr = new Attribute(name, type, qual, listof, dim);
+    auto attr = new Attribute(reinterpret_cast<intptr_t>(ctx), name, type, qual,
+                              listof, dim);
     curNode()->attrs_.emplace_back(attr);
   }
 }
 
 void DpdtJavaListener::exitFieldDeclaration(
     JavaParser::FieldDeclarationContext *ctx) {}
+
+/**
+ *
+ */
+void DpdtJavaListener::enterMethodDeclaration(
+    JavaParser::MethodDeclarationContext *ctx) {
+  auto type = ctx->typeTypeOrVoid()->getText();
+  auto name = ctx->IDENTIFIER()->getText();
+  if (auto tt = ctx->typeTypeOrVoid()->typeType()) {
+    if (tt->classOrInterfaceType()) {
+      type = tt->classOrInterfaceType()->getText();
+    } else {
+      type = tt->primitiveType()->getText();
+    }
+  }
+  std::cout << "Method type: " << type << std::endl;
+
+  auto params = visitor_.visitFormalParameters(ctx->formalParameters())
+                    .as<std::vector<Parameter *>>();
+
+  auto method = new Method(reinterpret_cast<intptr_t>(ctx), Method::MethodDecl,
+                           name, curqual_, type, params);
+  curNode()->methods_.emplace_back(method);
+}
+
+/**
+ *
+ */
+void DpdtJavaListener::exitMethodDeclaration(
+    JavaParser::MethodDeclarationContext *ctx) {}
 
 Graph *SrcParser::parse() {
   for (auto &src : srcs_) {
@@ -236,6 +288,13 @@ Graph *SrcParser::parse() {
         } else {
           gcdr_->addAssociation(i, nodeidx[nodemap[it->listof_]]);
         }
+      }
+    }
+
+    for (const auto &it : node->methods_) {
+      auto &type = it->type_;
+      if (nodemap.count(type) && nodeidx.count(nodemap[type])) {
+        gcdr_->addDependency(i, nodeidx[nodemap[type]]);
       }
     }
   }

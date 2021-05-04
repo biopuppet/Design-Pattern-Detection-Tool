@@ -191,11 +191,10 @@ class Facade : public Pattern {
   Node &facade_;
   std::vector<Node *> subsystems_;
 
-  static constexpr size_t LIMIT = 2; 
+  static constexpr size_t LIMIT = 2;
 
   Facade(Node &facade, std::vector<Node *> &subsystems)
-      : facade_(facade),
-        subsystems_(subsystems) {}
+      : facade_(facade), subsystems_(subsystems) {}
 
   void print() const override {
     printf("Facade<%s, ", facade_.name());

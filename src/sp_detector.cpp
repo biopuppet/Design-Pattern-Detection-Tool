@@ -1,8 +1,8 @@
 #include "sp_detector.hpp"
 
+#include <array>
 #include <iostream>
 #include <vector>
-#include <array>
 
 #define SUBPATTERN(U, L) const U SubPatternDetector::L;
 #include "subpattern.def"
@@ -48,7 +48,8 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
   auto sp_e2 = sp.edge(1, 0);
   for (const auto &vd1 : cvs[0]) {
     for (const auto &vd2 : cvs[1]) {
-      if (!system.edge(vd1, vd2).has(sp_e1) || !system.edge(vd2, vd1).has(sp_e2)) {
+      if (!system.edge(vd1, vd2).has(sp_e1) ||
+          !system.edge(vd2, vd1).has(sp_e2)) {
         continue;
       }
       // printf("%s(%s %s)\n", subp.name(), system[vd1].name(),
@@ -61,8 +62,9 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
 void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
   auto &sp = subp.gcdr();
-  const std::array<Edge, 6> sp_es = {sp.edge(0, 1), sp.edge(0, 2), sp.edge(1, 0),
-                    sp.edge(1, 2), sp.edge(2, 0), sp.edge(2, 1)};
+  const std::array<Edge, 6> sp_es = {sp.edge(0, 1), sp.edge(0, 2),
+                                     sp.edge(1, 0), sp.edge(1, 2),
+                                     sp.edge(2, 0), sp.edge(2, 1)};
   for (const auto &vd1 : cvs[0]) {
     for (const auto &vd2 : cvs[1]) {
       for (const auto &vd3 : cvs[2]) {

@@ -65,15 +65,18 @@ class QualType {
 };
 
 struct Attribute {
+  intptr_t ctx_;
   const std::string name_;
   const std::string type_str_;
   QualType qual_;
   // association
   std::string listof_;
   unsigned dim_;
-  Attribute(const std::string &name, const std::string &type_str, QualType qual,
-            const std::string &listof, unsigned dim = 0)
-      : name_(name),
+
+  Attribute(intptr_t ctx, const std::string &name, const std::string &type_str,
+            QualType qual, const std::string &listof, unsigned dim = 0)
+      : ctx_(ctx),
+        name_(name),
         type_str_(type_str),
         qual_(qual),
         listof_(listof),
@@ -83,38 +86,51 @@ struct Attribute {
 };
 
 struct Parameter {
-  std::string name_;
-  std::string type_str_;
-  enum Type {
-    Void,
-    Int,
-    Double,
-    Java_int,
-    Java_long,
-    Java_double,
-    Java_boolean,
-    Java_String,
-    Java_Hashtable,
-    Java_Class,
-  } type_;
-  enum Direction { IN, RETURN } dir_;
-  bool isUnique_;
+  const std::string name_;
+  const std::string type_;
+  // const std::string core_type_;
+  // enum Type {
+  //   Void,
+  //   Int,
+  //   Double,
+  //   Java_int,
+  //   Java_long,
+  //   Java_double,
+  //   Java_boolean,
+  //   Java_String,
+  //   Java_Hashtable,
+  //   Java_Class,
+  // } type_;
 
-  Parameter(const char *name, std::string &type_str, Type type, Direction dir)
-      : name_(name), type_str_(type_str), type_(type), dir_(dir) {}
+  Parameter(std::string &name, std::string &type) : name_(name), type_(type) {}
 };
 
 struct Method {
-  std::string name;
-  Modifier modi;
-  bool isAbstract;                  // bit-mask?
-  std::vector<Parameter *> params;  // including return value
+  intptr_t ctx_;
+  enum Type {
+    MethodDecl,
+    InterfaceMethodDecl,
+  } ctx_type_;
+
+  const std::string name_;
+  QualType qual_;
+  std::string type_;
+  std::vector<Parameter *> params_;  // including return value
+
+  Method(intptr_t ctx, Type ctx_type, const std::string &name, QualType qual,
+         std::string &type, std::vector<Parameter *> &params)
+      : ctx_(ctx),
+        ctx_type_(ctx_type),
+        name_(name),
+        qual_(qual),
+        type_(type),
+        params_(params) {}
 };
 
 struct MethodCmp {
   // TODO: Check parameters
   bool operator()(const Method *a, const Method *b) {
-    return a->name != b->name;
+    return a->name_ != b->name_;
   }
 };
 
@@ -134,7 +150,7 @@ struct Node {
   std::vector<Attribute *> attrs_;
 
   // Methods
-  std::vector<Method *> methods;
+  std::vector<Method *> methods_;
 
   // Explicit construction methods that share the same name with its class.
   std::vector<Method *> constructors;
@@ -158,29 +174,17 @@ struct Edge {
   std::vector<Attribute *> agg_attrs_;
   std::vector<Method *> methods_;
 
-  bool has(const Edge &edge) {
-    return prime_ % edge.prime_ == 0;
-  }
+  bool has(const Edge &edge) { return prime_ % edge.prime_ == 0; }
 
-  bool has(size_t composite) {
-    return prime_ % composite == 0;
-  }
+  bool has(size_t composite) { return prime_ % composite == 0; }
 
-  void add(size_t composite) {
-    prime_ *= composite;
-  }
+  void add(size_t composite) { prime_ *= composite; }
 
-  bool hasInheritance() const {
-    return prime_ % Relation::Inheritance == 0;
-  }
+  bool hasInheritance() const { return prime_ % Relation::Inheritance == 0; }
 
-  bool isInheritance() const {
-    return prime_ == Relation::Inheritance;
-  }
+  bool isInheritance() const { return prime_ == Relation::Inheritance; }
 
-  bool isImplementation() const {
-    return hasInheritance() && isImpl_;
-  }
+  bool isImplementation() const { return hasInheritance() && isImpl_; }
 
   void addInheritance(bool isImpl = false) {
     prime_ *= Relation::Inheritance;
@@ -190,23 +194,19 @@ struct Edge {
   bool hasAssociation(size_t mult = 1) const {
     return prime_ % (Relation::Association * mult) == 0;
   }
-  
+
   bool isAssociation(size_t mult = 1) const {
     return prime_ == (Relation::Association * mult);
   }
 
-  void addAssociation() {
-    prime_ *= Relation::Association;
-  }
+  void addAssociation() { prime_ *= Relation::Association; }
 
   void addAssociation(Attribute *attr) {
     prime_ *= Relation::Association;
     ass_attrs_.emplace_back(attr);
   }
 
-  std::vector<Attribute *> &getAssAttrs() {
-    return ass_attrs_;
-  }
+  std::vector<Attribute *> &getAssAttrs() { return ass_attrs_; }
 
   bool hasAggregation(size_t mult = 1) const {
     return prime_ % (Relation::Aggregation * mult) == 0;
@@ -216,18 +216,14 @@ struct Edge {
     return prime_ == (Relation::Aggregation * mult);
   }
 
-  void addAggregation() {
-    prime_ *= Relation::Aggregation;
-  }
+  void addAggregation() { prime_ *= Relation::Aggregation; }
 
   void addAggregation(Attribute *attr) {
     prime_ *= Relation::Aggregation;
     agg_attrs_.emplace_back(attr);
   }
 
-  std::vector<Attribute *> &getAggAttrs() {
-    return agg_attrs_;
-  }
+  std::vector<Attribute *> &getAggAttrs() { return agg_attrs_; }
 
   bool hasDependency(size_t mult = 1) const {
     return prime_ % (Relation::Dependency * mult) == 0;
@@ -237,22 +233,16 @@ struct Edge {
     return prime_ == (Relation::Dependency * mult);
   }
 
-  void addDependency() {
-    prime_ *= Relation::Dependency;
-  }
+  void addDependency() { prime_ *= Relation::Dependency; }
 
   void addDependency(Method *method) {
     prime_ *= Relation::Dependency;
     methods_.emplace_back(method);
   }
 
-  std::vector<Method *> &getDepMethods() {
-    return methods_;
-  }
+  std::vector<Method *> &getDepMethods() { return methods_; }
 
-  bool operator==(const Relation &r) {
-    return r == prime_;
-  }
+  bool operator==(const Relation &r) { return r == prime_; }
 };
 
 /**
@@ -329,17 +319,11 @@ class Graph {
     edge(u, v).addInheritance(isImpl);
   }
 
-  void addAssociation(size_t u, size_t v) {
-    edge(u, v).addAssociation();
-  }
+  void addAssociation(size_t u, size_t v) { edge(u, v).addAssociation(); }
 
-  void addAggregation(size_t u, size_t v) {
-    edge(u, v).addAggregation();
-  }
+  void addAggregation(size_t u, size_t v) { edge(u, v).addAggregation(); }
 
-  void addDependency(size_t u, size_t v) {
-    edge(u, v).addDependency();
-  }
+  void addDependency(size_t u, size_t v) { edge(u, v).addDependency(); }
 };
 
 #endif  // !DPDT_GRAPH_H

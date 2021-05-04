@@ -9,7 +9,7 @@ static MethodList intersected(const MethodList &m1, const MethodList &m2) {
   MethodList res;
   for (const auto &it1 : m1) {
     for (const auto &it2 : m2) {
-      if (it1->name == it2->name) {
+      if (it1->name_ == it2->name_) {
         res.emplace_back(it1);
       }
     }
@@ -21,13 +21,13 @@ static MethodList intersected(const MethodList &m1, const MethodList &m2) {
  * Target.[Method] = Adapter.[Method] → Adaptee.[Method]
  */
 bool Adapter::behavioral_check() const {
-  auto result = intersected(target_.methods, adapter_.methods);
+  auto result = intersected(target_.methods_, adapter_.methods_);
 
   for (auto &it : result) {
-    std::cout << "request: " << it->name << std::endl;
+    std::cout << "request: " << it->name_ << std::endl;
   }
 
-  bool indep = intersected(result, adaptee_.methods).size();
+  bool indep = intersected(result, adaptee_.methods_).size();
   if (result.size() && !indep) {
     return true;
   }
@@ -39,10 +39,10 @@ bool Adapter::behavioral_check() const {
  */
 bool Proxy::behavioral_check() const {
   // Looking for 3 identical method signature
-  auto res = intersected(subject_.methods, proxy_.methods);
-  res = intersected(res, real_subject_.methods);
+  auto res = intersected(subject_.methods_, proxy_.methods_);
+  res = intersected(res, real_subject_.methods_);
   for (auto &it : res) {
-    std::cout << "request: " << it->name << std::endl;
+    std::cout << "request: " << it->name_ << std::endl;
   }
   if (res.size()) {
     return true;
@@ -54,10 +54,10 @@ bool Proxy::behavioral_check() const {
  * Component.[Method] = Composite.[Method] → Component.[Method]
  */
 bool Composite::behavioral_check() const {
-  auto result = intersected(component_.methods, composite_.methods);
-  auto result2 = intersected(result, leaf_.methods);
+  auto result = intersected(component_.methods_, composite_.methods_);
+  auto result2 = intersected(result, leaf_.methods_);
   for (auto &it : result2) {
-    std::cout << "method: " << it->name << std::endl;
+    std::cout << "method: " << it->name_ << std::endl;
   }
 
   bool agg = false;
@@ -79,11 +79,11 @@ bool Composite::behavioral_check() const {
  *     = ConcreteDecorator.[Method] → Component.[Method]
  */
 bool Decorator::behavioral_check() const {
-  auto result = intersected(component_.methods, concrete_component_.methods);
-  auto result2 = intersected(result, decorator_.methods);
-  auto result3 = intersected(result2, concrete_decorator_.methods);
+  auto result = intersected(component_.methods_, concrete_component_.methods_);
+  auto result2 = intersected(result, decorator_.methods_);
+  auto result3 = intersected(result2, concrete_decorator_.methods_);
   for (auto &it : result3) {
-    std::cout << "method: " << it->name << std::endl;
+    std::cout << "method: " << it->name_ << std::endl;
   }
   if (result.size()) {
     return true;

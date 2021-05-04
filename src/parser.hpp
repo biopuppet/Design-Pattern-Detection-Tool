@@ -4,9 +4,16 @@
 #include <stack>
 
 #include "JavaParserBaseListener.h"
+#include "JavaParserBaseVisitor.h"
 #include "graph.hpp"
 
 using namespace antlr4;
+
+class DpdtJavaVisitor : public JavaParserBaseVisitor {
+ public:
+  antlrcpp::Any visitFormalParameters(
+      JavaParser::FormalParametersContext *ctx) override;
+};
 
 class DpdtJavaListener : public JavaParserBaseListener {
  public:
@@ -36,6 +43,11 @@ class DpdtJavaListener : public JavaParserBaseListener {
   void exitFieldDeclaration(
       JavaParser::FieldDeclarationContext * /*ctx*/) override;
 
+  void enterMethodDeclaration(
+      JavaParser::MethodDeclarationContext * /*ctx*/) override;
+  void exitMethodDeclaration(
+      JavaParser::MethodDeclarationContext * /*ctx*/) override;
+
   Node *curNode() const { return nodestack_.top(); }
   void popNode() { nodestack_.pop(); }
   void pushNode(Node *node) { nodestack_.push(node); }
@@ -43,6 +55,7 @@ class DpdtJavaListener : public JavaParserBaseListener {
  private:
   std::stack<Node *> nodestack_;
   QualType curqual_;
+  DpdtJavaVisitor visitor_;
 };
 
 class SrcParser {
