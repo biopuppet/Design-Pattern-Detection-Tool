@@ -14,7 +14,7 @@ class SubPatternDetector {
   friend class PatternAnalyzer;
 
   // System GCDR reference
-  Graph &system;
+  SrcGraph &system;
 
   // Sub-pattern instance set
   std::vector<SPRefList> spis{SPT_NUM};
@@ -23,7 +23,7 @@ class SubPatternDetector {
   bool dump_sp_;
 
  public:
-  explicit SubPatternDetector(Graph &sys, bool dump_sp = false)
+  explicit SubPatternDetector(SrcGraph &sys, bool dump_sp = false)
       : system(sys), dump_sp_(dump_sp) {}
 
   SubPatternDetector(const SubPatternDetector &) = delete;
@@ -37,8 +37,7 @@ class SubPatternDetector {
   void combine_cv_2(const SubPattern &sp, const CandidateVertexList &cvs);
   void combine_cv_1(const SubPattern &sp, const CandidateVertexList &cvs);
 
-#define SUBPATTERN(U, L) static const U L;
-#include "subpattern.def"
+  static const SubPattern sps[];
 };
 
 #endif  // !DPDT_SP_DETECTOR_H

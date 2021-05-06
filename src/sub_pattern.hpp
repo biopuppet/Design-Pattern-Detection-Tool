@@ -1,48 +1,101 @@
 #ifndef DPDT_SUB_PATTERN_H
 #define DPDT_SUB_PATTERN_H
 
+#include <string>
+
 #include "graph.hpp"
 
 enum SubPatternType {
-  SPT_NONE = -1,
 #define SUBPATTERN(U, L) SPT_##U,
 #include "subpattern.def"
   SPT_NUM,
 };
 
 /**
- * Note: If there are multiple edges,
- *  use multiplication instead of assignments, like IAGG, IASS.
+ *
  */
-class SubPattern {
- protected:
-  const std::string name_;
-  Graph g_;
+class SubPattern : public Graph<size_t> {
+  SubPatternType type_;
 
  public:
-  explicit SubPattern(const char *name, size_t size) : name_(name), g_(size) {}
+  SubPattern(SubPatternType type, size_t size)
+      : Graph<size_t>(size, 1), type_(type) {
+    switch (type) {
+      case SPT_ICA:
+        addInheritance(1, 0);
+        addAssociation(1, 2);
+        break;
+      case SPT_CI:
+        addInheritance(1, 0);
+        addInheritance(2, 0);
+        break;
+      case SPT_IAGG:
+        add(1, 0, Relation::Aggregation * Relation::Inheritance);
+        break;
+      case SPT_IPAG:
+        addInheritance(1, 0);
+        addAggregation(0, 2);
+        break;
+      case SPT_IPAS:
+        addAssociation(0, 2);
+        addInheritance(1, 0);
+        break;
+      case SPT_SASS:
+        addAssociation(0, 0);
+        break;
+      case SPT_MLI:
+        addInheritance(1, 0);
+        addInheritance(2, 1);
+        break;
+      case SPT_IIAGG:
+        addInheritance(1, 0);
+        addInheritance(2, 1);
+        addAggregation(2, 0);
+        break;
+      case SPT_IASS:
+        add(1, 0, Relation::Inheritance * Relation::Association);
+        break;
+      case SPT_ICD:
+        addInheritance(1, 0);
+        addDependency(1, 2);
+        break;
+      case SPT_DCI:
+        addInheritance(1, 0);
+        addDependency(2, 1);
+        break;
+      case SPT_SAGG:
+        addAggregation(0, 0);
+        break;
+      case SPT_AGPI:
+        addAggregation(2, 0);
+        addInheritance(1, 0);
+        break;
+      case SPT_ASPI:
+        addAssociation(2, 0);
+        addInheritance(1, 0);
+        break;
+      case SPT_IPD:
+        addDependency(0, 2);
+        addInheritance(1, 0);
+        break;
+      case SPT_DPI:
+        addDependency(2, 0);
+        addInheritance(1, 0);
+        break;
+      default:
+        break;
+    }
+  }
 
   SubPattern(const SubPattern &) = delete;
   SubPattern &operator=(const SubPattern &) = delete;
 
-  virtual ~SubPattern() {}
+  // const std::string &name() const { return name_; }
 
-  const char *name() const { return name_.c_str(); }
+  SubPatternType type() const { return type_; }
 
-  const Graph &gcdr() const { return g_; }
-
-  Graph &gcdr() { return g_; }
-
-  void add(size_t u, size_t v, size_t r) {
-    auto &e = g_.edge(u, v);
-    if (r % e.prime_) return;
-    e.prime_ = r;
-  }
-
-  virtual SubPatternType type() const = 0;
-
-  static const char *getname(size_t spt) {
-    switch (spt) {
+  const char *name() const {
+    switch (type_) {
 #define SUBPATTERN(U, L) \
   case SPT_##U:          \
     return #U;
@@ -52,159 +105,22 @@ class SubPattern {
     }
     return nullptr;
   }
-};
 
-class ICA : public SubPattern {
- public:
-  ICA() : SubPattern("ICA", 3) {
-    g_.edge(1, 0).addInheritance();
-    g_.edge(1, 2).addAssociation();
+  void add(size_t u, size_t v, size_t r) { edge(u, v) *= r; }
+
+  void addInheritance(size_t u, size_t v) {
+    edge(u, v) *= Relation::Inheritance;
   }
 
-  SubPatternType type() const override { return SubPatternType::SPT_ICA; }
-};
-
-class CI : public SubPattern {
- public:
-  CI() : SubPattern("CI", 3) {
-    g_.edge(1, 0).addInheritance();
-    g_.edge(2, 0).addInheritance();
+  void addAssociation(size_t u, size_t v) {
+    edge(u, v) *= Relation::Association;
   }
 
-  SubPatternType type() const override { return SubPatternType::SPT_CI; }
-};
-
-class IAGG : public SubPattern {
- public:
-  IAGG() : SubPattern("IAGG", 2) {
-    g_.edge(1, 0).add(Relation::Aggregation * Relation::Inheritance);
+  void addAggregation(size_t u, size_t v) {
+    edge(u, v) *= Relation::Aggregation;
   }
 
-  SubPatternType type() const override { return SubPatternType::SPT_IAGG; }
-};
-
-class IPAG : public SubPattern {
- public:
-  IPAG() : SubPattern("IPAG", 3) {
-    g_.edge(1, 0).addInheritance();
-    g_.edge(0, 2).addAggregation();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_IPAG; }
-};
-
-class IPAS : public SubPattern {
- public:
-  IPAS() : SubPattern("IPAS", 3) {
-    g_.edge(0, 2).addAssociation();
-    g_.edge(1, 0).addInheritance();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_IPAS; }
-};
-
-class SASS : public SubPattern {
- public:
-  SASS() : SubPattern("SASS", 1) { g_.edge(0, 0).addAssociation(); }
-
-  SubPatternType type() const override { return SubPatternType::SPT_SASS; }
-};
-
-class MLI : public SubPattern {
- public:
-  MLI() : SubPattern("MLI", 3) {
-    g_.edge(1, 0).addInheritance();
-    g_.edge(2, 1).addInheritance();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_MLI; }
-};
-
-class IIAGG : public SubPattern {
- public:
-  IIAGG() : SubPattern("IIAGG", 3) {
-    g_.edge(1, 0).addInheritance();
-    g_.edge(2, 1).addInheritance();
-    g_.edge(2, 0).addAggregation();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_IIAGG; }
-};
-
-class IASS : public SubPattern {
- public:
-  IASS() : SubPattern("IASS", 2) {
-    g_.edge(1, 0).add(Relation::Inheritance * Relation::Association);
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_IASS; }
-};
-
-class ICD : public SubPattern {
- public:
-  ICD() : SubPattern("ICD", 3) {
-    g_.edge(1, 0).addInheritance();
-    g_.edge(1, 2).addDependency();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_ICD; }
-};
-
-class DCI : public SubPattern {
- public:
-  DCI() : SubPattern("DCI", 3) {
-    g_.edge(1, 0).addInheritance();
-    g_.edge(2, 1).addDependency();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_DCI; }
-};
-
-class SAGG : public SubPattern {
- public:
-  SAGG() : SubPattern("SAGG", 1) { g_.edge(0, 0).addAggregation(); }
-
-  SubPatternType type() const override { return SubPatternType::SPT_SAGG; }
-};
-
-class AGPI : public SubPattern {
- public:
-  AGPI() : SubPattern("AGPI", 3) {
-    g_.edge(2, 0).addAggregation();
-    g_.edge(1, 0).addInheritance();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_AGPI; }
-};
-
-class ASPI : public SubPattern {
- public:
-  ASPI() : SubPattern("ASPI", 3) {
-    g_.edge(2, 0).addAssociation();
-    g_.edge(1, 0).addInheritance();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_ASPI; }
-};
-
-class IPD : public SubPattern {
- public:
-  IPD() : SubPattern("IPD", 3) {
-    g_.edge(0, 2).addDependency();
-    g_.edge(1, 0).addInheritance();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_IPD; }
-};
-
-class DPI : public SubPattern {
- public:
-  DPI() : SubPattern("DPI", 3) {
-    g_.edge(2, 0).addDependency();
-    g_.edge(1, 0).addInheritance();
-  }
-
-  SubPatternType type() const override { return SubPatternType::SPT_DPI; }
+  void addDependency(size_t u, size_t v) { edge(u, v) *= Relation::Dependency; }
 };
 
 #endif  // !DPDT_SUB_PATTERN_H

@@ -1,23 +1,26 @@
 #include "sp_detector.hpp"
 
-#include <array>
 #include <iostream>
-#include <vector>
 
-#define SUBPATTERN(U, L) const U SubPatternDetector::L;
-#include "subpattern.def"
+const SubPattern SubPatternDetector::sps[] = {
+    {SPT_ICA, 3},  {SPT_CI, 3},   {SPT_IAGG, 2}, {SPT_IPAG, 3},
+    {SPT_IPAS, 3}, {SPT_SASS, 1}, {SPT_MLI, 3},  {SPT_IIAGG, 3},
+    {SPT_IASS, 2}, {SPT_ICD, 3},  {SPT_DCI, 3},  {SPT_SAGG, 1},
+    {SPT_AGPI, 3}, {SPT_ASPI, 3}, {SPT_IPD, 3},  {SPT_DPI, 3},
+};
 
 void SubPatternDetector::detect_all() {
-#define SUBPATTERN(U, L) detect_sp_instances(L);
-#include "subpattern.def"
+  for (const auto &sp : sps) {
+    detect_sp_instances(sp);
+  }
 
   if (dump_sp_) {
     for (size_t i = 0; i < SPT_NUM; ++i) {
       if (spis[i].size()) {
-        std::cout << SubPattern::getname(i) << " (" << spis[i].size() << ")\n";
+        std::cout << sps[i].name() << " (" << spis[i].size() << ")\n";
       }
       for (const auto &spi : spis[i]) {
-        std::cout << SubPattern::getname(i) << ": ";
+        std::cout << sps[i].name() << ": ";
         for (const auto &it : spi) {
           std::cout << system[it]->name() << " ";
         }
@@ -30,8 +33,7 @@ void SubPatternDetector::detect_all() {
 
 void SubPatternDetector::combine_cv_1(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
-  auto &sp = subp.gcdr();
-  auto sp_e = sp.edge(0, 0);
+  auto sp_e = subp.edge(0, 0);
   for (const auto &vd : cvs[0]) {
     if (!system.edge(vd, vd).has(sp_e)) {
       continue;
@@ -43,9 +45,8 @@ void SubPatternDetector::combine_cv_1(const SubPattern &subp,
 
 void SubPatternDetector::combine_cv_2(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
-  auto &sp = subp.gcdr();
-  auto sp_e1 = sp.edge(0, 1);
-  auto sp_e2 = sp.edge(1, 0);
+  auto sp_e1 = subp.edge(0, 1);
+  auto sp_e2 = subp.edge(1, 0);
   for (const auto &vd1 : cvs[0]) {
     for (const auto &vd2 : cvs[1]) {
       if (!system.edge(vd1, vd2).has(sp_e1) ||
@@ -61,10 +62,9 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
 
 void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
-  auto &sp = subp.gcdr();
-  const std::array<Edge, 6> sp_es = {sp.edge(0, 1), sp.edge(0, 2),
-                                     sp.edge(1, 0), sp.edge(1, 2),
-                                     sp.edge(2, 0), sp.edge(2, 1)};
+  const std::vector<size_t> sp_es = {subp.edge(0, 1), subp.edge(0, 2),
+                                     subp.edge(1, 0), subp.edge(1, 2),
+                                     subp.edge(2, 0), subp.edge(2, 1)};
   for (const auto &vd1 : cvs[0]) {
     for (const auto &vd2 : cvs[1]) {
       for (const auto &vd3 : cvs[2]) {
@@ -89,20 +89,19 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
   }
 }
 
-void SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
-  auto &gcdr = sp.gcdr();
-  auto sp_num = gcdr.size();
+void SubPatternDetector::detect_sp_instances(const SubPattern &subp) {
+  auto sp_num = subp.size();
   CandidateVertexList cvs(sp_num);
 
   // std::cout << sp.name() << std::endl;
 
   for (size_t i = 0; i < sp_num; ++i) {
     for (size_t j = 0; j < system.size(); ++j) {
-      // printf("sys[%lu].cw_out=%lu sp[%lu].cw_out=%lu\n", j,
-      // system.cw_out(j), i, gcdr.cw_out(i)); printf("sys[%lu].cw_in=%lu
-      // sp[%lu].cw_in=%lu\n", j, system.cw_in(j), i, gcdr.cw_in(i));
-      if (system.cw_out(j) % gcdr.cw_out(i) == 0 &&
-          system.cw_in(j) % gcdr.cw_in(i) == 0) {
+      // printf("sys[%lu].cw_out=%lu sp[%lu].cw_out=%lu\n", j, system.cw_out(j),
+      // i, subp.cw_out(i)); printf("sys[%lu].cw_in=%lu sp[%lu].cw_in=%lu\n", j,
+      // system.cw_in(j), i, subp.cw_in(i));
+      if (system.cw_out(j) % subp.cw_out(i) == 0 &&
+          system.cw_in(j) % subp.cw_in(i) == 0) {
         cvs[i].push_back(j);
       }
     }
@@ -118,13 +117,13 @@ void SubPatternDetector::detect_sp_instances(const SubPattern &sp) {
 
   switch (sp_num) {
     case 1:
-      combine_cv_1(sp, cvs);
+      combine_cv_1(subp, cvs);
       break;
     case 2:
-      combine_cv_2(sp, cvs);
+      combine_cv_2(subp, cvs);
       break;
     case 3:
-      combine_cv_3(sp, cvs);
+      combine_cv_3(subp, cvs);
       break;
     default:
       std::cerr << "Sub-pattern of " << sp_num

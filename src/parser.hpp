@@ -59,7 +59,7 @@ class DpdtJavaListener : public JavaParserBaseListener {
 };
 
 class SrcParser {
-  Graph *gcdr_;
+  SrcGraph *gcdr_;
 
   std::vector<std::string> srcs_;
 
@@ -72,7 +72,7 @@ class SrcParser {
   SrcParser(const SrcParser &) = delete;
   SrcParser &operator=(const SrcParser &) = delete;
 
-  Graph *parse();
+  SrcGraph *parse();
 };
 
 #endif  // !DPDT_PARSER_H

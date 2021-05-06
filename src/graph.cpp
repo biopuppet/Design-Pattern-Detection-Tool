@@ -33,26 +33,9 @@ std::ostream &operator<<(std::ostream &os, const QualType &p) {
   return os;
 }
 
-size_t Graph::cw_in(size_t v) const {
-  size_t ret = 1;
-  for (size_t i = 0; i < size(); ++i) {
-    ret *= edge(i, v).prime_;
-  }
-  return ret;
-}
-
-size_t Graph::cw_out(size_t v) const {
-  size_t ret = 1;
-  for (size_t i = 0; i < size(); ++i) {
-    ret *= edge(v, i).prime_;
-  }
-  return ret;
-}
-
-void Graph::print_gcdr() const {
-  auto n = size();
-  for (size_t i = 0; i < n; ++i) {
-    for (size_t j = 0; j < n; ++j) {
+void SrcGraph::print_gcdr() const {
+  for (size_t i = 0; i < n_; ++i) {
+    for (size_t j = 0; j < n_; ++j) {
       if (edge(i, j).prime_ == Relation::None) {
         continue;
       }

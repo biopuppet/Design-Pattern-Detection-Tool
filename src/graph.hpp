@@ -243,57 +243,49 @@ struct Edge {
   std::vector<Method *> &getDepMethods() { return methods_; }
 
   bool operator==(const Relation &r) { return r == prime_; }
+  size_t operator*(size_t e) const { return this->prime_ * e; }
 };
 
 /**
  * Graph is a complete directed graph.
  */
+template <typename T>
 class Graph {
-  using NodeList = std::vector<Node *>;
-
+ protected:
   // Graph size, length, # of nodes
   const size_t n_;
 
-  // Associated class nodes
-  NodeList *nodes_{nullptr};
-
   // 1-dim implementation of adjacency matrix
-  std::vector<Edge> matrix_;
+  std::vector<T> matrix_;
 
  public:
-  explicit Graph(size_t n) : n_(n), nodes_(nullptr), matrix_(n * n) {}
-
-  explicit Graph(NodeList &nodes)
-      : n_(nodes.size()), nodes_(&nodes), matrix_(n_ * n_) {}
-
+  explicit Graph(size_t n, const T &e = T()) : n_(n), matrix_(n * n, e) {}
   Graph(const Graph &) = delete;
   Graph &operator=(const Graph &) = delete;
 
-  const Edge &edge(size_t u, size_t v) const { return matrix_.at(u * n_ + v); }
+  const T &edge(size_t u, size_t v) const { return matrix_.at(u * n_ + v); }
 
-  Edge &edge(size_t u, size_t v) { return matrix_.at(u * n_ + v); }
-
-  NodeList *nodes() const { return nodes_; }
-
-  Node *node(size_t index) { return nodes_ ? nodes_->at(index) : nullptr; }
-
-  const Node *node(size_t index) const {
-    return nodes_ ? nodes_->at(index) : nullptr;
-  }
-
-  Node *operator[](size_t index) { return node(index); }
+  T &edge(size_t u, size_t v) { return matrix_.at(u * n_ + v); }
 
   size_t size() const { return n_; }
 
-  size_t num_nodes() const { return n_; }
-
   size_t num_edges() const { return n_ * n_; }
 
-  size_t cw_in(size_t v) const;
+  size_t cw_in(size_t v) const {
+    size_t ret = 1;
+    for (size_t i = 0; i < size(); ++i) {
+      ret = edge(i, v) * ret;
+    }
+    return ret;
+  }
 
-  size_t cw_out(size_t v) const;
-
-  void print_gcdr() const;
+  size_t cw_out(size_t v) const {
+    size_t ret = 1;
+    for (size_t i = 0; i < size(); ++i) {
+      ret = edge(v, i) * ret;
+    }
+    return ret;
+  }
 
   bool hasInheritance(size_t u, size_t v) const {
     return edge(u, v).hasInheritance();
@@ -314,6 +306,29 @@ class Graph {
   bool hasAssOrAgg(size_t u, size_t v, size_t mult = 1) const {
     return hasAggregation(u, v, mult) || hasAssociation(u, v, mult);
   }
+};
+
+class SrcGraph : public Graph<Edge> {
+  using NodeList = std::vector<Node *>;
+
+  // Associated class nodes
+  NodeList *nodes_{nullptr};
+
+ public:
+  explicit SrcGraph(NodeList &nodes)
+      : Graph<Edge>(nodes.size()), nodes_(&nodes) {}
+
+  NodeList *nodes() const { return nodes_; }
+
+  Node *node(size_t index) { return nodes_ ? nodes_->at(index) : nullptr; }
+
+  Node *operator[](size_t index) { return node(index); }
+
+  const Node *node(size_t index) const {
+    return nodes_ ? nodes_->at(index) : nullptr;
+  }
+
+  void print_gcdr() const;
 
   void addInheritance(size_t u, size_t v, bool isImpl = false) {
     edge(u, v).addInheritance(isImpl);

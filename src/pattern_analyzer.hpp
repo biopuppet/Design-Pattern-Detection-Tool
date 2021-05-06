@@ -12,7 +12,7 @@ typedef std::unordered_map<std::string, PatternType> PatternMap;
 
 class PatternAnalyzer {
  protected:
-  Graph &sys;
+  SrcGraph &sys;
 
   const std::vector<SPRefList> &spis;
 

@@ -237,7 +237,7 @@ void DpdtJavaListener::enterMethodDeclaration(
 void DpdtJavaListener::exitMethodDeclaration(
     JavaParser::MethodDeclarationContext *ctx) {}
 
-Graph *SrcParser::parse() {
+SrcGraph *SrcParser::parse() {
   for (auto &src : srcs_) {
     std::ifstream stream;
     stream.open(src);
@@ -261,7 +261,7 @@ Graph *SrcParser::parse() {
   }
 
   // stream.close();
-  gcdr_ = new Graph(nodes);
+  gcdr_ = new SrcGraph(nodes);
 
   for (size_t i = 0; i < gcdr_->size(); ++i) {
     auto node = gcdr_->node(i);
