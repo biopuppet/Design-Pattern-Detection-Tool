@@ -247,7 +247,7 @@ struct Edge {
 };
 
 /**
- * Graph is a complete directed graph.
+ * Graph is an adj-matrix implemented complete directed graph.
  */
 template <typename T>
 class Graph {
@@ -286,26 +286,6 @@ class Graph {
     }
     return ret;
   }
-
-  bool hasInheritance(size_t u, size_t v) const {
-    return edge(u, v).hasInheritance();
-  }
-
-  bool hasAssociation(size_t u, size_t v, size_t mult = 1) const {
-    return edge(u, v).hasAssociation(mult);
-  }
-
-  bool hasAggregation(size_t u, size_t v, size_t mult = 1) const {
-    return edge(u, v).hasAggregation(mult);
-  }
-
-  bool hasDependency(size_t u, size_t v, size_t mult = 1) const {
-    return edge(u, v).hasDependency(mult);
-  }
-
-  bool hasAssOrAgg(size_t u, size_t v, size_t mult = 1) const {
-    return hasAggregation(u, v, mult) || hasAssociation(u, v, mult);
-  }
 };
 
 class SrcGraph : public Graph<Edge> {
@@ -329,6 +309,26 @@ class SrcGraph : public Graph<Edge> {
   }
 
   void print_gcdr() const;
+
+  bool hasInheritance(size_t u, size_t v) const {
+    return edge(u, v).hasInheritance();
+  }
+
+  bool hasAssociation(size_t u, size_t v, size_t mult = 1) const {
+    return edge(u, v).hasAssociation(mult);
+  }
+
+  bool hasAggregation(size_t u, size_t v, size_t mult = 1) const {
+    return edge(u, v).hasAggregation(mult);
+  }
+
+  bool hasDependency(size_t u, size_t v, size_t mult = 1) const {
+    return edge(u, v).hasDependency(mult);
+  }
+
+  bool hasAssOrAgg(size_t u, size_t v, size_t mult = 1) const {
+    return hasAggregation(u, v, mult) || hasAssociation(u, v, mult);
+  }
 
   void addInheritance(size_t u, size_t v, bool isImpl = false) {
     edge(u, v).addInheritance(isImpl);

@@ -67,12 +67,6 @@ void DpdtJavaListener::enterTypeDeclaration(
 /**
  *
  */
-void DpdtJavaListener::exitTypeDeclaration(
-    JavaParser::TypeDeclarationContext *ctx) {}
-
-/**
- *
- */
 void DpdtJavaListener::enterClassBodyDeclaration(
     JavaParser::ClassBodyDeclarationContext *ctx) {
   for (const auto &it : ctx->modifier()) {
@@ -83,12 +77,6 @@ void DpdtJavaListener::enterClassBodyDeclaration(
     }
   }
 }
-
-/**
- *
- */
-void DpdtJavaListener::exitClassBodyDeclaration(
-    JavaParser::ClassBodyDeclarationContext *ctx) {}
 
 /**
  *
@@ -121,7 +109,7 @@ void DpdtJavaListener::enterInterfaceDeclaration(
 }
 
 void DpdtJavaListener::exitInterfaceDeclaration(
-    JavaParser::InterfaceDeclarationContext *ctx) {
+    JavaParser::InterfaceDeclarationContext * /*ctx*/) {
   popNode();
 }
 
@@ -158,7 +146,7 @@ void DpdtJavaListener::enterClassDeclaration(
 }
 
 void DpdtJavaListener::exitClassDeclaration(
-    JavaParser::ClassDeclarationContext *ctx) {
+    JavaParser::ClassDeclarationContext * /*ctx*/) {
   popNode();
 }
 
@@ -204,9 +192,6 @@ void DpdtJavaListener::enterFieldDeclaration(
   }
 }
 
-void DpdtJavaListener::exitFieldDeclaration(
-    JavaParser::FieldDeclarationContext *ctx) {}
-
 /**
  *
  */
@@ -230,12 +215,6 @@ void DpdtJavaListener::enterMethodDeclaration(
                            name, curqual_, type, params);
   curNode()->methods_.emplace_back(method);
 }
-
-/**
- *
- */
-void DpdtJavaListener::exitMethodDeclaration(
-    JavaParser::MethodDeclarationContext *ctx) {}
 
 SrcGraph *SrcParser::parse() {
   for (auto &src : srcs_) {

@@ -12,14 +12,15 @@ enum SubPatternType {
 };
 
 /**
- *
+ * SubPattern is a light-weight const Graph.
+ * Keep graph interfaces to interact with SrcGraph.
  */
 class SubPattern : public Graph<size_t> {
   SubPatternType type_;
 
  public:
   SubPattern(SubPatternType type, size_t size)
-      : Graph<size_t>(size, 1), type_(type) {
+      : Graph<size_t>(size, Relation::None), type_(type) {
     switch (type) {
       case SPT_ICA:
         addInheritance(1, 0);
@@ -90,8 +91,6 @@ class SubPattern : public Graph<size_t> {
   SubPattern(const SubPattern &) = delete;
   SubPattern &operator=(const SubPattern &) = delete;
 
-  // const std::string &name() const { return name_; }
-
   SubPatternType type() const { return type_; }
 
   const char *name() const {
@@ -106,6 +105,7 @@ class SubPattern : public Graph<size_t> {
     return nullptr;
   }
 
+  // This is quite ugly, yet efficient.
   void add(size_t u, size_t v, size_t r) { edge(u, v) *= r; }
 
   void addInheritance(size_t u, size_t v) {
