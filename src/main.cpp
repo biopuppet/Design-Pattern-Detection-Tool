@@ -26,14 +26,18 @@ static void getAllFiles(std::string path, std::vector<std::string> &files) {
   DIR *dir;
   struct dirent *ptr;
   if ((dir = opendir(path.c_str())) == NULL) {
+    // if (path.substr(path.size()-6) == "*.java")
     files.push_back(path);
     return;
   }
   while ((ptr = readdir(dir)) != NULL) {
     if (strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0)
       continue;
-    else if (ptr->d_type == 8)  // file
-      files.push_back(path + "/" + ptr->d_name);
+    // file
+    else if (ptr->d_type == 8) {
+      if (!strcmp(ptr->d_name + strlen(ptr->d_name) - 5, ".java"))
+        files.push_back(path + "/" + ptr->d_name);
+    }
     else if (ptr->d_type == 10)  // link file
       continue;
     else if (ptr->d_type == 4) {
