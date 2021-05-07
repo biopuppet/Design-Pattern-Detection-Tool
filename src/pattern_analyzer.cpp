@@ -55,11 +55,10 @@ PatternAnalyzer *PatternAnalyzer::createPatternAnalyzer(
 void AdapterAnalyzer::struct_analyze() {
   for (const auto &ica : spis[SPT_ICA]) {
     // ICA && !CI, different from Proxy
-    if (!sys.hasInheritance(ica[2], ica[0])
-        // && !sys.hasAssOrAgg(ica[2], ica[0])
+    if (!sys.hasInheritance(ica[2], ica[0]) && !sys.hasAssOrAgg(ica[2], ica[0])
         // && !sys.hasDependency(ica[2], ica[0])
     ) {
-      add(Adapter(ica[0], ica[1], ica[2]));
+      add({ica[0], ica[1], ica[2]});
     }
   }
 }
@@ -69,18 +68,20 @@ void AdapterAnalyzer::struct_analyze() {
  */
 void AdapterAnalyzer::behavioral_analyze() {
   for (const auto &p : patterns_) {
+    // for (const auto &method : sys[p.adapter_]->methods_) {
+    //   std::cout <<method->name() <<std::endl;
+    // }
     auto result = intersected(*sys[p.adapter_], *sys[p.target_]);
-    static DpdtJavaBehavioralListener listener;
+    auto &attrs = sys.edge(p.adapter_, p.adaptee_).getAssAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
 
     for (auto &request : result) {
-      std::cout << "request: " << request->name() << std::endl;
+      // std::cout << "request: " << request->name() << std::endl;
       auto ctx = request->ctx_;
-
+      // traverse request method
       tree::ParseTreeWalker::DEFAULT.walk(&listener, ctx);
     }
-
-    // bool indep = intersected(result, adaptee_.methods_).size();
-    real_.push_back(result.size() != 0);
+    real_.push_back(listener.result_.size() != 0);
   }
 }
 
@@ -423,8 +424,17 @@ void DpdtJavaBehavioralListener::enterExpression(
   auto expr = ctx->expression(0);
   auto call = ctx->methodCall()->IDENTIFIER();
   if (expr && call) {
-    std::cout << "Caller: " << expr->getText() << std::endl;
-    std::cout << "Method: " << call->getText() << std::endl;
+    auto caller = expr->getText();
+    auto sr = call->getText();
+    for (const auto &attr : attrs_) {
+      // TODO: 2 types of caller: direct & indirect calling mode
+      if (attr->name_ == caller) {
+        // std::cout << "Caller: " << caller << std::endl;
+        // std::cout << "Method: " << sr << std::endl;
+        // std::cout << ctx->getText() <<std::endl;
+        result_.emplace_back(ctx);
+      }
+    }
   }
 }
 
@@ -647,7 +657,11 @@ void VisitorAnalyzer::behavioral_analyze() {
 #endif
 
 void AdapterAnalyzer::print() const {
+  size_t i = 0;
   for (const auto &p : patterns_) {
+    if (real_[i++]) {
+      printf("√ ");
+    }
     printf("Adapter<%s, %s, %s>\n", name(p.target_), name(p.adapter_),
            name(p.adaptee_));
   }

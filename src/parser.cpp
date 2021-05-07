@@ -84,8 +84,8 @@ void DpdtJavaListener::enterClassBodyDeclaration(
 void DpdtJavaListener::enterInterfaceDeclaration(
     JavaParser::InterfaceDeclarationContext *ctx) {
   // std::cout << ctx->getText() << std::endl;
-  auto interval = ctx->getSourceInterval();
-  std::cout << interval.toString() << std::endl;
+  // auto interval = ctx->getSourceInterval();
+  // std::cout << interval.toString() << std::endl;
   auto ident = ctx->IDENTIFIER()->getText();
   if (ctx->typeParameters()) {
     ident += ctx->typeParameters()->getText();
@@ -97,7 +97,6 @@ void DpdtJavaListener::enterInterfaceDeclaration(
     auto parents = ctx->typeList()->typeType();
     for (const auto &parent : parents) {
       auto ps = parent->getText();
-      std::cout << "Parent: " << ps << std::endl;
       node->addInterface(ps);
     }
   }
@@ -116,13 +115,12 @@ void DpdtJavaListener::exitInterfaceDeclaration(
 void DpdtJavaListener::enterClassDeclaration(
     JavaParser::ClassDeclarationContext *ctx) {
   // std::cout << ctx->getText() << std::endl;
-  auto interval = ctx->getSourceInterval();
-  std::cout << interval.toString() << std::endl;
+  // auto interval = ctx->getSourceInterval();
+  // std::cout << interval.toString() << std::endl;
   auto ident = ctx->IDENTIFIER()->getText();
   if (ctx->typeParameters()) {
     ident += ctx->typeParameters()->getText();
   }
-  std::cout << ident << std::endl;
 
   auto node = new Node(ident, curqual_);
 
@@ -134,7 +132,6 @@ void DpdtJavaListener::enterClassDeclaration(
     auto parents = ctx->typeList()->typeType();
     for (const auto &p : parents) {
       auto ps = p->getText();
-      std::cout << "Parent: " << ps << std::endl;
       node->addInterface(ps);
     }
   }
@@ -155,11 +152,12 @@ void DpdtJavaListener::exitClassDeclaration(
  */
 void DpdtJavaListener::enterFieldDeclaration(
     JavaParser::FieldDeclarationContext *ctx) {
-  assert(curNode() != nullptr);
+  if (curNode() == nullptr) {
+    return;
+  }
   QualType qual;
   auto vards = ctx->variableDeclarators()->variableDeclarator();
   auto type = ctx->typeType()->getText();
-  std::cout << "Field type: " << type << std::endl;
 
   auto node_type = ctx->typeType()->classOrInterfaceType();
   auto builtin_type = ctx->typeType()->primitiveType();
@@ -188,7 +186,6 @@ void DpdtJavaListener::enterFieldDeclaration(
   for (const auto &var : vards) {
     auto name = var->variableDeclaratorId()->IDENTIFIER()->getText();
     dim += var->variableDeclaratorId()->LBRACK().size();
-    std::cout << "var: " << name << dim << listof << std::endl;
     auto attr = new Attribute(reinterpret_cast<intptr_t>(ctx), name, type, qual,
                               listof, dim);
     curNode()->attrs_.emplace_back(attr);
@@ -200,6 +197,9 @@ void DpdtJavaListener::enterFieldDeclaration(
  */
 void DpdtJavaListener::enterConstructorDeclaration(
     JavaParser::ConstructorDeclarationContext *ctx) {
+  if (curNode() == nullptr) {
+    return;
+  }
   std::string type = "ctor";
   auto name = ctx->IDENTIFIER()->getText();
   auto params = visitor_.visitFormalParameters(ctx->formalParameters())
@@ -216,6 +216,7 @@ void DpdtJavaListener::enterConstructorDeclaration(
  */
 void DpdtJavaListener::enterMethodDeclaration(
     JavaParser::MethodDeclarationContext *ctx) {
+  if (curNode() == nullptr) return;
   auto type = ctx->typeTypeOrVoid()->getText();
   auto name = ctx->IDENTIFIER()->getText();
   if (auto tt = ctx->typeTypeOrVoid()->typeType()) {
@@ -225,13 +226,46 @@ void DpdtJavaListener::enterMethodDeclaration(
       type = tt->primitiveType()->getText();
     }
   }
-  std::cout << "Method type: " << type << std::endl;
 
   auto params = visitor_.visitFormalParameters(ctx->formalParameters())
                     .as<std::vector<Parameter *>>();
-
   auto method =
       new Method(ctx, Method::MethodDecl, name, curqual_, type, params);
+  curNode()->methods_.emplace_back(method);
+}
+
+/**
+ * interfaceMethodModifier* (typeTypeOrVoid | typeParameters annotation*
+ * typeTypeOrVoid)
+ * IDENTIFIER formalParameters ('[' ']')*
+ *    (THROWS qualifiedNameList)? methodBody
+ */
+void DpdtJavaListener::enterInterfaceMethodDeclaration(
+    JavaParser::InterfaceMethodDeclarationContext *ctx) {
+  if (curNode() == nullptr) return;
+
+  // TODO: Function
+  for (const auto &it : ctx->interfaceMethodModifier()) {
+    const auto mod = it->getText();
+    if (modifiers.count(mod)) {
+      curqual_.setType(modifiers.at(mod));
+    }
+  }
+
+  auto type = ctx->typeTypeOrVoid()->getText();
+  auto name = ctx->IDENTIFIER()->getText();
+  if (auto tt = ctx->typeTypeOrVoid()->typeType()) {
+    if (tt->classOrInterfaceType()) {
+      type = tt->classOrInterfaceType()->getText();
+    } else {
+      type = tt->primitiveType()->getText();
+    }
+  }
+
+  auto params = visitor_.visitFormalParameters(ctx->formalParameters())
+                    .as<std::vector<Parameter *>>();
+  auto method = new Method(ctx, Method::InterfaceMethodDecl, name, curqual_,
+                           type, params);
   curNode()->methods_.emplace_back(method);
 }
 
@@ -285,9 +319,9 @@ SrcGraph *SrcParser::parse() {
     for (const auto &it : node->attrs_) {
       if (nodemap.count(it->listof_) && nodeidx.count(nodemap[it->listof_])) {
         if (it->isList()) {
-          gcdr_->addAggregation(i, nodeidx[nodemap[it->listof_]]);
+          gcdr_->addAggregation(i, nodeidx[nodemap[it->listof_]], it);
         } else {
-          gcdr_->addAssociation(i, nodeidx[nodemap[it->listof_]]);
+          gcdr_->addAssociation(i, nodeidx[nodemap[it->listof_]], it);
         }
       }
     }

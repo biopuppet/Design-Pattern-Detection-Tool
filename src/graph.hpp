@@ -342,7 +342,15 @@ class SrcGraph : public Graph<Edge> {
 
   void addAssociation(size_t u, size_t v) { edge(u, v).addAssociation(); }
 
+  void addAssociation(size_t u, size_t v, Attribute *attr) {
+    edge(u, v).addAssociation(attr);
+  }
+
   void addAggregation(size_t u, size_t v) { edge(u, v).addAggregation(); }
+
+  void addAggregation(size_t u, size_t v, Attribute *attr) {
+    edge(u, v).addAggregation(attr);
+  }
 
   void addDependency(size_t u, size_t v) { edge(u, v).addDependency(); }
 };

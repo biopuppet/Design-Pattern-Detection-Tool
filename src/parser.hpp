@@ -33,10 +33,14 @@ class DpdtJavaListener : public JavaParserBaseListener {
       JavaParser::FieldDeclarationContext * /*ctx*/) override;
   void enterMethodDeclaration(
       JavaParser::MethodDeclarationContext * /*ctx*/) override;
+  void enterInterfaceMethodDeclaration(
+      JavaParser::InterfaceMethodDeclarationContext * /*ctx*/) override;
   void enterConstructorDeclaration(
       JavaParser::ConstructorDeclarationContext * /*ctx*/) override;
 
-  Node *curNode() const { return nodestack_.top(); }
+  Node *curNode() const {
+    return nodestack_.empty() ? nullptr : nodestack_.top();
+  }
   void popNode() { nodestack_.pop(); }
   void pushNode(Node *node) { nodestack_.push(node); }
 

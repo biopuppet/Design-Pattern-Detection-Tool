@@ -8,7 +8,11 @@
 
 class DpdtJavaBehavioralListener : public JavaParserBaseListener {
  public:
-  void enterExpression(JavaParser::ExpressionContext* /*ctx*/) override;
+  DpdtJavaBehavioralListener(std::vector<Attribute *> &attrs) : attrs_(attrs) {}
+  void enterExpression(JavaParser::ExpressionContext * /*ctx*/) override;
+
+  std::vector<Attribute *> &attrs_;
+  std::vector<JavaParser::ExpressionContext *> result_;
 };
 
 enum PatternType {
