@@ -1,6 +1,7 @@
 # TODO: Remove this part when released
 .github/
 .travis.yml
+test/
 
 # VS Code
 .vscode/
