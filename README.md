@@ -1,4 +1,4 @@
-# Design Pattern Detection System
+# Design Pattern Detection Tool
 written in C++11, using ANTLR4 for source parsing.
 
 ## Desgin Patterns
