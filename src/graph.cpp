@@ -3,9 +3,9 @@
 #include <cstring>
 #include <iostream>
 
-static std::string edge2str(const Edge &edge) {
-  std::string s = "";
-  auto e = edge.prime_;
+std::string Edge::str() const {
+  std::string s;
+  auto e = prime_;
   while (e) {
     if (e % Relation::Association == 0) {
       e /= Relation::Association;
@@ -33,13 +33,13 @@ std::ostream &operator<<(std::ostream &os, const QualType &p) {
   return os;
 }
 
-void SrcGraph::print_gcdr() const {
+void SrcGraph::print() const {
   for (size_t i = 0; i < n_; ++i) {
     for (size_t j = 0; j < n_; ++j) {
       if (edge(i, j).prime_ == Relation::None) {
         continue;
       }
-      std::cout << node(i)->name() << " --" << edge2str(edge(i, j)) << "--> "
+      std::cout << node(i)->name() << " --" << edge(i, j).str() << "--> "
                 << node(j)->name() << std::endl;
     }
   }

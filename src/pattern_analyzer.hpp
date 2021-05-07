@@ -1,7 +1,6 @@
 #ifndef DPDT_PATTERN_ANALYZER_H
 #define DPDT_PATTERN_ANALYZER_H
 
-#include <iostream>
 #include <unordered_map>
 #include <vector>
 
@@ -16,9 +15,6 @@ class PatternAnalyzer {
 
   const std::vector<SPRefList> &spis;
 
-  // Candidate pattern instances
-  std::vector<Pattern *> patterns_;
-
   // True if the pattern instance passed the behavioral check
   std::vector<bool> real_;
 
@@ -29,32 +25,16 @@ class PatternAnalyzer {
   PatternAnalyzer(const PatternAnalyzer &) = delete;
   PatternAnalyzer &operator=(const PatternAnalyzer &) = delete;
 
-  virtual ~PatternAnalyzer() {
-    for (auto &p : patterns_) {
-      delete p;
-    }
-  }
-
-  void add_pattern(Pattern *p) { patterns_.emplace_back(p); }
+  virtual ~PatternAnalyzer() {}
 
   virtual void struct_analyze() = 0;
 
-  virtual void behavioral_check() {
-    if (!patterns_.size()) {
-      return;
-    }
-    std::cout << "Total: " << patterns_.size() << std::endl;
-    for (const auto &p : patterns_) {
-      p->print();
-      real_.push_back(p->behavioral_check());
-    }
-    std::cout << std::endl;
-  }
+  virtual void behavioral_analyze() = 0;
 
-  virtual void print() {
-    for (const auto &p : patterns_) {
-      p->print();
-    }
+  virtual void print() const = 0;
+
+  const char *name(size_t member) const {
+    return sys[member]->name();
   }
 
   static const PatternMap pattern_map;
@@ -63,22 +43,46 @@ class PatternAnalyzer {
 };
 
 class ProxyAnalyzer : public PatternAnalyzer {
+  // Candidate pattern instances
+  std::vector<Proxy> patterns_;
+
  public:
   explicit ProxyAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+
+  void behavioral_analyze() override;
+  
+  void print() const override;
+
+  void add(Proxy &&p) { patterns_.emplace_back(p); }
+  void add(Proxy &p) { patterns_.emplace_back(p); }
 };
 
 class AdapterAnalyzer : public PatternAnalyzer {
+  // Candidate pattern instances
+  std::vector<Adapter> patterns_;
+
  public:
   explicit AdapterAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
-
+  
   void struct_analyze() override;
+
+  void behavioral_analyze() override;
+  
+  void print() const override;
+
+  void add(Adapter &&p) { patterns_.emplace_back(p); }
+
 };
 
+#if 0
 class CompositeAnalyzer : public PatternAnalyzer {
+  // Candidate pattern instances
+  std::vector<Composite> patterns_;
+
  public:
   explicit CompositeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
@@ -87,7 +91,9 @@ class CompositeAnalyzer : public PatternAnalyzer {
 };
 
 class DecoratorAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Decorator> patterns_;
+
   explicit DecoratorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -95,7 +101,10 @@ class DecoratorAnalyzer : public PatternAnalyzer {
 };
 
 class BridgeAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Bridge> patterns_;
+
+public:
   explicit BridgeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -103,7 +112,10 @@ class BridgeAnalyzer : public PatternAnalyzer {
 };
 
 class FlyweightAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Flyweight> patterns_;
+
+public:
   explicit FlyweightAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -111,7 +123,10 @@ class FlyweightAnalyzer : public PatternAnalyzer {
 };
 
 class FacadeAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Facade> patterns_;
+
+public:
   explicit FacadeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -119,7 +134,9 @@ class FacadeAnalyzer : public PatternAnalyzer {
 };
 
 class AbstractFactoryAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit AbstractFactoryAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -127,7 +144,9 @@ class AbstractFactoryAnalyzer : public PatternAnalyzer {
 };
 
 class BuilderAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit BuilderAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -135,7 +154,9 @@ class BuilderAnalyzer : public PatternAnalyzer {
 };
 
 class FactoryAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit FactoryAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -143,7 +164,9 @@ class FactoryAnalyzer : public PatternAnalyzer {
 };
 
 class PrototypeAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit PrototypeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -151,7 +174,9 @@ class PrototypeAnalyzer : public PatternAnalyzer {
 };
 
 class SingletonAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit SingletonAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -159,7 +184,9 @@ class SingletonAnalyzer : public PatternAnalyzer {
 };
 
 class ResponsibilityChainAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit ResponsibilityChainAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -167,7 +194,9 @@ class ResponsibilityChainAnalyzer : public PatternAnalyzer {
 };
 
 class CommandAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit CommandAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -175,7 +204,9 @@ class CommandAnalyzer : public PatternAnalyzer {
 };
 
 class InterpreterAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit InterpreterAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -183,7 +214,9 @@ class InterpreterAnalyzer : public PatternAnalyzer {
 };
 
 class IteratorAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit IteratorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -191,7 +224,9 @@ class IteratorAnalyzer : public PatternAnalyzer {
 };
 
 class MediatorAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit MediatorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -199,7 +234,9 @@ class MediatorAnalyzer : public PatternAnalyzer {
 };
 
 class MementoAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit MementoAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -207,7 +244,9 @@ class MementoAnalyzer : public PatternAnalyzer {
 };
 
 class ObserverAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit ObserverAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -215,7 +254,9 @@ class ObserverAnalyzer : public PatternAnalyzer {
 };
 
 class StateAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit StateAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -223,7 +264,9 @@ class StateAnalyzer : public PatternAnalyzer {
 };
 
 class StrategyAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit StrategyAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -231,7 +274,9 @@ class StrategyAnalyzer : public PatternAnalyzer {
 };
 
 class TemplateAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit TemplateAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -239,12 +284,16 @@ class TemplateAnalyzer : public PatternAnalyzer {
 };
 
 class VisitorAnalyzer : public PatternAnalyzer {
- public:
+  // Candidate pattern instances
+  std::vector<Compsite> patterns_;
+public:
   explicit VisitorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
 };
+
+#endif
 
 /**
  * TODO: It could be a set of analyzers instead of 'All', but it needs hell
@@ -252,7 +301,7 @@ class VisitorAnalyzer : public PatternAnalyzer {
  * PS. This is a case of composite pattern.
  */
 class AllAnalyzer : public PatternAnalyzer {
- public:
+public:
   std::vector<PatternAnalyzer *> pas_;
 
   explicit AllAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {
@@ -273,13 +322,13 @@ class AllAnalyzer : public PatternAnalyzer {
     }
   }
 
-  void behavioral_check() override {
+  void behavioral_analyze() override {
     for (auto pa : pas_) {
-      pa->behavioral_check();
+      pa->behavioral_analyze();
     }
   }
 
-  void print() override {
+  void print() const override {
     for (auto pa : pas_) {
       pa->print();
     }

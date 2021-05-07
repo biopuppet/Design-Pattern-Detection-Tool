@@ -150,6 +150,9 @@ void DpdtJavaListener::exitClassDeclaration(
   popNode();
 }
 
+/**
+ * typeType variableDeclarators ';'
+ */
 void DpdtJavaListener::enterFieldDeclaration(
     JavaParser::FieldDeclarationContext *ctx) {
   assert(curNode() != nullptr);
@@ -193,7 +196,24 @@ void DpdtJavaListener::enterFieldDeclaration(
 }
 
 /**
- *
+ * IDENTIFIER formalParameters (THROWS qualifiedNameList)? block
+ */
+void DpdtJavaListener::enterConstructorDeclaration(
+    JavaParser::ConstructorDeclarationContext *ctx) {
+  std::string type = "ctor";
+  auto name = ctx->IDENTIFIER()->getText();
+  auto params = visitor_.visitFormalParameters(ctx->formalParameters())
+                    .as<std::vector<Parameter *>>();
+
+  auto method = new Method(ctx, Method::CtorDecl,
+                           name, curqual_, type, params);
+  curNode()->ctors_.emplace_back(method);
+}
+
+/**
+ * typeTypeOrVoid IDENTIFIER formalParameters ('[' ']')*
+ *     (THROWS qualifiedNameList)?
+ *     methodBody
  */
 void DpdtJavaListener::enterMethodDeclaration(
     JavaParser::MethodDeclarationContext *ctx) {
@@ -211,7 +231,7 @@ void DpdtJavaListener::enterMethodDeclaration(
   auto params = visitor_.visitFormalParameters(ctx->formalParameters())
                     .as<std::vector<Parameter *>>();
 
-  auto method = new Method(reinterpret_cast<intptr_t>(ctx), Method::MethodDecl,
+  auto method = new Method(ctx, Method::MethodDecl,
                            name, curqual_, type, params);
   curNode()->methods_.emplace_back(method);
 }
@@ -220,17 +240,22 @@ SrcGraph *SrcParser::parse() {
   for (auto &src : srcs_) {
     std::ifstream stream;
     stream.open(src);
+
     try {
-      ANTLRInputStream input(stream);
-      JavaLexer lexer(&input);
-      CommonTokenStream tokens(&lexer);
-      JavaParser parser(&tokens);
+      ANTLRInputStream *input = new ANTLRInputStream(stream);
+      JavaLexer *lexer = new JavaLexer(input);
+      
+      CommonTokenStream *tokens = new CommonTokenStream(lexer);
+      
+      // tokens.fill();
+    
+      JavaParser *parser = new JavaParser(tokens);
 
       // JavaParser::CompilationUnitContext *cu = parser.compilationUnit();
       // std::cout << cu->toStringTree(&parser, true) << std::endl;
 
       DpdtJavaListener listener;
-      tree::ParseTree *tree = parser.compilationUnit();
+      tree::ParseTree *tree = parser->compilationUnit();
       tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
     } catch (std::exception &e) {
       fprintf(stderr, "ANTLR4 parsing error: %s\n", e.what());
@@ -238,8 +263,6 @@ SrcGraph *SrcParser::parse() {
     }
     stream.close();
   }
-
-  // stream.close();
   gcdr_ = new SrcGraph(nodes);
 
   for (size_t i = 0; i < gcdr_->size(); ++i) {

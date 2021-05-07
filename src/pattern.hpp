@@ -3,7 +3,14 @@
 
 #include <iostream>
 
+#include "JavaParserBaseListener.h"
 #include "graph.hpp"
+
+class DpdtJavaBehavioralListener : public JavaParserBaseListener {
+ public:
+  void enterExpression(
+      JavaParser::ExpressionContext * /*ctx*/) override;
+};
 
 enum PatternType {
 #define PATTERN(x, c) PT_##x,
@@ -11,36 +18,19 @@ enum PatternType {
 };
 
 class Pattern {
- public:
-  virtual bool behavioral_check() const = 0;
-  virtual void print() const = 0;
-  virtual ~Pattern() {}
 };
-
-// Q: Why not Graph/size_t/...?
-// A: On this level(Behavorial Analysis and further), we care nothing but
-// Node, Method (signature), and things within Graph. And, A pointer to Node
-// is much more safe and robust in terms of invalid indication.
 
 /**
  * Adapter
- *
  */
 class Adapter : public Pattern {
  public:
-  Node &target_;
-  Node &adapter_;
-  Node &adaptee_;
+  size_t target_;
+  size_t adapter_;
+  size_t adaptee_;
 
-  Adapter(Node &target, Node &adapter, Node &adaptee)
+  Adapter(size_t target, size_t adapter, size_t adaptee)
       : target_(target), adapter_(adapter), adaptee_(adaptee) {}
-
-  bool behavioral_check() const override;
-
-  void print() const override {
-    printf("Adapter<%s, %s, %s>\n", target_.name(), adapter_.name(),
-           adaptee_.name());
-  }
 };
 
 /**
@@ -48,56 +38,40 @@ class Adapter : public Pattern {
  */
 class Proxy : public Pattern {
  public:
-  Node &subject_;
-  Node &real_subject_;
-  Node &proxy_;
+  size_t subject_;
+  size_t real_subject_;
+  size_t proxy_;
 
   // CI && IASS   CI && ICA
   enum Type { RefSubject, RefRealSubject } type_;
 
-  Proxy(Node &s, Node &rs, Node &p, Type t)
+  Proxy(size_t s, size_t rs, size_t p, Type t)
       : subject_(s), real_subject_(rs), proxy_(p), type_(t) {}
 
-  friend std::ostream &operator<<(std::ostream &os, const Proxy &p) {
-    return os << "Proxy<" << p.subject_.name() << ", " << p.real_subject_.name()
-              << ", " << p.proxy_.name() << ">";
-  }
-
-  void print() const override {
-    printf("Proxy<%s, %s, %s>\n", subject_.name(), real_subject_.name(),
-           proxy_.name());
-  }
-
-  bool behavioral_check() const override;
 };
+#if 0
 
 /**
  *
  */
 class Composite : public Pattern {
  public:
-  Node &component_;
-  Node &composite_;
-  Node &leaf_;
+  size_t component_;
+  size_t composite_;
+  size_t leaf_;
 
   Method *operation;
   Method *add;     // optional
   Method *remove;  // optional
 
-  Composite(Node &component, Node &composite, Node &leaf)
+  Composite(size_t component, size_t composite, size_t leaf)
       : component_(component), composite_(composite), leaf_(leaf) {}
 
-  friend std::ostream &operator<<(std::ostream &os, const Composite &p) {
-    return os << "Composite<" << p.component_.name() << ", "
-              << p.composite_.name() << ", " << p.leaf_.name() << ">";
-  }
-
-  void print() const override {
+  void print() const {
     printf("Composite<%s, %s, %s>\n", component_.name(), composite_.name(),
            leaf_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -105,27 +79,26 @@ class Composite : public Pattern {
  */
 class Decorator : public Pattern {
  public:
-  Node &component_;
-  Node &concrete_component_;
-  Node &decorator_;
-  Node &concrete_decorator_;
+  size_t component_;
+  size_t concrete_component_;
+  size_t decorator_;
+  size_t concrete_decorator_;
 
   Method *operation;
 
-  Decorator(Node &component, Node &concrete_component, Node &decorator,
-            Node &concrete_decorator)
+  Decorator(size_t component, size_t concrete_component, size_t decorator,
+            size_t concrete_decorator)
       : component_(component),
         concrete_component_(concrete_component),
         decorator_(decorator),
         concrete_decorator_(concrete_decorator) {}
 
-  void print() const override {
+  void print() const {
     printf("Decorator<%s, %s, %s, %s>\n", component_.name(),
            concrete_component_.name(), decorator_.name(),
            concrete_decorator_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -133,27 +106,26 @@ class Decorator : public Pattern {
  */
 class Bridge : public Pattern {
  public:
-  Node &abstraction_;
-  Node &refined_abstraction_;
-  Node &implementor_;
-  Node &concrete_implementor1_;
-  Node &concrete_implementor2_;
+  size_t abstraction_;
+  size_t refined_abstraction_;
+  size_t implementor_;
+  size_t concrete_implementor1_;
+  size_t concrete_implementor2_;
 
-  Bridge(Node &abstraction, Node &refined_abstraction, Node &implementor,
-         Node &concrete_implementor1, Node &concrete_implementor2)
+  Bridge(size_t abstraction, size_t refined_abstraction, size_t implementor,
+         size_t concrete_implementor1, size_t concrete_implementor2)
       : abstraction_(abstraction),
         refined_abstraction_(refined_abstraction),
         implementor_(implementor),
         concrete_implementor1_(concrete_implementor1),
         concrete_implementor2_(concrete_implementor2) {}
 
-  void print() const override {
+  void print() const {
     printf("Bridge<%s, %s, %s, %s, %s>\n", abstraction_.name(),
            refined_abstraction_.name(), implementor_.name(),
            concrete_implementor1_.name(), concrete_implementor2_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -161,26 +133,25 @@ class Bridge : public Pattern {
  */
 class Flyweight : public Pattern {
  public:
-  Node &factory_;
-  Node &flyweight_;
-  Node &concrete_flyweight_;
-  Node &unshared_concrete_flyweight_;
+  size_t factory_;
+  size_t flyweight_;
+  size_t concrete_flyweight_;
+  size_t unshared_concrete_flyweight_;
 
   Method *operation;
 
-  Flyweight(Node &factory, Node &flyweight, Node &concrete_flyweight,
-            Node &unshared_concrete_flyweight)
+  Flyweight(size_t factory, size_t flyweight, size_t concrete_flyweight,
+            size_t unshared_concrete_flyweight)
       : factory_(factory),
         flyweight_(flyweight),
         concrete_flyweight_(concrete_flyweight),
         unshared_concrete_flyweight_(unshared_concrete_flyweight) {}
 
-  void print() const override {
+  void print() const {
     printf("Flyweight<%s, %s, %s, %s>\n", factory_.name(), flyweight_.name(),
            concrete_flyweight_.name(), unshared_concrete_flyweight_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -188,15 +159,15 @@ class Flyweight : public Pattern {
  */
 class Facade : public Pattern {
  public:
-  Node &facade_;
+  size_t facade_;
   std::vector<Node *> subsystems_;
 
   static constexpr size_t LIMIT = 2;
 
-  Facade(Node &facade, std::vector<Node *> &subsystems)
+  Facade(size_t facade, std::vector<Node *> &subsystems)
       : facade_(facade), subsystems_(subsystems) {}
 
-  void print() const override {
+  void print() const {
     printf("Facade<%s, ", facade_.name());
     printf("Subsystems<%s", subsystems_[0]->name());
     for (size_t i = 1; i < subsystems_.size(); ++i) {
@@ -205,7 +176,6 @@ class Facade : public Pattern {
     printf(">>\n");
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -213,27 +183,26 @@ class Facade : public Pattern {
  */
 class AbstractFactory : public Pattern {
  public:
-  Node &abstract_factory_;
-  Node &concrete_factory_;
-  Node &product_;
-  Node &concrete_product1_;
-  Node &concrete_product2_;
+  size_t abstract_factory_;
+  size_t concrete_factory_;
+  size_t product_;
+  size_t concrete_product1_;
+  size_t concrete_product2_;
 
-  AbstractFactory(Node &abstract_factory, Node &concrete_factory, Node &product,
-                  Node &concrete_product1, Node &concrete_product2)
+  AbstractFactory(size_t abstract_factory, size_t concrete_factory, size_t product,
+                  size_t concrete_product1, size_t concrete_product2)
       : abstract_factory_(abstract_factory),
         concrete_factory_(concrete_factory),
         product_(product),
         concrete_product1_(concrete_product1),
         concrete_product2_(concrete_product2) {}
 
-  void print() const override {
+  void print() const {
     printf("AbstractFactory<%s, %s, %s, %s, %s>\n", abstract_factory_.name(),
            concrete_factory_.name(), product_.name(), concrete_product1_.name(),
            concrete_product2_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -242,23 +211,22 @@ class AbstractFactory : public Pattern {
  */
 class Builder : public Pattern {
  public:
-  Node &builder_;
-  Node &concrete_builder_;
-  Node &director_;
-  Node &product_;
+  size_t builder_;
+  size_t concrete_builder_;
+  size_t director_;
+  size_t product_;
 
-  Builder(Node &builder, Node &concrete_builder, Node &director, Node &product)
+  Builder(size_t builder, size_t concrete_builder, size_t director, size_t product)
       : builder_(builder),
         concrete_builder_(concrete_builder),
         director_(director),
         product_(product) {}
 
-  void print() const override {
+  void print() const {
     printf("Builder<%s, %s, %s, %s>\n", builder_.name(),
            concrete_builder_.name(), director_.name(), product_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -267,24 +235,23 @@ class Builder : public Pattern {
  */
 class Factory : public Pattern {
  public:
-  Node &product_;
-  Node &concrete_product_;
-  Node &creator_;
-  Node &concrete_creator_;
+  size_t product_;
+  size_t concrete_product_;
+  size_t creator_;
+  size_t concrete_creator_;
 
-  Factory(Node &product, Node &concrete_product, Node &creator,
-          Node &concrete_creator)
+  Factory(size_t product, size_t concrete_product, size_t creator,
+          size_t concrete_creator)
       : product_(product),
         concrete_product_(concrete_product),
         creator_(creator),
         concrete_creator_(concrete_creator) {}
 
-  void print() const override {
+  void print() const {
     printf("Factory<%s, %s, %s, %s>\n", product_.name(),
            concrete_product_.name(), creator_.name(), concrete_creator_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -293,24 +260,23 @@ class Factory : public Pattern {
  */
 class Prototype : public Pattern {
  public:
-  Node &client_;
-  Node &prototype_;
-  Node &concrete_prototype_;
-  Node &concrete_prototype2_;
+  size_t client_;
+  size_t prototype_;
+  size_t concrete_prototype_;
+  size_t concrete_prototype2_;
 
-  Prototype(Node &client, Node &prototype, Node &concrete_prototype,
-            Node &concrete_prototype2)
+  Prototype(size_t client, size_t prototype, size_t concrete_prototype,
+            size_t concrete_prototype2)
       : client_(client),
         prototype_(prototype),
         concrete_prototype_(concrete_prototype),
         concrete_prototype2_(concrete_prototype2) {}
 
-  void print() const override {
+  void print() const {
     printf("Prototype<%s, %s, %s, %s>\n", client_.name(), prototype_.name(),
            concrete_prototype_.name(), concrete_prototype2_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -318,13 +284,12 @@ class Prototype : public Pattern {
  */
 class Singleton : public Pattern {
  public:
-  Node &singleton_;
+  size_t singleton_;
 
-  Singleton(Node &singleton) : singleton_(singleton) {}
+  Singleton(size_t singleton) : singleton_(singleton) {}
 
-  void print() const override { printf("Singleton<%s>\n", singleton_.name()); }
+  void print() const { printf("Singleton<%s>\n", singleton_.name()); }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -332,22 +297,21 @@ class Singleton : public Pattern {
  */
 class ResponsibilityChain : public Pattern {
  public:
-  Node &handler_;
-  Node &concrete_handler1_;
-  Node &concrete_handler2_;
+  size_t handler_;
+  size_t concrete_handler1_;
+  size_t concrete_handler2_;
 
-  ResponsibilityChain(Node &handler, Node &concrete_handler1,
-                      Node &concrete_handler2)
+  ResponsibilityChain(size_t handler, size_t concrete_handler1,
+                      size_t concrete_handler2)
       : handler_(handler),
         concrete_handler1_(concrete_handler1),
         concrete_handler2_(concrete_handler2) {}
 
-  void print() const override {
+  void print() const {
     printf("ResponsibilityChain<%s, %s, %s>\n", handler_.name(),
            concrete_handler1_.name(), concrete_handler2_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -355,23 +319,22 @@ class ResponsibilityChain : public Pattern {
  */
 class Command : public Pattern {
  public:
-  Node &invoker_;
-  Node &command_;
-  Node &concrete_command_;
-  Node &receiver_;
+  size_t invoker_;
+  size_t command_;
+  size_t concrete_command_;
+  size_t receiver_;
 
-  Command(Node &invoker, Node &command, Node &concrete_command, Node &receiver)
+  Command(size_t invoker, size_t command, size_t concrete_command, size_t receiver)
       : invoker_(invoker),
         command_(command),
         concrete_command_(concrete_command),
         receiver_(receiver) {}
 
-  void print() const override {
+  void print() const {
     printf("Command<%s, %s, %s, %s>\n", invoker_.name(), command_.name(),
            concrete_command_.name(), receiver_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -379,25 +342,24 @@ class Command : public Pattern {
  */
 class Interpreter : public Pattern {
  public:
-  Node &content_;
-  Node &abstract_expr_;
-  Node &terminal_expr_;
-  Node &nonterminal_expr_;
+  size_t content_;
+  size_t abstract_expr_;
+  size_t terminal_expr_;
+  size_t nonterminal_expr_;
 
-  Interpreter(Node &content, Node &abstract_expr, Node &terminal_expr,
-              Node &nonterminal_expr)
+  Interpreter(size_t content, size_t abstract_expr, size_t terminal_expr,
+              size_t nonterminal_expr)
       : content_(content),
         abstract_expr_(abstract_expr),
         terminal_expr_(terminal_expr),
         nonterminal_expr_(nonterminal_expr) {}
 
-  void print() const override {
+  void print() const {
     printf("Interpreter<%s, %s, %s, %s>\n", content_.name(),
            abstract_expr_.name(), terminal_expr_.name(),
            nonterminal_expr_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -405,25 +367,24 @@ class Interpreter : public Pattern {
  */
 class Iterator : public Pattern {
  public:
-  Node &iterator_;
-  Node &concrete_iterator_;
-  Node &aggregate_;
-  Node &aggregate_iterator_;
+  size_t iterator_;
+  size_t concrete_iterator_;
+  size_t aggregate_;
+  size_t aggregate_iterator_;
 
-  Iterator(Node &iterator, Node &concrete_iterator, Node &aggregate,
-           Node &aggregate_iterator)
+  Iterator(size_t iterator, size_t concrete_iterator, size_t aggregate,
+           size_t aggregate_iterator)
       : iterator_(iterator),
         concrete_iterator_(concrete_iterator),
         aggregate_(aggregate),
         aggregate_iterator_(aggregate_iterator) {}
 
-  void print() const override {
+  void print() const {
     printf("Iterator<%s, %s, %s, %s>\n", iterator_.name(),
            concrete_iterator_.name(), aggregate_.name(),
            aggregate_iterator_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -431,27 +392,26 @@ class Iterator : public Pattern {
  */
 class Mediator : public Pattern {
  public:
-  Node &mediator_;
-  Node &concrete_mediator_;
-  Node &colleague_;
-  Node &concrete_colleague1_;
-  Node &concrete_colleague2_;
+  size_t mediator_;
+  size_t concrete_mediator_;
+  size_t colleague_;
+  size_t concrete_colleague1_;
+  size_t concrete_colleague2_;
 
-  Mediator(Node &mediator, Node &concrete_mediator, Node &colleague,
-           Node &concrete_colleague1, Node &concrete_colleague2)
+  Mediator(size_t mediator, size_t concrete_mediator, size_t colleague,
+           size_t concrete_colleague1, size_t concrete_colleague2)
       : mediator_(mediator),
         concrete_mediator_(concrete_mediator),
         colleague_(colleague),
         concrete_colleague1_(concrete_colleague1),
         concrete_colleague2_(concrete_colleague2) {}
 
-  void print() const override {
+  void print() const {
     printf("Mediator<%s, %s, %s, %s, %s>\n", mediator_.name(),
            concrete_mediator_.name(), colleague_.name(),
            concrete_colleague1_.name(), concrete_colleague2_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -459,23 +419,22 @@ class Mediator : public Pattern {
  */
 class Memento : public Pattern {
  public:
-  Node &memento_;
-  Node &memento_imp_;
-  Node &caretaker_;
-  Node &originator_;
+  size_t memento_;
+  size_t memento_imp_;
+  size_t caretaker_;
+  size_t originator_;
 
-  Memento(Node &memento, Node &memento_imp, Node &caretaker, Node &originator)
+  Memento(size_t memento, size_t memento_imp, size_t caretaker, size_t originator)
       : memento_(memento),
         memento_imp_(memento_imp),
         caretaker_(caretaker),
         originator_(originator) {}
 
-  void print() const override {
+  void print() const {
     printf("Memento<%s, %s, %s, %s>\n", memento_.name(), memento_imp_.name(),
            caretaker_.name(), originator_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -483,25 +442,24 @@ class Memento : public Pattern {
  */
 class Observer : public Pattern {
  public:
-  Node &subject_;
-  Node &concrete_subject_;
-  Node &observer_;
-  Node &concrete_observer_;
+  size_t subject_;
+  size_t concrete_subject_;
+  size_t observer_;
+  size_t concrete_observer_;
 
-  Observer(Node &subject, Node &concrete_subject, Node &observer,
-           Node &concrete_observer)
+  Observer(size_t subject, size_t concrete_subject, size_t observer,
+           size_t concrete_observer)
       : subject_(subject),
         concrete_subject_(concrete_subject),
         observer_(observer),
         concrete_observer_(concrete_observer) {}
 
-  void print() const override {
+  void print() const {
     printf("Observer<%s, %s, %s, %s>\n", subject_.name(),
            concrete_subject_.name(), observer_.name(),
            concrete_observer_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -509,24 +467,23 @@ class Observer : public Pattern {
  */
 class State : public Pattern {
  public:
-  Node &context_;
-  Node &state_;
-  Node &concrete_state1_;
-  Node &concrete_state2_;
+  size_t context_;
+  size_t state_;
+  size_t concrete_state1_;
+  size_t concrete_state2_;
 
-  State(Node &context, Node &state, Node &concrete_state1,
-        Node &concrete_state2)
+  State(size_t context, size_t state, size_t concrete_state1,
+        size_t concrete_state2)
       : context_(context),
         state_(state),
         concrete_state1_(concrete_state1),
         concrete_state2_(concrete_state2) {}
 
-  void print() const override {
+  void print() const {
     printf("State<%s, %s, %s, %s>\n", context_.name(), state_.name(),
            concrete_state1_.name(), concrete_state2_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -534,24 +491,23 @@ class State : public Pattern {
  */
 class Strategy : public Pattern {
  public:
-  Node &context_;
-  Node &strategy_;
-  Node &concrete_strategy1_;
-  Node &concrete_strategy2_;
+  size_t context_;
+  size_t strategy_;
+  size_t concrete_strategy1_;
+  size_t concrete_strategy2_;
 
-  Strategy(Node &context, Node &strategy, Node &concrete_strategy1,
-           Node &concrete_strategy2)
+  Strategy(size_t context, size_t strategy, size_t concrete_strategy1,
+           size_t concrete_strategy2)
       : context_(context),
         strategy_(strategy),
         concrete_strategy1_(concrete_strategy1),
         concrete_strategy2_(concrete_strategy2) {}
 
-  void print() const override {
+  void print() const {
     printf("Strategy<%s, %s, %s, %s>\n", context_.name(), strategy_.name(),
            concrete_strategy1_.name(), concrete_strategy2_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 /**
@@ -559,39 +515,37 @@ class Strategy : public Pattern {
  */
 class Template : public Pattern {
  public:
-  Node &abstract_;
-  Node &concrete1_;
-  Node &concrete2_;
+  size_t abstract_;
+  size_t concrete1_;
+  size_t concrete2_;
 
-  Template(Node &abstract, Node &concrete1, Node &concrete2)
+  Template(size_t abstract, size_t concrete1, size_t concrete2)
       : abstract_(abstract), concrete1_(concrete1), concrete2_(concrete2) {}
 
-  void print() const override {
+  void print() const {
     printf("Template<%s, %s, %s>\n", abstract_.name(), concrete1_.name(),
            concrete2_.name());
   }
 
-  bool behavioral_check() const override;
 };
 
 class Visitor : public Pattern {
  public:
-  Node &element;
-  Node &visitor;
-  Node &concrete_elem;
-  Node &concrete_visitor;
+  size_t element;
+  size_t visitor;
+  size_t concrete_elem;
+  size_t concrete_visitor;
 
   Node *object_struct;
 
-  Visitor(Node &e, Node &v, Node &ce, Node &cv)
+  Visitor(size_t e, size_t v, size_t ce, size_t cv)
       : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv) {}
 
-  bool behavioral_check() const override;
 
-  void print() const override {
+  void print() const {
     printf("Visitor<%s, %s, %s, %s>\n", element.name(), visitor.name(),
            concrete_elem.name(), concrete_visitor.name());
   }
 };
-
+#endif
 #endif  // !DPDT_PATTERN_H

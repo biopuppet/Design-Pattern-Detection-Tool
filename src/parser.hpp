@@ -33,6 +33,8 @@ class DpdtJavaListener : public JavaParserBaseListener {
       JavaParser::FieldDeclarationContext * /*ctx*/) override;
   void enterMethodDeclaration(
       JavaParser::MethodDeclarationContext * /*ctx*/) override;
+  void enterConstructorDeclaration(
+      JavaParser::ConstructorDeclarationContext * /*ctx*/) override;
 
   Node *curNode() const { return nodestack_.top(); }
   void popNode() { nodestack_.pop(); }
@@ -50,7 +52,7 @@ class SrcParser {
   std::vector<std::string> srcs_;
 
  public:
-  explicit SrcParser(std::vector<std::string> &file) : srcs_(file) {}
+  explicit SrcParser(std::vector<std::string> &files) : srcs_(files) {}
   ~SrcParser() {
     if (gcdr_) delete gcdr_;
   }

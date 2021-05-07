@@ -107,14 +107,18 @@ int main(int argc, char **argv) {
 
   SrcParser parser{src_files};
   auto system = parser.parse();
-  if (dump_graph) system->print_gcdr();
+  if (!system) {
+    return -1;
+  }
+  if (dump_graph) system->print();
 
   SubPatternDetector spd{*system, dump_sp};
   spd.detect_all();
 
   auto pa = PatternAnalyzer::createPatternAnalyzer(spd, pattern);
   pa->struct_analyze();
-  pa->behavioral_check();
+  pa->behavioral_analyze();
+  pa->print();
   delete pa;
 
   return 0;

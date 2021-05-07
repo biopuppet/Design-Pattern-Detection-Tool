@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "antlr4-runtime.h"
 
 struct Node;
 
@@ -106,10 +107,11 @@ struct Parameter {
 };
 
 struct Method {
-  intptr_t ctx_;
+  antlr4::tree::ParseTree *ctx_;
   enum Type {
     MethodDecl,
     InterfaceMethodDecl,
+    CtorDecl,
   } ctx_type_;
 
   const std::string name_;
@@ -117,7 +119,7 @@ struct Method {
   std::string type_;
   std::vector<Parameter *> params_;  // including return value
 
-  Method(intptr_t ctx, Type ctx_type, const std::string &name, QualType qual,
+  Method(antlr4::tree::ParseTree *ctx, Type ctx_type, const std::string &name, QualType qual,
          std::string &type, std::vector<Parameter *> &params)
       : ctx_(ctx),
         ctx_type_(ctx_type),
@@ -125,6 +127,10 @@ struct Method {
         qual_(qual),
         type_(type),
         params_(params) {}
+
+  const std::string &name() const {
+    return name_;
+  }
 };
 
 struct MethodCmp {
@@ -153,7 +159,7 @@ struct Node {
   std::vector<Method *> methods_;
 
   // Explicit construction methods that share the same name with its class.
-  std::vector<Method *> constructors;
+  std::vector<Method *> ctors_;
 
   Node(const std::string &name, QualType qual) : name_(name), qual_(qual) {}
 
@@ -242,7 +248,10 @@ struct Edge {
 
   std::vector<Method *> &getDepMethods() { return methods_; }
 
+  std::string str() const;
+
   bool operator==(const Relation &r) { return r == prime_; }
+
   size_t operator*(size_t e) const { return this->prime_ * e; }
 };
 
@@ -252,7 +261,7 @@ struct Edge {
 template <typename T>
 class Graph {
  protected:
-  // Graph size, length, # of nodes
+  // Graph size, # of nodes
   const size_t n_;
 
   // 1-dim implementation of adjacency matrix
@@ -292,23 +301,21 @@ class SrcGraph : public Graph<Edge> {
   using NodeList = std::vector<Node *>;
 
   // Associated class nodes
-  NodeList *nodes_{nullptr};
+  NodeList &nodes_;
 
  public:
   explicit SrcGraph(NodeList &nodes)
-      : Graph<Edge>(nodes.size()), nodes_(&nodes) {}
+      : Graph<Edge>(nodes.size()), nodes_(nodes) {}
 
-  NodeList *nodes() const { return nodes_; }
+  NodeList &nodes() const { return nodes_; }
 
-  Node *node(size_t index) { return nodes_ ? nodes_->at(index) : nullptr; }
+  Node *node(size_t index) { return nodes_.at(index); }
 
   Node *operator[](size_t index) { return node(index); }
 
-  const Node *node(size_t index) const {
-    return nodes_ ? nodes_->at(index) : nullptr;
-  }
+  Node *node(size_t index) const { return nodes_.at(index); }
 
-  void print_gcdr() const;
+  void print() const;
 
   bool hasInheritance(size_t u, size_t v) const {
     return edge(u, v).hasInheritance();

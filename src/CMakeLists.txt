@@ -43,7 +43,6 @@ set(ALL_SOURCE_FILES
     graph.cpp
     parser.cpp
     sp_detector.cpp
-    pattern.cpp
     pattern_analyzer.cpp
     main.cpp
 )
