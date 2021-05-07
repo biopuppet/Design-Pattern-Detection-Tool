@@ -8,8 +8,7 @@
 
 class DpdtJavaBehavioralListener : public JavaParserBaseListener {
  public:
-  void enterExpression(
-      JavaParser::ExpressionContext * /*ctx*/) override;
+  void enterExpression(JavaParser::ExpressionContext* /*ctx*/) override;
 };
 
 enum PatternType {
@@ -17,8 +16,7 @@ enum PatternType {
 #include "pattern.def"
 };
 
-class Pattern {
-};
+class Pattern {};
 
 /**
  * Adapter
@@ -47,7 +45,6 @@ class Proxy : public Pattern {
 
   Proxy(size_t s, size_t rs, size_t p, Type t)
       : subject_(s), real_subject_(rs), proxy_(p), type_(t) {}
-
 };
 #if 0
 

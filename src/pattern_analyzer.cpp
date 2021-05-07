@@ -1,7 +1,7 @@
 #include "pattern_analyzer.hpp"
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
 #include "antlr4-runtime.h"
 
@@ -75,7 +75,7 @@ void AdapterAnalyzer::behavioral_analyze() {
     for (auto &request : result) {
       std::cout << "request: " << request->name() << std::endl;
       auto ctx = request->ctx_;
-      
+
       tree::ParseTreeWalker::DEFAULT.walk(&listener, ctx);
     }
 
@@ -96,8 +96,7 @@ void ProxyAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     for (const auto &iass : spis[SPT_IASS]) {
       if (ci[0] == iass[0] && ci[2] == iass[1]) {
-        add(Proxy(ci[0], ci[1], ci[2],
-                              Proxy::RefSubject));
+        add(Proxy(ci[0], ci[1], ci[2], Proxy::RefSubject));
       }
     }
   }
@@ -415,20 +414,18 @@ void VisitorAnalyzer::struct_analyze() {
  * expression bop='.' ( IDENTIFIER | methodCall | ... )
  */
 void DpdtJavaBehavioralListener::enterExpression(
-  JavaParser::ExpressionContext *ctx) {
-    // sufficient condition
-    if (!ctx->methodCall() || !ctx->bop) {
-      return;
-    }
-    // assert(ctx->bop == '.');
-    auto expr = ctx->expression(0);
-    auto call = ctx->methodCall()->IDENTIFIER();
-    if (expr && call) {
-      std::cout << "Caller: " << expr->getText() << std::endl;
-      std::cout << "Method: " << call->getText() << std::endl;
-      
-    }
-
+    JavaParser::ExpressionContext *ctx) {
+  // sufficient condition
+  if (!ctx->methodCall() || !ctx->bop) {
+    return;
+  }
+  // assert(ctx->bop == '.');
+  auto expr = ctx->expression(0);
+  auto call = ctx->methodCall()->IDENTIFIER();
+  if (expr && call) {
+    std::cout << "Caller: " << expr->getText() << std::endl;
+    std::cout << "Method: " << call->getText() << std::endl;
+  }
 }
 
 /**
@@ -439,7 +436,7 @@ void ProxyAnalyzer::behavioral_analyze() {
   // auto res = intersected(subject_.methods_, proxy_.methods_);
   // res = intersected(res, real_subject_.methods_);
   // for (auto &it : res) {
-    // std::cout << "request: " << it->name_ << std::endl;
+  // std::cout << "request: " << it->name_ << std::endl;
   // }
 }
 
@@ -652,13 +649,13 @@ void VisitorAnalyzer::behavioral_analyze() {
 void AdapterAnalyzer::print() const {
   for (const auto &p : patterns_) {
     printf("Adapter<%s, %s, %s>\n", name(p.target_), name(p.adapter_),
-          name(p.adaptee_));
+           name(p.adaptee_));
   }
 }
 
 void ProxyAnalyzer::print() const {
   for (const auto &p : patterns_) {
     printf("Proxy<%s, %s, %s>\n", name(p.subject_), name(p.real_subject_),
-          name(p.proxy_));
+           name(p.proxy_));
   }
 }

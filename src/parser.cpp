@@ -205,8 +205,7 @@ void DpdtJavaListener::enterConstructorDeclaration(
   auto params = visitor_.visitFormalParameters(ctx->formalParameters())
                     .as<std::vector<Parameter *>>();
 
-  auto method = new Method(ctx, Method::CtorDecl,
-                           name, curqual_, type, params);
+  auto method = new Method(ctx, Method::CtorDecl, name, curqual_, type, params);
   curNode()->ctors_.emplace_back(method);
 }
 
@@ -231,8 +230,8 @@ void DpdtJavaListener::enterMethodDeclaration(
   auto params = visitor_.visitFormalParameters(ctx->formalParameters())
                     .as<std::vector<Parameter *>>();
 
-  auto method = new Method(ctx, Method::MethodDecl,
-                           name, curqual_, type, params);
+  auto method =
+      new Method(ctx, Method::MethodDecl, name, curqual_, type, params);
   curNode()->methods_.emplace_back(method);
 }
 
@@ -244,11 +243,11 @@ SrcGraph *SrcParser::parse() {
     try {
       ANTLRInputStream *input = new ANTLRInputStream(stream);
       JavaLexer *lexer = new JavaLexer(input);
-      
+
       CommonTokenStream *tokens = new CommonTokenStream(lexer);
-      
+
       // tokens.fill();
-    
+
       JavaParser *parser = new JavaParser(tokens);
 
       // JavaParser::CompilationUnitContext *cu = parser.compilationUnit();

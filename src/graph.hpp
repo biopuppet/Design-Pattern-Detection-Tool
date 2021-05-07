@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+
 #include "antlr4-runtime.h"
 
 struct Node;
@@ -119,8 +120,8 @@ struct Method {
   std::string type_;
   std::vector<Parameter *> params_;  // including return value
 
-  Method(antlr4::tree::ParseTree *ctx, Type ctx_type, const std::string &name, QualType qual,
-         std::string &type, std::vector<Parameter *> &params)
+  Method(antlr4::tree::ParseTree *ctx, Type ctx_type, const std::string &name,
+         QualType qual, std::string &type, std::vector<Parameter *> &params)
       : ctx_(ctx),
         ctx_type_(ctx_type),
         name_(name),
@@ -128,9 +129,7 @@ struct Method {
         type_(type),
         params_(params) {}
 
-  const std::string &name() const {
-    return name_;
-  }
+  const std::string &name() const { return name_; }
 };
 
 struct MethodCmp {

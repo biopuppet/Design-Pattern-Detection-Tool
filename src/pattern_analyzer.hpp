@@ -33,9 +33,7 @@ class PatternAnalyzer {
 
   virtual void print() const = 0;
 
-  const char *name(size_t member) const {
-    return sys[member]->name();
-  }
+  const char *name(size_t member) const { return sys[member]->name(); }
 
   static const PatternMap pattern_map;
   static PatternAnalyzer *createPatternAnalyzer(const SubPatternDetector &spd,
@@ -53,7 +51,7 @@ class ProxyAnalyzer : public PatternAnalyzer {
   void struct_analyze() override;
 
   void behavioral_analyze() override;
-  
+
   void print() const override;
 
   void add(Proxy &&p) { patterns_.emplace_back(p); }
@@ -67,15 +65,14 @@ class AdapterAnalyzer : public PatternAnalyzer {
  public:
   explicit AdapterAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
-  
+
   void struct_analyze() override;
 
   void behavioral_analyze() override;
-  
+
   void print() const override;
 
   void add(Adapter &&p) { patterns_.emplace_back(p); }
-
 };
 
 #if 0
@@ -301,7 +298,7 @@ public:
  * PS. This is a case of composite pattern.
  */
 class AllAnalyzer : public PatternAnalyzer {
-public:
+ public:
   std::vector<PatternAnalyzer *> pas_;
 
   explicit AllAnalyzer(const SubPatternDetector &spd) : PatternAnalyzer(spd) {
