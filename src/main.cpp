@@ -21,12 +21,12 @@ static std::string pattern;
 static std::vector<std::string> src_file_dirs;
 static std::vector<std::string> src_files;
 static bool dump_graph = false, dump_sp = false;
+static bool structural = false;
 
 static void getAllFiles(std::string path, std::vector<std::string> &files) {
   DIR *dir;
   struct dirent *ptr;
   if ((dir = opendir(path.c_str())) == NULL) {
-    // if (path.substr(path.size()-6) == "*.java")
     files.push_back(path);
     return;
   }
@@ -57,6 +57,7 @@ static void print_usage(const char *argv0) {
       " --dump-graph                 Dump GCDR graph in form of adjacent "
       "lists.\n"
       " --dump-sp                    Dump sub patterns info.\n"
+      " -s, --structural             Show all structural matched instances.\n"
       " -h, --help                   Display this information.\n"
       " -v, --version                Display version.\n",
       argv0);
@@ -87,6 +88,9 @@ static int parse_option(int argc, char *argv[]) {
     if (cmdl["--dump-sp"]) {
       dump_sp = true;
     }
+    if (cmdl[{"-s", "--structural"}]) {
+      structural = true;
+    }
 
     auto p = cmdl("-p");
     p >> pattern;
@@ -116,13 +120,16 @@ int main(int argc, char **argv) {
   }
   if (dump_graph) system->print();
 
+  std::cerr << "Detecting sub-patterns..." << std::endl;
   SubPatternDetector spd{*system, dump_sp};
   spd.detect_all();
 
   auto pa = PatternAnalyzer::createPatternAnalyzer(spd, pattern);
+  std::cerr << "Structual analyzing..." << std::endl;
   pa->struct_analyze();
+  std::cerr << "Behavioral analyzing..." << std::endl;
   pa->behavioral_analyze();
-  pa->print();
+  pa->print(structural);
   delete pa;
 
   return 0;

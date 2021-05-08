@@ -656,20 +656,20 @@ void VisitorAnalyzer::behavioral_analyze() {
 
 #endif
 
-void AdapterAnalyzer::print() const {
+void AdapterAnalyzer::print(bool structural) const {
   size_t i = 0;
   for (const auto &p : patterns_) {
-    if (real_[i++]) {
-      printf("√ ");
-    }
-    printf("Adapter<%s, %s, %s>\n", name(p.target_), name(p.adapter_),
+    if (real_[i++] || structural)
+      printf("Adapter<%s, %s, %s>\n", name(p.target_), name(p.adapter_),
            name(p.adaptee_));
   }
 }
 
-void ProxyAnalyzer::print() const {
+void ProxyAnalyzer::print(bool structural) const {
+  size_t i = 0;
   for (const auto &p : patterns_) {
-    printf("Proxy<%s, %s, %s>\n", name(p.subject_), name(p.real_subject_),
+    if (real_[i++] || structural)
+      printf("Proxy<%s, %s, %s>\n", name(p.subject_), name(p.real_subject_),
            name(p.proxy_));
   }
 }

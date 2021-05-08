@@ -46,5 +46,5 @@ endif()
 
 add_subdirectory(src)
 
-enable_testing()
-add_subdirectory(test EXCLUDE_FROM_ALL)
+# enable_testing()
+# add_subdirectory(test EXCLUDE_FROM_ALL)

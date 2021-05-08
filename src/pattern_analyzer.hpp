@@ -31,7 +31,7 @@ class PatternAnalyzer {
 
   virtual void behavioral_analyze() = 0;
 
-  virtual void print() const = 0;
+  virtual void print(bool structural = false) const = 0;
 
   const char *name(size_t member) const { return sys[member]->name(); }
 
@@ -52,7 +52,7 @@ class ProxyAnalyzer : public PatternAnalyzer {
 
   void behavioral_analyze() override;
 
-  void print() const override;
+  void print(bool structural = false) const override;
 
   void add(Proxy &&p) { patterns_.emplace_back(p); }
   void add(Proxy &p) { patterns_.emplace_back(p); }
@@ -70,7 +70,7 @@ class AdapterAnalyzer : public PatternAnalyzer {
 
   void behavioral_analyze() override;
 
-  void print() const override;
+  void print(bool structural = false) const override;
 
   void add(Adapter &&p) { patterns_.emplace_back(p); }
 };
@@ -325,7 +325,7 @@ class AllAnalyzer : public PatternAnalyzer {
     }
   }
 
-  void print() const override {
+  void print(bool structural = false) const override {
     for (auto pa : pas_) {
       pa->print();
     }
