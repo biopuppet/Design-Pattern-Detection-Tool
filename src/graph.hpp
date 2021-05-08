@@ -1,6 +1,7 @@
 #ifndef DPDT_GRAPH_H
 #define DPDT_GRAPH_H
 
+#include <array>
 #include <string>
 #include <vector>
 
@@ -9,14 +10,15 @@
 struct Node;
 
 /**
- * Use prime number for composite relation factoring
+ *
  */
 enum Relation {
-  None = 1,
-  Association = 2,
-  Aggregation = 3,  // TODO: Change back to 3
-  Inheritance = 5,
-  Dependency = 7,
+  R_NONE = 0x0,
+  R_ASS = 0x1,
+  R_AGG = 0x2,
+  R_INH = 0x4,
+  R_DEP = 0x8,
+  R_MAX = 0x10,
 };
 
 enum Modifier {
@@ -173,75 +175,67 @@ struct Node {
 };
 
 struct Edge {
-  size_t prime_ = Relation::None;
+  size_t prime_ = R_NONE;
   bool isImpl_ = false;
   std::vector<Attribute *> ass_attrs_;
   std::vector<Attribute *> agg_attrs_;
   std::vector<Method *> methods_;
 
-  bool has(const Edge &edge) { return prime_ % edge.prime_ == 0; }
+  bool has(const Edge &edge) { return (prime_ & edge.prime_) == edge.prime_; }
 
-  bool has(size_t composite) { return prime_ % composite == 0; }
+  bool has(size_t comp) { return (prime_ & comp) == comp; }
 
-  void add(size_t composite) { prime_ *= composite; }
+  void add(size_t comp) { prime_ |= comp; }
 
-  bool hasInheritance() const { return prime_ % Relation::Inheritance == 0; }
+  bool isNone() const { return prime_ == R_NONE; }
 
-  bool isInheritance() const { return prime_ == Relation::Inheritance; }
+  bool hasInheritance() const { return prime_ & R_INH; }
 
-  bool isImplementation() const { return hasInheritance() && isImpl_; }
+  bool isInheritance() const { return prime_ == R_INH; }
+
+  bool hasImplementation() const { return hasInheritance() && isImpl_; }
+
+  bool isImplementation() const { return isInheritance() && isImpl_; }
 
   void addInheritance(bool isImpl = false) {
-    prime_ *= Relation::Inheritance;
+    prime_ |= R_INH;
     isImpl_ = isImpl;
   }
 
-  bool hasAssociation(size_t mult = 1) const {
-    return prime_ % (Relation::Association * mult) == 0;
-  }
+  bool hasAssociation() const { return prime_ & R_ASS; }
 
-  bool isAssociation(size_t mult = 1) const {
-    return prime_ == (Relation::Association * mult);
-  }
+  bool isAssociation() const { return prime_ == R_ASS; }
 
-  void addAssociation() { prime_ *= Relation::Association; }
+  void addAssociation() { prime_ |= R_ASS; }
 
   void addAssociation(Attribute *attr) {
-    prime_ *= Relation::Association;
+    prime_ |= R_ASS;
     ass_attrs_.emplace_back(attr);
   }
 
   std::vector<Attribute *> &getAssAttrs() { return ass_attrs_; }
 
-  bool hasAggregation(size_t mult = 1) const {
-    return prime_ % (Relation::Aggregation * mult) == 0;
-  }
+  bool hasAggregation() const { return prime_ & R_AGG; }
 
-  bool isAggregation(size_t mult = 1) const {
-    return prime_ == (Relation::Aggregation * mult);
-  }
+  bool isAggregation() const { return prime_ == R_AGG; }
 
-  void addAggregation() { prime_ *= Relation::Aggregation; }
+  void addAggregation() { prime_ |= R_AGG; }
 
   void addAggregation(Attribute *attr) {
-    prime_ *= Relation::Aggregation;
+    prime_ |= R_AGG;
     agg_attrs_.emplace_back(attr);
   }
 
   std::vector<Attribute *> &getAggAttrs() { return agg_attrs_; }
 
-  bool hasDependency(size_t mult = 1) const {
-    return prime_ % (Relation::Dependency * mult) == 0;
-  }
+  bool hasDependency() const { return prime_ % R_DEP == 0; }
 
-  bool isDependency(size_t mult = 1) const {
-    return prime_ == (Relation::Dependency * mult);
-  }
+  bool isDependency() const { return prime_ == R_DEP; }
 
-  void addDependency() { prime_ *= Relation::Dependency; }
+  void addDependency() { prime_ |= R_DEP; }
 
   void addDependency(Method *method) {
-    prime_ *= Relation::Dependency;
+    prime_ |= R_DEP;
     methods_.emplace_back(method);
   }
 
@@ -279,21 +273,9 @@ class Graph {
 
   size_t num_edges() const { return n_ * n_; }
 
-  size_t cw_in(size_t v) const {
-    size_t ret = 1;
-    for (size_t i = 0; i < size(); ++i) {
-      ret = edge(i, v) * ret;
-    }
-    return ret;
-  }
+  std::array<size_t, 4> cw_in(size_t v) const;
 
-  size_t cw_out(size_t v) const {
-    size_t ret = 1;
-    for (size_t i = 0; i < size(); ++i) {
-      ret = edge(v, i) * ret;
-    }
-    return ret;
-  }
+  std::array<size_t, 4> cw_out(size_t v) const;
 };
 
 class SrcGraph : public Graph<Edge> {
@@ -320,20 +302,20 @@ class SrcGraph : public Graph<Edge> {
     return edge(u, v).hasInheritance();
   }
 
-  bool hasAssociation(size_t u, size_t v, size_t mult = 1) const {
-    return edge(u, v).hasAssociation(mult);
+  bool hasAssociation(size_t u, size_t v) const {
+    return edge(u, v).hasAssociation();
   }
 
-  bool hasAggregation(size_t u, size_t v, size_t mult = 1) const {
-    return edge(u, v).hasAggregation(mult);
+  bool hasAggregation(size_t u, size_t v) const {
+    return edge(u, v).hasAggregation();
   }
 
-  bool hasDependency(size_t u, size_t v, size_t mult = 1) const {
-    return edge(u, v).hasDependency(mult);
+  bool hasDependency(size_t u, size_t v) const {
+    return edge(u, v).hasDependency();
   }
 
-  bool hasAssOrAgg(size_t u, size_t v, size_t mult = 1) const {
-    return hasAggregation(u, v, mult) || hasAssociation(u, v, mult);
+  bool hasAssOrAgg(size_t u, size_t v) const {
+    return hasAggregation(u, v) || hasAssociation(u, v);
   }
 
   void addInheritance(size_t u, size_t v, bool isImpl = false) {

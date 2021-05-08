@@ -1,5 +1,6 @@
 #include "sp_detector.hpp"
 
+#include <cstring>
 #include <iostream>
 
 const SubPattern SubPatternDetector::sps[] = {
@@ -62,12 +63,12 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
 
 void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
-  const std::vector<size_t> sp_es = {subp.edge(0, 1), subp.edge(0, 2),
-                                     subp.edge(1, 0), subp.edge(1, 2),
-                                     subp.edge(2, 0), subp.edge(2, 1)};
-  for (const auto &vd1 : cvs[0]) {
-    for (const auto &vd2 : cvs[1]) {
-      for (const auto &vd3 : cvs[2]) {
+  const std::vector<Edge> sp_es = {subp.edge(0, 1), subp.edge(0, 2),
+                                   subp.edge(1, 0), subp.edge(1, 2),
+                                   subp.edge(2, 0), subp.edge(2, 1)};
+  for (const auto vd1 : cvs[0]) {
+    for (const auto vd2 : cvs[1]) {
+      for (const auto vd3 : cvs[2]) {
         // since there are no self-loops in 2 or 3-vertex-sub-patterns
         // we can presume vd1, vd2, vd3 are different.
         if (vd1 == vd2 || vd2 == vd3 || vd1 == vd3) {
@@ -81,12 +82,21 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
             !system.edge(vd3, vd2).has(sp_es[5])) {
           continue;
         }
-        // printf("%s(%s %s %s)\n", subp.name(), system[vd1].name(),
-        //  system[vd2].name(), system[vd3].name());
+        // printf("%s(%s %s %s)\n", subp.name(), system[vd1]->name(),
+        //  system[vd2]->name(), system[vd3]->name());
         spis[subp.type()].push_back({vd1, vd2, vd3});
       }
     }
   }
+}
+
+static bool greater(std::array<size_t, 4> &&a1, std::array<size_t, 4> &&a2) {
+  for (size_t k = 0; k < a1.size(); ++k) {
+    if (a1[k] < a2[k]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 void SubPatternDetector::detect_sp_instances(const SubPattern &subp) {
@@ -95,23 +105,24 @@ void SubPatternDetector::detect_sp_instances(const SubPattern &subp) {
 
   for (size_t i = 0; i < sp_num; ++i) {
     for (size_t j = 0; j < system.size(); ++j) {
-      // printf("sys[%lu].cw_out=%lu sp[%lu].cw_out=%lu\n", j, system.cw_out(j),
-      // i, subp.cw_out(i)); printf("sys[%lu].cw_in=%lu sp[%lu].cw_in=%lu\n", j,
-      // system.cw_in(j), i, subp.cw_in(i));
-      if (system.cw_out(j) % subp.cw_out(i) == 0 &&
-          system.cw_in(j) % subp.cw_in(i) == 0) {
+      // printf("sys[%lu](%s).cw_out=%lu sp[%lu].cw_out=%lu\n", j,
+            //  system[j]->name(), system.cw_out(j), i, subp.cw_out(i));
+      // printf("sys[%lu](%s).cw_in=%lu sp[%lu].cw_in=%lu\n", j, system[j]->name(),
+            //  system.cw_in(j), i, subp.cw_in(i));
+      if (greater(system.cw_out(j), subp.cw_out(i)) &&
+          greater(system.cw_in(j), subp.cw_in(i)))
         cvs[i].push_back(j);
-      }
     }
   }
 
-  // for (size_t i = 0; i < cvs.size(); ++i) {
-  //     std::cout << "cvs[" << i << "]: ";
-  //     for (auto v : cvs[i]) {
-  //         std::cout << v << " ";
-  //     }
-  //     std::cout << "\n";
-  // }
+  std::cout << subp.name() <<std::endl;
+  for (size_t i = 0; i < cvs.size(); ++i) {
+    std::cout << "cvs[" << i << "]: ";
+    for (auto v : cvs[i]) {
+      std::cout << system[v]->name() << " ";
+    }
+    std::cout << "\n";
+  }
 
   switch (sp_num) {
     case 1:

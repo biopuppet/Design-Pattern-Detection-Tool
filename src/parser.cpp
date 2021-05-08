@@ -276,15 +276,11 @@ SrcGraph *SrcParser::parse() {
     try {
       ANTLRInputStream *input = new ANTLRInputStream(stream);
       JavaLexer *lexer = new JavaLexer(input);
-
       CommonTokenStream *tokens = new CommonTokenStream(lexer);
-
-      // tokens.fill();
-
       JavaParser *parser = new JavaParser(tokens);
 
-      // JavaParser::CompilationUnitContext *cu = parser.compilationUnit();
-      // std::cout << cu->toStringTree(&parser, true) << std::endl;
+      // auto cu = parser->compilationUnit();
+      // std::cout << cu->toStringTree(parser, true) << std::endl;
 
       DpdtJavaListener listener;
       tree::ParseTree *tree = parser->compilationUnit();

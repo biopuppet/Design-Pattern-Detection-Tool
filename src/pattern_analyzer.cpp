@@ -660,7 +660,7 @@ void AdapterAnalyzer::print(bool structural) const {
   for (const auto &p : patterns_) {
     if (p.behave() || structural)
       printf("Adapter<%s, %s, %s>\n", name(p.target_), name(p.adapter_),
-           name(p.adaptee_));
+             name(p.adaptee_));
   }
 }
 
@@ -668,6 +668,6 @@ void ProxyAnalyzer::print(bool structural) const {
   for (const auto &p : patterns_) {
     if (p.behave() || structural)
       printf("Proxy<%s, %s, %s>\n", name(p.subject_), name(p.real_subject_),
-           name(p.proxy_));
+             name(p.proxy_));
   }
 }

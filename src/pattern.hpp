@@ -23,7 +23,7 @@ enum PatternType {
 class Pattern {
   bool behave_ = false;
 
-public:
+ public:
   bool behave() const { return behave_; }
   void setBehave(bool behave) { behave_ = behave; }
 };

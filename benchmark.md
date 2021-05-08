@@ -609,6 +609,7 @@ Reusability: 1.0625
 
 Software Name: Lizzy   ver.1.1.1    ((Object)Adapter-Command)  
 Root: christophedelory.playlist.kpl.Info
+christophedelory.playlist.kpl.Xml
 Number of Classes: 2
 External Dependencies: 10
 Functionality: 1

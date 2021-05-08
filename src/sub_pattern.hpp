@@ -15,12 +15,12 @@ enum SubPatternType {
  * SubPattern is a light-weight const Graph.
  * Keep graph interfaces to interact with SrcGraph.
  */
-class SubPattern : public Graph<size_t> {
+class SubPattern : public Graph<Edge> {
   SubPatternType type_;
 
  public:
   SubPattern(SubPatternType type, size_t size)
-      : Graph<size_t>(size, Relation::None), type_(type) {
+      : Graph<Edge>(size), type_(type) {
     switch (type) {
       case SPT_ICA:
         addInheritance(1, 0);
@@ -31,7 +31,7 @@ class SubPattern : public Graph<size_t> {
         addInheritance(2, 0);
         break;
       case SPT_IAGG:
-        add(1, 0, Relation::Aggregation * Relation::Inheritance);
+        add(1, 0, R_AGG * R_INH);
         break;
       case SPT_IPAG:
         addInheritance(1, 0);
@@ -54,7 +54,7 @@ class SubPattern : public Graph<size_t> {
         addAggregation(2, 0);
         break;
       case SPT_IASS:
-        add(1, 0, Relation::Inheritance * Relation::Association);
+        add(1, 0, R_INH * R_ASS);
         break;
       case SPT_ICD:
         addInheritance(1, 0);
@@ -106,21 +106,15 @@ class SubPattern : public Graph<size_t> {
   }
 
   // This is quite ugly, yet efficient.
-  void add(size_t u, size_t v, size_t r) { edge(u, v) *= r; }
+  void add(size_t u, size_t v, size_t r) { edge(u, v).add(r); }
 
-  void addInheritance(size_t u, size_t v) {
-    edge(u, v) *= Relation::Inheritance;
-  }
+  void addInheritance(size_t u, size_t v) { edge(u, v).addInheritance(); }
 
-  void addAssociation(size_t u, size_t v) {
-    edge(u, v) *= Relation::Association;
-  }
+  void addAssociation(size_t u, size_t v) { edge(u, v).addAssociation(); }
 
-  void addAggregation(size_t u, size_t v) {
-    edge(u, v) *= Relation::Aggregation;
-  }
+  void addAggregation(size_t u, size_t v) { edge(u, v).addAggregation(); }
 
-  void addDependency(size_t u, size_t v) { edge(u, v) *= Relation::Dependency; }
+  void addDependency(size_t u, size_t v) { edge(u, v).addDependency(); }
 };
 
 #endif  // !DPDT_SUB_PATTERN_H

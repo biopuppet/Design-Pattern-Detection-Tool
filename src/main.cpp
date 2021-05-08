@@ -37,8 +37,7 @@ static void getAllFiles(std::string path, std::vector<std::string> &files) {
     else if (ptr->d_type == 8) {
       if (!strcmp(ptr->d_name + strlen(ptr->d_name) - 5, ".java"))
         files.push_back(path + "/" + ptr->d_name);
-    }
-    else if (ptr->d_type == 10)  // link file
+    } else if (ptr->d_type == 10)  // link file
       continue;
     else if (ptr->d_type == 4) {
       // files.push_back(ptr->d_name);//dir
@@ -113,6 +112,7 @@ int main(int argc, char **argv) {
     getAllFiles(src, src_files);
   }
 
+  std::cout << "Total # of source files: " << src_files.size() << std::endl;
   SrcParser parser{src_files};
   auto system = parser.parse();
   if (!system) {
