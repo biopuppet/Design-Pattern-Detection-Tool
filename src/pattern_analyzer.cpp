@@ -67,7 +67,7 @@ void AdapterAnalyzer::struct_analyze() {
  * Target.[Request] = Adapter.[Request] → Adaptee.[SpecificRequest]
  */
 void AdapterAnalyzer::behavioral_analyze() {
-  for (const auto &p : patterns_) {
+  for (auto &p : patterns_) {
     // for (const auto &method : sys[p.adapter_]->methods_) {
     //   std::cout <<method->name() <<std::endl;
     // }
@@ -81,7 +81,7 @@ void AdapterAnalyzer::behavioral_analyze() {
       // traverse request method
       tree::ParseTreeWalker::DEFAULT.walk(&listener, ctx);
     }
-    real_.push_back(listener.result_.size() != 0);
+    p.setBehave(listener.result_.size() != 0);
   }
 }
 
@@ -657,18 +657,16 @@ void VisitorAnalyzer::behavioral_analyze() {
 #endif
 
 void AdapterAnalyzer::print(bool structural) const {
-  size_t i = 0;
   for (const auto &p : patterns_) {
-    if (real_[i++] || structural)
+    if (p.behave() || structural)
       printf("Adapter<%s, %s, %s>\n", name(p.target_), name(p.adapter_),
            name(p.adaptee_));
   }
 }
 
 void ProxyAnalyzer::print(bool structural) const {
-  size_t i = 0;
   for (const auto &p : patterns_) {
-    if (real_[i++] || structural)
+    if (p.behave() || structural)
       printf("Proxy<%s, %s, %s>\n", name(p.subject_), name(p.real_subject_),
            name(p.proxy_));
   }

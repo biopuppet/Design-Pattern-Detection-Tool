@@ -15,9 +15,6 @@ class PatternAnalyzer {
 
   const std::vector<SPRefList> &spis;
 
-  // True if the pattern instance passed the behavioral check
-  std::vector<bool> real_;
-
  public:
   explicit PatternAnalyzer(const SubPatternDetector &spd)
       : sys(spd.system), spis(spd.spis) {}
@@ -327,7 +324,7 @@ class AllAnalyzer : public PatternAnalyzer {
 
   void print(bool structural = false) const override {
     for (auto pa : pas_) {
-      pa->print();
+      pa->print(structural);
     }
   }
 };

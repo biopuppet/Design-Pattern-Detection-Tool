@@ -90,7 +90,6 @@ void DpdtJavaListener::enterInterfaceDeclaration(
   if (ctx->typeParameters()) {
     ident += ctx->typeParameters()->getText();
   }
-  std::cout << ident << std::endl;
   auto node = new Node(ident, curqual_);
 
   if (ctx->typeList()) {

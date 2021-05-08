@@ -20,7 +20,13 @@ enum PatternType {
 #include "pattern.def"
 };
 
-class Pattern {};
+class Pattern {
+
+  bool behave_ = false;
+public:
+  bool behave() const { return behave_; }
+  void setBehave(bool behave) { behave_ = behave; }
+};
 
 /**
  * Adapter
