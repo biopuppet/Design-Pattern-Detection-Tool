@@ -4,6 +4,7 @@
 #include <array>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "antlr4-runtime.h"
 
@@ -253,6 +254,8 @@ struct Edge {
  */
 template <typename T>
 class Graph {
+public:
+  using CWMap = std::unordered_map<size_t, std::array<size_t, 4>>;
  protected:
   // Graph size, # of nodes
   const size_t n_;
@@ -260,10 +263,14 @@ class Graph {
   // 1-dim implementation of adjacency matrix
   std::vector<T> matrix_;
 
+  CWMap cw_in_;
+  CWMap cw_out_;
+
  public:
   explicit Graph(size_t n, const T &e = T()) : n_(n), matrix_(n * n, e) {}
   Graph(const Graph &) = delete;
   Graph &operator=(const Graph &) = delete;
+  virtual ~Graph() {}
 
   const T &edge(size_t u, size_t v) const { return matrix_.at(u * n_ + v); }
 
@@ -273,9 +280,39 @@ class Graph {
 
   size_t num_edges() const { return n_ * n_; }
 
-  std::array<size_t, 4> cw_in(size_t v) const;
+  const std::array<size_t, 4> &cw_in(size_t v) {
+    if (cw_in_.count(v)) return cw_in_.at(v);
+    std::array<size_t, 4> ret{0};
+    for (size_t i = 0; i < size(); ++i) {
+      ret[0] += hasInheritance(i, v);
+      ret[1] += hasAssociation(i, v);
+      ret[2] += hasAggregation(i, v);
+      ret[3] += hasDependency(i, v);
+    }
+    cw_in_.emplace(v, ret);
+    return cw_in_.at(v);
+  }
 
-  std::array<size_t, 4> cw_out(size_t v) const;
+  const std::array<size_t, 4> &cw_out(size_t v) {
+    if (cw_out_.count(v)) return cw_out_.at(v);
+    std::array<size_t, 4> ret{0};
+    for (size_t i = 0; i < size(); ++i) {
+      ret[0] += hasInheritance(v, i);
+      ret[1] += hasAssociation(v, i);
+      ret[2] += hasAggregation(v, i);
+      ret[3] += hasDependency(v, i);
+    }
+    cw_out_.emplace(v, ret);
+    return cw_out_.at(v);
+  }
+
+  virtual bool hasInheritance(size_t u, size_t v) const = 0;
+
+  virtual bool hasAssociation(size_t u, size_t v) const = 0;
+
+  virtual bool hasAggregation(size_t u, size_t v) const = 0;
+
+  virtual bool hasDependency(size_t u, size_t v) const = 0;
 };
 
 class SrcGraph : public Graph<Edge> {

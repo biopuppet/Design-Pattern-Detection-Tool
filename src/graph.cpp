@@ -40,27 +40,3 @@ void SrcGraph::print() const {
   }
   std::cout << std::endl;
 }
-
-template <>
-std::array<size_t, 4> Graph<Edge>::cw_in(size_t v) const {
-  std::array<size_t, 4> ret{0};
-  for (size_t i = 0; i < size(); ++i) {
-    ret[0] += edge(i, v).hasInheritance();
-    ret[1] += edge(i, v).hasAssociation();
-    ret[2] += edge(i, v).hasAggregation();
-    ret[3] += edge(i, v).hasDependency();
-  }
-  return ret;
-}
-
-template <>
-std::array<size_t, 4> Graph<Edge>::cw_out(size_t v) const {
-  std::array<size_t, 4> ret{0};
-  for (size_t i = 0; i < size(); ++i) {
-    ret[0] += edge(v, i).hasInheritance();
-    ret[1] += edge(v, i).hasAssociation();
-    ret[2] += edge(v, i).hasAggregation();
-    ret[3] += edge(v, i).hasDependency();
-  }
-  return ret;
-}

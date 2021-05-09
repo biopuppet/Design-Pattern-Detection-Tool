@@ -3,25 +3,20 @@
 #include <cstring>
 #include <iostream>
 
-const SubPattern SubPatternDetector::sps[] = {
-    {SPT_ICA, 3},  {SPT_CI, 3},   {SPT_IAGG, 2}, {SPT_IPAG, 3},
-    {SPT_IPAS, 3}, {SPT_SASS, 1}, {SPT_MLI, 3},  {SPT_IIAGG, 3},
-    {SPT_IASS, 2}, {SPT_ICD, 3},  {SPT_DCI, 3},  {SPT_SAGG, 1},
-    {SPT_AGPI, 3}, {SPT_ASPI, 3}, {SPT_IPD, 3},  {SPT_DPI, 3},
-};
+#define SUBPATTERN(U, L) U SubPatternDetector::L;
+#include "subpattern.def"
 
 void SubPatternDetector::detect_all() {
-  for (const auto &sp : sps) {
-    detect_sp_instances(sp);
-  }
+#define SUBPATTERN(U, L) detect_sp_instances(L);
+#include "subpattern.def"
 
   if (dump_sp_) {
     for (size_t i = 0; i < SPT_NUM; ++i) {
       if (spis[i].size()) {
-        std::cout << sps[i].name() << " (" << spis[i].size() << ")\n";
+        std::cout << SubPattern::name(i) << " (" << spis[i].size() << ")\n";
       }
       for (const auto &spi : spis[i]) {
-        std::cout << sps[i].name() << ": ";
+        std::cout << " " << SubPattern::name(i) << ": ";
         for (const auto &it : spi) {
           std::cout << system[it]->name() << " ";
         }
@@ -63,9 +58,9 @@ void SubPatternDetector::combine_cv_2(const SubPattern &subp,
 
 void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
-  const std::vector<Edge> sp_es = {subp.edge(0, 1), subp.edge(0, 2),
-                                   subp.edge(1, 0), subp.edge(1, 2),
-                                   subp.edge(2, 0), subp.edge(2, 1)};
+  const std::vector<size_t> sp_es = {subp.edge(0, 1), subp.edge(0, 2),
+                                     subp.edge(1, 0), subp.edge(1, 2),
+                                     subp.edge(2, 0), subp.edge(2, 1)};
   for (const auto vd1 : cvs[0]) {
     for (const auto vd2 : cvs[1]) {
       for (const auto vd3 : cvs[2]) {
@@ -90,7 +85,7 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
   }
 }
 
-static bool greater(std::array<size_t, 4> &&a1, std::array<size_t, 4> &&a2) {
+static bool greater(const std::array<size_t, 4> &a1, const std::array<size_t, 4> &a2) {
   for (size_t k = 0; k < a1.size(); ++k) {
     if (a1[k] < a2[k]) {
       return false;
@@ -99,30 +94,33 @@ static bool greater(std::array<size_t, 4> &&a1, std::array<size_t, 4> &&a2) {
   return true;
 }
 
-void SubPatternDetector::detect_sp_instances(const SubPattern &subp) {
+void SubPatternDetector::detect_sp_instances(SubPattern &subp) {
   auto sp_num = subp.size();
   CandidateVertexList cvs(sp_num);
 
+  std::cerr << "Generating CVS for " << subp.name() << std::endl;
   for (size_t i = 0; i < sp_num; ++i) {
     for (size_t j = 0; j < system.size(); ++j) {
       // printf("sys[%lu](%s).cw_out=%lu sp[%lu].cw_out=%lu\n", j,
-            //  system[j]->name(), system.cw_out(j), i, subp.cw_out(i));
-      // printf("sys[%lu](%s).cw_in=%lu sp[%lu].cw_in=%lu\n", j, system[j]->name(),
-            //  system.cw_in(j), i, subp.cw_in(i));
+      //  system[j]->name(), system.cw_out(j), i, subp.cw_out(i));
+      // printf("sys[%lu](%s).cw_in=%lu sp[%lu].cw_in=%lu\n", j,
+      // system[j]->name(),
+      //  system.cw_in(j), i, subp.cw_in(i));
       if (greater(system.cw_out(j), subp.cw_out(i)) &&
           greater(system.cw_in(j), subp.cw_in(i)))
         cvs[i].push_back(j);
     }
   }
 
-  std::cout << subp.name() <<std::endl;
-  for (size_t i = 0; i < cvs.size(); ++i) {
-    std::cout << "cvs[" << i << "]: ";
-    for (auto v : cvs[i]) {
-      std::cout << system[v]->name() << " ";
-    }
-    std::cout << "\n";
-  }
+  // std::cout << subp.name() << std::endl;
+  // for (size_t i = 0; i < cvs.size(); ++i) {
+  //   std::cout << "cvs[" << i << "]: ";
+  //   for (auto v : cvs[i]) {
+  //     std::cout << system[v]->name() << " ";
+  //   }
+  //   std::cout << "\n";
+  // }
+  std::cerr << "Combining.." << std::endl;
 
   switch (sp_num) {
     case 1:

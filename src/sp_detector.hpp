@@ -31,13 +31,14 @@ class SubPatternDetector {
 
   void detect_all();
 
-  void detect_sp_instances(const SubPattern &sp);
+  void detect_sp_instances(SubPattern &sp);
 
   void combine_cv_3(const SubPattern &sp, const CandidateVertexList &cvs);
   void combine_cv_2(const SubPattern &sp, const CandidateVertexList &cvs);
   void combine_cv_1(const SubPattern &sp, const CandidateVertexList &cvs);
 
-  static const SubPattern sps[];
+#define SUBPATTERN(U, L) static U L;
+#include "subpattern.def"
 };
 
 #endif  // !DPDT_SP_DETECTOR_H
