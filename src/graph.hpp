@@ -3,8 +3,8 @@
 
 #include <array>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 #include "antlr4-runtime.h"
 
@@ -254,8 +254,9 @@ struct Edge {
  */
 template <typename T>
 class Graph {
-public:
+ public:
   using CWMap = std::unordered_map<size_t, std::array<size_t, 4>>;
+
  protected:
   // Graph size, # of nodes
   const size_t n_;

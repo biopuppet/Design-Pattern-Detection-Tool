@@ -63,15 +63,14 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                                      subp.edge(2, 0), subp.edge(2, 1)};
   for (const auto vd1 : cvs[0]) {
     for (const auto vd2 : cvs[1]) {
+      if (vd1 == vd2 || !system.edge(vd1, vd2).has(sp_es[0]) ||
+          !system.edge(vd2, vd1).has(sp_es[2])) {
+        continue;
+      }
       for (const auto vd3 : cvs[2]) {
         // since there are no self-loops in 2 or 3-vertex-sub-patterns
         // we can presume vd1, vd2, vd3 are different.
-        if (vd1 == vd2 || vd2 == vd3 || vd1 == vd3) {
-          continue;
-        }
-        if (!system.edge(vd1, vd2).has(sp_es[0]) ||
-            !system.edge(vd1, vd3).has(sp_es[1]) ||
-            !system.edge(vd2, vd1).has(sp_es[2]) ||
+        if (vd2 == vd3 || vd1 == vd3 || !system.edge(vd1, vd3).has(sp_es[1]) ||
             !system.edge(vd2, vd3).has(sp_es[3]) ||
             !system.edge(vd3, vd1).has(sp_es[4]) ||
             !system.edge(vd3, vd2).has(sp_es[5])) {
@@ -85,7 +84,8 @@ void SubPatternDetector::combine_cv_3(const SubPattern &subp,
   }
 }
 
-static bool greater(const std::array<size_t, 4> &a1, const std::array<size_t, 4> &a2) {
+static bool greater(const std::array<size_t, 4> &a1,
+                    const std::array<size_t, 4> &a2) {
   for (size_t k = 0; k < a1.size(); ++k) {
     if (a1[k] < a2[k]) {
       return false;
