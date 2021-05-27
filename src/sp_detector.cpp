@@ -39,23 +39,6 @@ void SubPatternDetector::combine_cv_1(const SubPattern &subp,
   }
 }
 
-void SubPatternDetector::combine_cv_2(const SubPattern &subp,
-                                      const CandidateVertexList &cvs) {
-  auto sp_e1 = subp.edge(0, 1);
-  auto sp_e2 = subp.edge(1, 0);
-  for (const auto &vd1 : cvs[0]) {
-    for (const auto &vd2 : cvs[1]) {
-      if (!system.edge(vd1, vd2).has(sp_e1) ||
-          !system.edge(vd2, vd1).has(sp_e2)) {
-        continue;
-      }
-      // printf("%s(%s %s)\n", subp.name(), system[vd1].name(),
-      //  system[vd2].name());
-      spis[subp.type()].push_back({vd1, vd2});
-    }
-  }
-}
-
 void SubPatternDetector::combine_cv_3(const SubPattern &subp,
                                       const CandidateVertexList &cvs) {
   const std::vector<size_t> sp_es = {subp.edge(0, 1), subp.edge(0, 2),
@@ -123,12 +106,6 @@ void SubPatternDetector::detect_sp_instances(SubPattern &subp) {
   std::cerr << "Combining.." << std::endl;
 
   switch (sp_num) {
-    case 1:
-      combine_cv_1(subp, cvs);
-      break;
-    case 2:
-      combine_cv_2(subp, cvs);
-      break;
     case 3:
       combine_cv_3(subp, cvs);
       break;

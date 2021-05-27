@@ -95,19 +95,6 @@ class CI : public SubPattern {
   }
 };
 
-class IAGG : public SubPattern {
- public:
-  IAGG() : SubPattern(SPT_IAGG, 2) { add(1, 0, R_AGG | R_INH); }
-};
-
-class IPAG : public SubPattern {
- public:
-  IPAG() : SubPattern(SPT_IPAG, 3) {
-    addInheritance(1, 0);
-    addAggregation(0, 2);
-  }
-};
-
 class IPAS : public SubPattern {
  public:
   IPAS() : SubPattern(SPT_IPAS, 3) {
@@ -116,31 +103,12 @@ class IPAS : public SubPattern {
   }
 };
 
-class SASS : public SubPattern {
- public:
-  SASS() : SubPattern(SPT_SASS, 1) { addAssociation(0, 0); }
-};
-
 class MLI : public SubPattern {
  public:
   MLI() : SubPattern(SPT_MLI, 3) {
     addInheritance(1, 0);
     addInheritance(2, 1);
   }
-};
-
-class IIAGG : public SubPattern {
- public:
-  IIAGG() : SubPattern(SPT_IIAGG, 3) {
-    addInheritance(1, 0);
-    addInheritance(2, 1);
-    addAggregation(2, 0);
-  }
-};
-
-class IASS : public SubPattern {
- public:
-  IASS() : SubPattern(SPT_IASS, 2) { add(1, 0, R_INH | R_ASS); }
 };
 
 class ICD : public SubPattern {
@@ -159,11 +127,6 @@ class DCI : public SubPattern {
   }
 };
 
-class SAGG : public SubPattern {
- public:
-  SAGG() : SubPattern(SPT_SAGG, 1) { addAggregation(0, 0); }
-};
-
 class AGPI : public SubPattern {
  public:
   AGPI() : SubPattern(SPT_AGPI, 3) {
@@ -176,14 +139,6 @@ class ASPI : public SubPattern {
  public:
   ASPI() : SubPattern(SPT_ASPI, 3) {
     addAssociation(2, 0);
-    addInheritance(1, 0);
-  }
-};
-
-class IPD : public SubPattern {
- public:
-  IPD() : SubPattern(SPT_IPD, 3) {
-    addDependency(0, 2);
     addInheritance(1, 0);
   }
 };

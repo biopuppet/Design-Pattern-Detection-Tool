@@ -32,6 +32,34 @@ inline static MethodList intersected(const Node &n1, const Node &n2) {
   return intersected(n1.methods_, n2.methods_);
 }
 
+/**
+ * expression bop='.' ( IDENTIFIER | methodCall | ... )
+ * attrs_ ∩ caller -> result_
+ */
+void DpdtJavaBehavioralListener::enterExpression(
+    JavaParser::ExpressionContext *ctx) {
+  // sufficient condition
+  if (!ctx->methodCall() || !ctx->bop) {
+    return;
+  }
+  // assert(ctx->bop == '.');
+  auto expr = ctx->expression(0);
+  auto call = ctx->methodCall()->IDENTIFIER();
+  if (expr && call) {
+    auto caller = expr->getText();
+    auto sr = call->getText();
+    for (const auto &attr : attrs_) {
+      // TODO: 2 types of caller: direct & indirect calling mode
+      if (attr->name_ == caller) {
+        // std::cout << "Caller: " << caller << std::endl;
+        // std::cout << "Method: " << sr << std::endl;
+        // std::cout << ctx->getText() <<std::endl;
+        result_.emplace_back(ctx);
+      }
+    }
+  }
+}
+
 PatternAnalyzer *PatternAnalyzer::createPatternAnalyzer(
     const SubPatternDetector &spd, const std::string &p) {
   if (p.empty()) {
@@ -81,24 +109,17 @@ void AdapterAnalyzer::behavioral_analyze() {
       // traverse request method
       tree::ParseTreeWalker::DEFAULT.walk(&listener, ctx);
     }
-    p.setBehave(listener.result_.size() != 0);
+    p.setBehave(listener.nonEmpty());
   }
 }
 
 void ProxyAnalyzer::struct_analyze() {
-  for (const auto &ica : spis[SPT_ICA]) {
-    for (const auto &ci : spis[SPT_CI]) {
-      if (ica[0] == ci[0] && ica[1] == ci[1] && ica[2] == ci[2]) {
-        add({ci[0], ci[1], ci[2], Proxy::RefRealSubject});
-      }
-    }
-  }
-
   for (const auto &ci : spis[SPT_CI]) {
-    for (const auto &iass : spis[SPT_IASS]) {
-      if (ci[0] == iass[0] && ci[2] == iass[1]) {
-        add(Proxy(ci[0], ci[1], ci[2], Proxy::RefSubject));
-      }
+    if (sys.hasAssociation(ci[2], ci[1])) {
+      add(Proxy{ci[0], ci[1], ci[2], Proxy::RefRealSubject});
+    }
+    if (sys.hasAssociation(ci[2], ci[0])) {
+      add(Proxy(ci[0], ci[1], ci[2], Proxy::RefSubject));
     }
   }
 }
@@ -233,8 +254,10 @@ void PrototypeAnalyzer::struct_analyze() {
  * Singleton
  */
 void SingletonAnalyzer::struct_analyze() {
-  for (const auto &sass : spis[SPT_SASS]) {
-    add(new Singleton(*sys[sass[0]]));
+  for (size_t i = 0; i < sys.size(); ++i) {
+    if (sys.hasDependency(i, i)) {
+      add(new Singleton(i));
+    }
   }
 }
 
@@ -242,12 +265,10 @@ void SingletonAnalyzer::struct_analyze() {
  * ResponsibilityChain
  */
 void ResponsibilityChainAnalyzer::struct_analyze() {
-  for (const auto &sass : spis[SPT_SASS]) {
-    for (const auto &ci : spis[SPT_CI]) {
-      if (sass[0] == ci[0]) {
-        add(
-            new ResponsibilityChain(*sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
-      }
+  for (const auto &ci : spis[SPT_CI]) {
+    if (sys.hasDependency(ci[0], ci[0])) {
+      add(
+          new ResponsibilityChain(*sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
     }
   }
 }
@@ -270,12 +291,10 @@ void CommandAnalyzer::struct_analyze() {
  * Interpreter
  */
 void InterpreterAnalyzer::struct_analyze() {
-  for (const auto &iagg : spis[SPT_IAGG]) {
-    for (const auto &ipd : spis[SPT_IPD]) {
-      if (iagg[0] == ipd[0] && iagg[1] != ipd[1] && iagg[1] != ipd[2]) {
-        add(new Interpreter(*sys[ipd[2]], *sys[ipd[0]], *sys[ipd[1]],
-                                    *sys[iagg[1]]));
-      }
+  for (const auto &ci : spis[SPT_CI]) {
+    if (system.hasAggregation(ci[2], ci[0])) {
+      add(new Interpreter(*sys[ci[0]], *sys[ci[1]],
+                                  *sys[ci[2]]));
     }
   }
 }
@@ -410,33 +429,6 @@ void VisitorAnalyzer::struct_analyze() {
 }
 
 #endif
-
-/**
- * expression bop='.' ( IDENTIFIER | methodCall | ... )
- */
-void DpdtJavaBehavioralListener::enterExpression(
-    JavaParser::ExpressionContext *ctx) {
-  // sufficient condition
-  if (!ctx->methodCall() || !ctx->bop) {
-    return;
-  }
-  // assert(ctx->bop == '.');
-  auto expr = ctx->expression(0);
-  auto call = ctx->methodCall()->IDENTIFIER();
-  if (expr && call) {
-    auto caller = expr->getText();
-    auto sr = call->getText();
-    for (const auto &attr : attrs_) {
-      // TODO: 2 types of caller: direct & indirect calling mode
-      if (attr->name_ == caller) {
-        // std::cout << "Caller: " << caller << std::endl;
-        // std::cout << "Method: " << sr << std::endl;
-        // std::cout << ctx->getText() <<std::endl;
-        result_.emplace_back(ctx);
-      }
-    }
-  }
-}
 
 /**
  * Subject.[Method] = Proxy.[Method] → RealSubject.[Method]
