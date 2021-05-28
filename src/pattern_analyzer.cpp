@@ -96,18 +96,14 @@ void AdapterAnalyzer::struct_analyze() {
  */
 void AdapterAnalyzer::behavioral_analyze() {
   for (auto &p : patterns_) {
-    // for (const auto &method : sys[p.adapter_]->methods_) {
-    //   std::cout <<method->name() <<std::endl;
-    // }
     auto result = intersected(*sys[p.adapter_], *sys[p.target_]);
     auto &attrs = sys.edge(p.adapter_, p.adaptee_).getAssAttrs();
     DpdtJavaBehavioralListener listener{attrs};
 
     for (auto &request : result) {
       // std::cout << "request: " << request->name() << std::endl;
-      auto ctx = request->ctx_;
       // traverse request method
-      tree::ParseTreeWalker::DEFAULT.walk(&listener, ctx);
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
     }
     p.setBehave(listener.nonEmpty());
   }
@@ -121,6 +117,30 @@ void ProxyAnalyzer::struct_analyze() {
     if (sys.hasAssociation(ci[2], ci[0])) {
       add(Proxy(ci[0], ci[1], ci[2], Proxy::RefSubject));
     }
+  }
+}
+
+/**
+ * Subject.[Method] = Proxy.[Method] → RealSubject.[Method]
+ */
+void ProxyAnalyzer::behavioral_analyze() {
+  // Looking for 3 identical method signature
+  for (auto &p : patterns_) {
+    auto res = intersected(*sys[p.proxy_], *sys[p.subject_]);
+    
+    Edge *edge = nullptr;
+    if (p.type_ == Proxy::RefRealSubject) {
+      edge = &sys.edge(p.proxy_, p.real_subject_);
+    } else {
+      edge = &sys.edge(p.proxy_, p.subject_);
+    }
+    auto &attrs = edge->getAssAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : res) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -428,21 +448,7 @@ void VisitorAnalyzer::struct_analyze() {
   }
 }
 
-#endif
 
-/**
- * Subject.[Method] = Proxy.[Method] → RealSubject.[Method]
- */
-void ProxyAnalyzer::behavioral_analyze() {
-  // Looking for 3 identical method signature
-  // auto res = intersected(subject_.methods_, proxy_.methods_);
-  // res = intersected(res, real_subject_.methods_);
-  // for (auto &it : res) {
-  // std::cout << "request: " << it->name_ << std::endl;
-  // }
-}
-
-#if 0
 /**
  * Component.[Method] = Composite.[Method] → Component.[Method]
  */

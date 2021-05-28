@@ -81,7 +81,7 @@ void SubPatternDetector::detect_sp_instances(SubPattern &subp) {
   auto sp_num = subp.size();
   CandidateVertexList cvs(sp_num);
 
-  std::cerr << "Generating CVS for " << subp.name() << std::endl;
+  // std::cerr << "Generating CVS for " << subp.name() << std::endl;
   for (size_t i = 0; i < sp_num; ++i) {
     for (size_t j = 0; j < system.size(); ++j) {
       // printf("sys[%lu](%s).cw_out=%lu sp[%lu].cw_out=%lu\n", j,
@@ -103,7 +103,7 @@ void SubPatternDetector::detect_sp_instances(SubPattern &subp) {
   //   }
   //   std::cout << "\n";
   // }
-  std::cerr << "Combining.." << std::endl;
+  // std::cerr << "Combining.." << std::endl;
 
   switch (sp_num) {
     case 3:
