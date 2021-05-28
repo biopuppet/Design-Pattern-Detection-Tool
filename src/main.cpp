@@ -49,7 +49,7 @@ static void getAllFiles(std::string path, std::vector<std::string> &files) {
 
 static void print_usage(const char *argv0) {
   printf(
-      "Usage: %s [option...] [XMI file]\n"
+      "Usage: %s [option...] [Source file/directory...]\n"
       "Options:\n"
       " -p, --pattern <adapter/...>  Select which design pattern to match, "
       "match all on default.\n"
