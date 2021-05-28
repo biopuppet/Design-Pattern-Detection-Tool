@@ -72,7 +72,6 @@ class AdapterAnalyzer : public PatternAnalyzer {
   void add(Adapter &&p) { patterns_.emplace_back(p); }
 };
 
-#if 0
 class CompositeAnalyzer : public PatternAnalyzer {
   // Candidate pattern instances
   std::vector<Composite> patterns_;
@@ -82,8 +81,12 @@ class CompositeAnalyzer : public PatternAnalyzer {
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Composite &&p) { patterns_.emplace_back(p); }
 };
 
+#if 0
 class DecoratorAnalyzer : public PatternAnalyzer {
   // Candidate pattern instances
   std::vector<Decorator> patterns_;

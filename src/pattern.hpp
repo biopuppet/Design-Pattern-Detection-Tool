@@ -58,7 +58,6 @@ class Proxy : public Pattern {
   Proxy(size_t s, size_t rs, size_t p, Type t)
       : subject_(s), real_subject_(rs), proxy_(p), type_(t) {}
 };
-#if 0
 
 /**
  *
@@ -69,19 +68,10 @@ class Composite : public Pattern {
   size_t composite_;
   size_t leaf_;
 
-  Method *operation;
-  Method *add;     // optional
-  Method *remove;  // optional
-
   Composite(size_t component, size_t composite, size_t leaf)
       : component_(component), composite_(composite), leaf_(leaf) {}
-
-  void print() const {
-    printf("Composite<%s, %s, %s>\n", component_.name(), composite_.name(),
-           leaf_.name());
-  }
-
 };
+#if 0
 
 /**
  *

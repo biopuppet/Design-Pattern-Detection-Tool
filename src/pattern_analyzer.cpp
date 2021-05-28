@@ -53,8 +53,9 @@ void DpdtJavaBehavioralListener::enterExpression(
       if (attr->name_ == caller) {
         // std::cout << "Caller: " << caller << std::endl;
         // std::cout << "Method: " << sr << std::endl;
-        // std::cout << ctx->getText() <<std::endl;
+        // std::cout << ctx->getText() << std::endl;
         result_.emplace_back(ctx);
+        return;
       }
     }
   }
@@ -127,7 +128,7 @@ void ProxyAnalyzer::behavioral_analyze() {
   // Looking for 3 identical method signature
   for (auto &p : patterns_) {
     auto res = intersected(*sys[p.proxy_], *sys[p.subject_]);
-    
+
     Edge *edge = nullptr;
     if (p.type_ == Proxy::RefRealSubject) {
       edge = &sys.edge(p.proxy_, p.real_subject_);
@@ -144,22 +145,40 @@ void ProxyAnalyzer::behavioral_analyze() {
   }
 }
 
-#if 0
 void CompositeAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     if (sys.hasAggregation(ci[2], ci[0])) {
-      add(new Composite(*sys[ci[0]], *sys[ci[2]], *sys[ci[1]]));
+      add(Composite(ci[0], ci[2], ci[1]));
     }
   }
 }
+
+/**
+ * Component.[Method] = Composite.[Method] → Component.[Method]
+ */
+void CompositeAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.composite_], *sys[p.component_]);
+    auto result2 = intersected(result, sys[p.leaf_]->methods_);
+    auto &attrs = sys.edge(p.composite_, p.component_).getAggAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : result) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
+  }
+}
+
+#if 0
 
 void DecoratorAnalyzer::struct_analyze() {
   for (const auto &mli : spis[SPT_MLI]) {
     for (const auto &ci : spis[SPT_CI]) {
       if (mli[0] == ci[0] && mli[1] == ci[2] && mli[2] != ci[1] &&
           sys.hasAssOrAgg(ci[2], ci[0])) {
-        add(new Decorator(*sys[mli[0]], *sys[ci[1]], *sys[ci[2]],
-                                  *sys[mli[2]]));
+        add(new Decorator(mli[0], ci[1], ci[2],
+                                  mli[2]));
       }
     }
   }
@@ -174,8 +193,8 @@ void BridgeAnalyzer::struct_analyze() {
     for (const auto &ipas : spis[SPT_IPAS]) {
       if (ipas[2] == ci[0] && ipas[1] != ci[2] && ipas[2] != ci[1] &&
           ci[1] != ipas[1] && ci[2] != ipas[2]) {
-        add(new Bridge(*sys[ipas[0]], *sys[ipas[1]], *sys[ipas[2]],
-                               *sys[ci[1]], *sys[ci[2]]));
+        add(new Bridge(ipas[0], ipas[1], ipas[2],
+                               ci[1], ci[2]));
       }
     }
   }
@@ -185,8 +204,8 @@ void FlyweightAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     for (const auto &agpi : spis[SPT_AGPI]) {
       if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-        add(new Flyweight(*sys[agpi[2]], *sys[ci[0]], *sys[ci[1]],
-                                  *sys[ci[2]]));
+        add(new Flyweight(agpi[2], ci[0], ci[1],
+                                  ci[2]));
       }
     }
   }
@@ -208,7 +227,7 @@ void FacadeAnalyzer::struct_analyze() {
       }
     }
     if (nodes.size() < Facade::LIMIT) continue;
-    add(new Facade(*sys[i], nodes));
+    add(new Facade(i, nodes));
   }
 }
 
@@ -221,8 +240,8 @@ void AbstractFactoryAnalyzer::struct_analyze() {
       if (icd[2] == ci[1] && icd[1] != ci[2] && icd[1] != ci[0] &&
           icd[0] != ci[2] && icd[0] != ci[0] &&
           sys.hasDependency(icd[1], ci[2])) {
-        add(new AbstractFactory(*sys[icd[0]], *sys[icd[1]], *sys[ci[0]],
-                                        *sys[ci[1]], *sys[ci[2]]));
+        add(new AbstractFactory(icd[0], icd[1], ci[0],
+                                        ci[1], ci[2]));
       }
     }
   }
@@ -235,8 +254,8 @@ void BuilderAnalyzer::struct_analyze() {
   for (const auto &aspi : spis[SPT_ASPI]) {
     for (const auto &ica : spis[SPT_ICA]) {
       if (aspi[0] == ica[0] && aspi[1] == ica[1] && aspi[2] != ica[2]) {
-        add(new Builder(*sys[ica[0]], *sys[ica[1]], *sys[aspi[2]],
-                                *sys[ica[2]]));
+        add(new Builder(ica[0], ica[1], aspi[2],
+                                ica[2]));
       }
     }
   }
@@ -249,8 +268,8 @@ void FactoryAnalyzer::struct_analyze() {
   for (const auto &dci : spis[SPT_DCI]) {
     for (const auto &icd : spis[SPT_ICD]) {
       if (dci[0] != icd[0] && dci[1] == icd[2] && dci[2] == icd[1]) {
-        add(new Factory(*sys[dci[0]], *sys[dci[1]], *sys[icd[0]],
-                                *sys[icd[1]]));
+        add(new Factory(dci[0], dci[1], icd[0],
+                                icd[1]));
       }
     }
   }
@@ -263,8 +282,8 @@ void PrototypeAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &ci : spis[SPT_CI]) {
       if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-        add(new Prototype(*sys[agpi[2]], *sys[ci[0]], *sys[ci[1]],
-                                  *sys[ci[2]]));
+        add(new Prototype(agpi[2], ci[0], ci[1],
+                                  ci[2]));
       }
     }
   }
@@ -288,7 +307,7 @@ void ResponsibilityChainAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     if (sys.hasDependency(ci[0], ci[0])) {
       add(
-          new ResponsibilityChain(*sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
+          new ResponsibilityChain(ci[0], ci[1], ci[2]));
     }
   }
 }
@@ -300,8 +319,8 @@ void CommandAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &ica : spis[SPT_ICA]) {
       if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
-        add(new Command(*sys[agpi[2]], *sys[ica[0]], *sys[ica[1]],
-                                *sys[ica[2]]));
+        add(new Command(agpi[2], ica[0], ica[1],
+                                ica[2]));
       }
     }
   }
@@ -313,8 +332,8 @@ void CommandAnalyzer::struct_analyze() {
 void InterpreterAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     if (system.hasAggregation(ci[2], ci[0])) {
-      add(new Interpreter(*sys[ci[0]], *sys[ci[1]],
-                                  *sys[ci[2]]));
+      add(new Interpreter(ci[0], ci[1],
+                                  ci[2]));
     }
   }
 }
@@ -327,8 +346,8 @@ void IteratorAnalyzer::struct_analyze() {
   for (const auto &ica : spis[SPT_ICA]) {
     for (const auto &icd : spis[SPT_ICD]) {
       if (ica[0] != icd[0] && ica[1] == icd[2] && ica[2] == icd[1]) {
-        add(new Iterator(*sys[ica[0]], *sys[ica[1]], *sys[icd[0]],
-                                 *sys[icd[1]]));
+        add(new Iterator(ica[0], ica[1], icd[0],
+                                 icd[1]));
       }
     }
   }
@@ -347,8 +366,8 @@ void MediatorAnalyzer::struct_analyze() {
           sys.hasAssociation(ci[0], ica[0]) &&
           // ConcreteMediator --> ConcreteColleague2
           sys.hasAssociation(ica[1], ci[2])) {
-        add(new Mediator(*sys[ica[0]], *sys[ica[1]], *sys[ci[0]],
-                                 *sys[ci[1]], *sys[ci[2]]));
+        add(new Mediator(ica[0], ica[1], ci[0],
+                                 ci[1], ci[2]));
       }
     }
   }
@@ -362,8 +381,8 @@ void MementoAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &dpi : spis[SPT_DPI]) {
       if (agpi[0] == dpi[0] && agpi[1] == dpi[1] && agpi[2] != dpi[2]) {
-        add(new Memento(*sys[dpi[0]], *sys[dpi[1]], *sys[agpi[2]],
-                                *sys[dpi[2]]));
+        add(new Memento(dpi[0], dpi[1], agpi[2],
+                                dpi[2]));
       }
     }
   }
@@ -379,8 +398,8 @@ void ObserverAnalyzer::struct_analyze() {
       if (agpi[0] == icd[0] && agpi[1] == icd[1] && agpi[2] != icd[2] &&
           // ConcreteSubject --> Subject
           sys.hasInheritance(icd[2], agpi[2])) {
-        add(new Observer(*sys[agpi[2]], *sys[icd[2]], *sys[icd[0]],
-                                 *sys[icd[1]]));
+        add(new Observer(agpi[2], icd[2], icd[0],
+                                 icd[1]));
       }
     }
   }
@@ -395,7 +414,7 @@ void StateAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
       if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
         add(
-            new State(*sys[agpi[2]], *sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
+            new State(agpi[2], ci[0], ci[1], ci[2]));
       }
     }
   }
@@ -410,7 +429,7 @@ void StrategyAnalyzer::struct_analyze() {
     for (const auto &ci : spis[SPT_CI]) {
       if (aspi[0] == ci[0] && aspi[1] == ci[1] && aspi[2] != ci[2]) {
         add(
-            new Strategy(*sys[aspi[2]], *sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
+            new Strategy(aspi[2], ci[0], ci[1], ci[2]));
       }
     }
   }
@@ -423,7 +442,7 @@ void StrategyAnalyzer::struct_analyze() {
 void TemplateAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     if (!sys.hasAssOrAgg(ci[1], ci[0]) && !sys.hasAssOrAgg(ci[2], ci[0])) {
-      add(new Template(*sys[ci[0]], *sys[ci[1]], *sys[ci[2]]));
+      add(new Template(ci[0], ci[1], ci[2]));
     }
   }
 }
@@ -441,36 +460,13 @@ void VisitorAnalyzer::struct_analyze() {
           sys.hasDependency(icd[2], dpi[0]) &&
           // concrete element --|> element
           sys.hasInheritance(icd[2], dpi[2])) {
-        add(new Visitor(*sys[dpi[2]], *sys[dpi[0]], *sys[icd[2]],
-                                *sys[dpi[1]]));
+        add(new Visitor(dpi[2], dpi[0], icd[2],
+                                dpi[1]));
       }
     }
   }
 }
 
-
-/**
- * Component.[Method] = Composite.[Method] → Component.[Method]
- */
-void CompositeAnalyzer::behavioral_analyze() {
-  auto result = intersected(component_.methods_, composite_.methods_);
-  auto result2 = intersected(result, leaf_.methods_);
-  for (auto &it : result2) {
-    std::cout << "method: " << it->name_ << std::endl;
-  }
-
-  bool agg = false;
-  for (const auto &it : composite_.attrs_) {
-    if (it->dim_) {
-      agg = true;
-      std::cout << it->name_ << " ";
-    }
-  }
-  if (result2.size() && agg) {
-    return true;
-  }
-  return false;
-}
 
 /**
  * (1) Component.[Method] = Decorator.[Method] → Component.[Method]
@@ -667,5 +663,14 @@ void ProxyAnalyzer::print(bool structural) const {
     if (p.behave() || structural)
       printf("Proxy<%s, %s, %s>\n", name(p.subject_), name(p.real_subject_),
              name(p.proxy_));
+  }
+}
+
+void CompositeAnalyzer::print(bool structural) const {
+  for (const auto &p : patterns_) {
+    if (p.behave() || structural) {
+      printf("Composite<%s, %s, %s>\n", name(p.component_), name(p.composite_),
+             name(p.leaf_));
+    }
   }
 }
