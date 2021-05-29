@@ -71,7 +71,6 @@ class Composite : public Pattern {
   Composite(size_t component, size_t composite, size_t leaf)
       : component_(component), composite_(composite), leaf_(leaf) {}
 };
-#if 0
 
 /**
  *
@@ -83,21 +82,12 @@ class Decorator : public Pattern {
   size_t decorator_;
   size_t concrete_decorator_;
 
-  Method *operation;
-
   Decorator(size_t component, size_t concrete_component, size_t decorator,
             size_t concrete_decorator)
       : component_(component),
         concrete_component_(concrete_component),
         decorator_(decorator),
         concrete_decorator_(concrete_decorator) {}
-
-  void print() const {
-    printf("Decorator<%s, %s, %s, %s>\n", component_.name(),
-           concrete_component_.name(), decorator_.name(),
-           concrete_decorator_.name());
-  }
-
 };
 
 /**
@@ -118,13 +108,6 @@ class Bridge : public Pattern {
         implementor_(implementor),
         concrete_implementor1_(concrete_implementor1),
         concrete_implementor2_(concrete_implementor2) {}
-
-  void print() const {
-    printf("Bridge<%s, %s, %s, %s, %s>\n", abstraction_.name(),
-           refined_abstraction_.name(), implementor_.name(),
-           concrete_implementor1_.name(), concrete_implementor2_.name());
-  }
-
 };
 
 /**
@@ -145,12 +128,6 @@ class Flyweight : public Pattern {
         flyweight_(flyweight),
         concrete_flyweight_(concrete_flyweight),
         unshared_concrete_flyweight_(unshared_concrete_flyweight) {}
-
-  void print() const {
-    printf("Flyweight<%s, %s, %s, %s>\n", factory_.name(), flyweight_.name(),
-           concrete_flyweight_.name(), unshared_concrete_flyweight_.name());
-  }
-
 };
 
 /**
@@ -165,16 +142,6 @@ class Facade : public Pattern {
 
   Facade(size_t facade, std::vector<Node *> &subsystems)
       : facade_(facade), subsystems_(subsystems) {}
-
-  void print() const {
-    printf("Facade<%s, ", facade_.name());
-    printf("Subsystems<%s", subsystems_[0]->name());
-    for (size_t i = 1; i < subsystems_.size(); ++i) {
-      printf(", %s", subsystems_[i]->name());
-    }
-    printf(">>\n");
-  }
-
 };
 
 /**
@@ -188,20 +155,14 @@ class AbstractFactory : public Pattern {
   size_t concrete_product1_;
   size_t concrete_product2_;
 
-  AbstractFactory(size_t abstract_factory, size_t concrete_factory, size_t product,
-                  size_t concrete_product1, size_t concrete_product2)
+  AbstractFactory(size_t abstract_factory, size_t concrete_factory,
+                  size_t product, size_t concrete_product1,
+                  size_t concrete_product2)
       : abstract_factory_(abstract_factory),
         concrete_factory_(concrete_factory),
         product_(product),
         concrete_product1_(concrete_product1),
         concrete_product2_(concrete_product2) {}
-
-  void print() const {
-    printf("AbstractFactory<%s, %s, %s, %s, %s>\n", abstract_factory_.name(),
-           concrete_factory_.name(), product_.name(), concrete_product1_.name(),
-           concrete_product2_.name());
-  }
-
 };
 
 /**
@@ -215,17 +176,12 @@ class Builder : public Pattern {
   size_t director_;
   size_t product_;
 
-  Builder(size_t builder, size_t concrete_builder, size_t director, size_t product)
+  Builder(size_t builder, size_t concrete_builder, size_t director,
+          size_t product)
       : builder_(builder),
         concrete_builder_(concrete_builder),
         director_(director),
         product_(product) {}
-
-  void print() const {
-    printf("Builder<%s, %s, %s, %s>\n", builder_.name(),
-           concrete_builder_.name(), director_.name(), product_.name());
-  }
-
 };
 
 /**
@@ -245,12 +201,6 @@ class Factory : public Pattern {
         concrete_product_(concrete_product),
         creator_(creator),
         concrete_creator_(concrete_creator) {}
-
-  void print() const {
-    printf("Factory<%s, %s, %s, %s>\n", product_.name(),
-           concrete_product_.name(), creator_.name(), concrete_creator_.name());
-  }
-
 };
 
 /**
@@ -270,12 +220,6 @@ class Prototype : public Pattern {
         prototype_(prototype),
         concrete_prototype_(concrete_prototype),
         concrete_prototype2_(concrete_prototype2) {}
-
-  void print() const {
-    printf("Prototype<%s, %s, %s, %s>\n", client_.name(), prototype_.name(),
-           concrete_prototype_.name(), concrete_prototype2_.name());
-  }
-
 };
 
 /**
@@ -286,9 +230,6 @@ class Singleton : public Pattern {
   size_t singleton_;
 
   Singleton(size_t singleton) : singleton_(singleton) {}
-
-  void print() const { printf("Singleton<%s>\n", singleton_.name()); }
-
 };
 
 /**
@@ -305,12 +246,6 @@ class ResponsibilityChain : public Pattern {
       : handler_(handler),
         concrete_handler1_(concrete_handler1),
         concrete_handler2_(concrete_handler2) {}
-
-  void print() const {
-    printf("ResponsibilityChain<%s, %s, %s>\n", handler_.name(),
-           concrete_handler1_.name(), concrete_handler2_.name());
-  }
-
 };
 
 /**
@@ -323,17 +258,12 @@ class Command : public Pattern {
   size_t concrete_command_;
   size_t receiver_;
 
-  Command(size_t invoker, size_t command, size_t concrete_command, size_t receiver)
+  Command(size_t invoker, size_t command, size_t concrete_command,
+          size_t receiver)
       : invoker_(invoker),
         command_(command),
         concrete_command_(concrete_command),
         receiver_(receiver) {}
-
-  void print() const {
-    printf("Command<%s, %s, %s, %s>\n", invoker_.name(), command_.name(),
-           concrete_command_.name(), receiver_.name());
-  }
-
 };
 
 /**
@@ -341,24 +271,15 @@ class Command : public Pattern {
  */
 class Interpreter : public Pattern {
  public:
-  size_t content_;
   size_t abstract_expr_;
   size_t terminal_expr_;
   size_t nonterminal_expr_;
 
-  Interpreter(size_t content, size_t abstract_expr, size_t terminal_expr,
+  Interpreter(size_t abstract_expr, size_t terminal_expr,
               size_t nonterminal_expr)
-      : content_(content),
-        abstract_expr_(abstract_expr),
+      : abstract_expr_(abstract_expr),
         terminal_expr_(terminal_expr),
         nonterminal_expr_(nonterminal_expr) {}
-
-  void print() const {
-    printf("Interpreter<%s, %s, %s, %s>\n", content_.name(),
-           abstract_expr_.name(), terminal_expr_.name(),
-           nonterminal_expr_.name());
-  }
-
 };
 
 /**
@@ -377,13 +298,6 @@ class Iterator : public Pattern {
         concrete_iterator_(concrete_iterator),
         aggregate_(aggregate),
         aggregate_iterator_(aggregate_iterator) {}
-
-  void print() const {
-    printf("Iterator<%s, %s, %s, %s>\n", iterator_.name(),
-           concrete_iterator_.name(), aggregate_.name(),
-           aggregate_iterator_.name());
-  }
-
 };
 
 /**
@@ -404,13 +318,6 @@ class Mediator : public Pattern {
         colleague_(colleague),
         concrete_colleague1_(concrete_colleague1),
         concrete_colleague2_(concrete_colleague2) {}
-
-  void print() const {
-    printf("Mediator<%s, %s, %s, %s, %s>\n", mediator_.name(),
-           concrete_mediator_.name(), colleague_.name(),
-           concrete_colleague1_.name(), concrete_colleague2_.name());
-  }
-
 };
 
 /**
@@ -423,17 +330,12 @@ class Memento : public Pattern {
   size_t caretaker_;
   size_t originator_;
 
-  Memento(size_t memento, size_t memento_imp, size_t caretaker, size_t originator)
+  Memento(size_t memento, size_t memento_imp, size_t caretaker,
+          size_t originator)
       : memento_(memento),
         memento_imp_(memento_imp),
         caretaker_(caretaker),
         originator_(originator) {}
-
-  void print() const {
-    printf("Memento<%s, %s, %s, %s>\n", memento_.name(), memento_imp_.name(),
-           caretaker_.name(), originator_.name());
-  }
-
 };
 
 /**
@@ -452,13 +354,6 @@ class Observer : public Pattern {
         concrete_subject_(concrete_subject),
         observer_(observer),
         concrete_observer_(concrete_observer) {}
-
-  void print() const {
-    printf("Observer<%s, %s, %s, %s>\n", subject_.name(),
-           concrete_subject_.name(), observer_.name(),
-           concrete_observer_.name());
-  }
-
 };
 
 /**
@@ -477,12 +372,6 @@ class State : public Pattern {
         state_(state),
         concrete_state1_(concrete_state1),
         concrete_state2_(concrete_state2) {}
-
-  void print() const {
-    printf("State<%s, %s, %s, %s>\n", context_.name(), state_.name(),
-           concrete_state1_.name(), concrete_state2_.name());
-  }
-
 };
 
 /**
@@ -501,12 +390,6 @@ class Strategy : public Pattern {
         strategy_(strategy),
         concrete_strategy1_(concrete_strategy1),
         concrete_strategy2_(concrete_strategy2) {}
-
-  void print() const {
-    printf("Strategy<%s, %s, %s, %s>\n", context_.name(), strategy_.name(),
-           concrete_strategy1_.name(), concrete_strategy2_.name());
-  }
-
 };
 
 /**
@@ -520,12 +403,6 @@ class Template : public Pattern {
 
   Template(size_t abstract, size_t concrete1, size_t concrete2)
       : abstract_(abstract), concrete1_(concrete1), concrete2_(concrete2) {}
-
-  void print() const {
-    printf("Template<%s, %s, %s>\n", abstract_.name(), concrete1_.name(),
-           concrete2_.name());
-  }
-
 };
 
 class Visitor : public Pattern {
@@ -539,12 +416,6 @@ class Visitor : public Pattern {
 
   Visitor(size_t e, size_t v, size_t ce, size_t cv)
       : element(e), visitor(v), concrete_elem(ce), concrete_visitor(cv) {}
-
-
-  void print() const {
-    printf("Visitor<%s, %s, %s, %s>\n", element.name(), visitor.name(),
-           concrete_elem.name(), concrete_visitor.name());
-  }
 };
-#endif
+
 #endif  // !DPDT_PATTERN_H

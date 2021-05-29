@@ -38,7 +38,6 @@ class PatternAnalyzer {
 };
 
 class ProxyAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
   std::vector<Proxy> patterns_;
 
  public:
@@ -56,7 +55,6 @@ class ProxyAnalyzer : public PatternAnalyzer {
 };
 
 class AdapterAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
   std::vector<Adapter> patterns_;
 
  public:
@@ -73,7 +71,6 @@ class AdapterAnalyzer : public PatternAnalyzer {
 };
 
 class CompositeAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
   std::vector<Composite> patterns_;
 
  public:
@@ -86,211 +83,264 @@ class CompositeAnalyzer : public PatternAnalyzer {
   void add(Composite &&p) { patterns_.emplace_back(p); }
 };
 
-#if 0
 class DecoratorAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
   std::vector<Decorator> patterns_;
-
+public:
   explicit DecoratorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Decorator &&p) { patterns_.emplace_back(p); }
 };
 
 class BridgeAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
   std::vector<Bridge> patterns_;
 
-public:
+ public:
   explicit BridgeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Bridge &&p) { patterns_.emplace_back(p); }
 };
 
 class FlyweightAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
   std::vector<Flyweight> patterns_;
 
-public:
+ public:
   explicit FlyweightAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Flyweight &&p) { patterns_.emplace_back(p); }
 };
 
 class FacadeAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
   std::vector<Facade> patterns_;
 
-public:
+ public:
   explicit FacadeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Facade &&p) { patterns_.emplace_back(p); }
 };
 
 class AbstractFactoryAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<AbstractFactory> patterns_;
+
+ public:
   explicit AbstractFactoryAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(AbstractFactory &&p) { patterns_.emplace_back(p); }
 };
 
 class BuilderAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Builder> patterns_;
+
+ public:
   explicit BuilderAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Builder &&p) { patterns_.emplace_back(p); }
 };
 
 class FactoryAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Factory> patterns_;
+
+ public:
   explicit FactoryAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Factory &&p) { patterns_.emplace_back(p); }
 };
 
 class PrototypeAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Prototype> patterns_;
+
+ public:
   explicit PrototypeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Prototype &&p) { patterns_.emplace_back(p); }
 };
 
 class SingletonAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Singleton> patterns_;
+
+ public:
   explicit SingletonAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Singleton &&p) { patterns_.emplace_back(p); }
 };
 
 class ResponsibilityChainAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<ResponsibilityChain> patterns_;
+
+ public:
   explicit ResponsibilityChainAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(ResponsibilityChain &&p) { patterns_.emplace_back(p); }
 };
 
 class CommandAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Command> patterns_;
+
+ public:
   explicit CommandAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Command &&p) { patterns_.emplace_back(p); }
 };
 
 class InterpreterAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Interpreter> patterns_;
+
+ public:
   explicit InterpreterAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Interpreter &&p) { patterns_.emplace_back(p); }
 };
 
 class IteratorAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Iterator> patterns_;
+
+ public:
   explicit IteratorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Iterator &&p) { patterns_.emplace_back(p); }
 };
 
 class MediatorAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Mediator> patterns_;
+
+ public:
   explicit MediatorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Mediator &&p) { patterns_.emplace_back(p); }
 };
 
 class MementoAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Memento> patterns_;
+
+ public:
   explicit MementoAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Memento &&p) { patterns_.emplace_back(p); }
 };
 
 class ObserverAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Observer> patterns_;
+
+ public:
   explicit ObserverAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Observer &&p) { patterns_.emplace_back(p); }
 };
 
 class StateAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<State> patterns_;
+
+ public:
   explicit StateAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(State &&p) { patterns_.emplace_back(p); }
 };
 
 class StrategyAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Strategy> patterns_;
+
+ public:
   explicit StrategyAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Strategy &&p) { patterns_.emplace_back(p); }
 };
 
 class TemplateAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Template> patterns_;
+
+ public:
   explicit TemplateAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Template &&p) { patterns_.emplace_back(p); }
 };
 
 class VisitorAnalyzer : public PatternAnalyzer {
-  // Candidate pattern instances
-  std::vector<Compsite> patterns_;
-public:
+  std::vector<Visitor> patterns_;
+
+ public:
   explicit VisitorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
   void struct_analyze() override;
+  void behavioral_analyze() override;
+  void print(bool structural = false) const override;
+  void add(Visitor &&p) { patterns_.emplace_back(p); }
 };
-
-#endif
 
 /**
  * TODO: It could be a set of analyzers instead of 'All', but it needs hell
