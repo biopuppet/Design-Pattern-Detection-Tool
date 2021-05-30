@@ -59,6 +59,7 @@ void DpdtJavaListener::enterTypeDeclaration(
     const auto mod = it->getText();
     // std::cout << "Mod: " <<  << std::endl;
     if (modifiers.count(mod)) {
+      curqual_.clear();
       curqual_.setType(modifiers.at(mod));
     }
   }
@@ -73,6 +74,7 @@ void DpdtJavaListener::enterClassBodyDeclaration(
     const auto mod = it->getText();
     // std::cout << "Mod: " <<  << std::endl;
     if (modifiers.count(mod)) {
+      curqual_.clear();
       curqual_.setType(modifiers.at(mod));
     }
   }

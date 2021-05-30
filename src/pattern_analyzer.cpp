@@ -300,6 +300,21 @@ void SingletonAnalyzer::struct_analyze() {
 }
 
 /**
+ *  Singleton.[Constructor] : private/protected/static public
+ */
+void SingletonAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto &ctors = sys[p.singleton_]->ctors_;
+    for (auto ctor : ctors) {
+      if (ctor && (ctor->isPrivate() || ctor->isProtected() || ctor->isStaticPublic())) {
+        p.setBehave(1);
+        break;
+      }
+    }
+  }
+}
+
+/**
  * ResponsibilityChain
  */
 void ResponsibilityChainAnalyzer::struct_analyze() {
@@ -532,14 +547,6 @@ void FactoryAnalyzer::behavioral_analyze() {
  * ConcretePrototype ∼ {Cloneable}
  */
 void PrototypeAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- *  Singleton.[Constructor] : private/protected/static public
- */
-void SingletonAnalyzer::behavioral_analyze() {
   std::vector<Method *> result;
   
 }

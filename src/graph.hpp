@@ -43,6 +43,8 @@ class QualType {
  public:
   QualType(unsigned type = Modifier::M_NONE) : type_(type) {}
 
+  void clear() { type_ = Modifier::M_NONE; }
+
   unsigned getType() const { return type_; }
 
   void setType(const unsigned mod) { type_ |= mod; }
@@ -133,6 +135,12 @@ struct Method {
         params_(params) {}
 
   const std::string &name() const { return name_; }
+
+  bool isPrivate() const { return qual_.has(M_PRIVATE); }
+  bool isProtected() const { return qual_.has(M_PROTECTED); }
+  bool isPublic() const { return qual_.has(M_PUBLIC); }
+  bool isStatic() const { return qual_.has(M_STATIC); }
+  bool isStaticPublic() const { return isPublic() && isStatic(); }
 };
 
 struct MethodCmp {
