@@ -157,7 +157,7 @@ External Dependencies: 3
 Functionality: 1
 Reusability: 1.7500
 
-Software Name: Hodoku   ver.2.1.1    (Singleton)  
+Software Name: Hodoku   ver.2.1.1    (Singleton)X  
 Root: sudoku.SudokuSetShort
 Number of Classes: 1
 External Dependencies: 0

@@ -405,7 +405,7 @@ void PrototypeAnalyzer::behavioral_analyze() {
  */
 void SingletonAnalyzer::struct_analyze() {
   for (size_t i = 0; i < sys.size(); ++i) {
-    if (sys.hasDependency(i, i)) {
+    if (sys.hasDependency(i, i) && sys.hasAssociation(i, i)) {
       add(Singleton(i));
     }
   }
@@ -417,13 +417,14 @@ void SingletonAnalyzer::struct_analyze() {
 void SingletonAnalyzer::behavioral_analyze() {
   for (auto &p : patterns_) {
     auto &ctors = sys[p.singleton_]->ctors_;
+    bool flag = false;
     for (auto ctor : ctors) {
       if (ctor && (ctor->isPrivate() || ctor->isProtected() ||
                    ctor->isStaticPublic())) {
-        p.setBehave(1);
-        break;
+        flag = true;
       }
     }
+    p.setBehave(flag);
   }
 }
 

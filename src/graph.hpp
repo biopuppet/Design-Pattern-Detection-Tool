@@ -237,7 +237,7 @@ struct Edge {
 
   std::vector<Attribute *> &getAggAttrs() { return agg_attrs_; }
 
-  bool hasDependency() const { return prime_ % R_DEP == 0; }
+  bool hasDependency() const { return prime_ & R_DEP; }
 
   bool isDependency() const { return prime_ == R_DEP; }
 
