@@ -170,16 +170,35 @@ void CompositeAnalyzer::behavioral_analyze() {
   }
 }
 
-
 void DecoratorAnalyzer::struct_analyze() {
   for (const auto &mli : spis[SPT_MLI]) {
     for (const auto &ci : spis[SPT_CI]) {
       if (mli[0] == ci[0] && mli[1] == ci[2] && mli[2] != ci[1] &&
           sys.hasAssOrAgg(ci[2], ci[0])) {
-        add(Decorator(mli[0], ci[1], ci[2],
-                                  mli[2]));
+        add(Decorator(mli[0], ci[1], ci[2], mli[2]));
       }
     }
+  }
+}
+
+/**
+ * (1) Component.[Method] = Decorator.[Method] → Component.[Method]
+ * (2) Component.[Method] = Decorator.[Method]
+ *     = ConcreteDecorator.[Method] → Component.[Method]
+ */
+void DecoratorAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.decorator_], *sys[p.component_]);
+    auto &ass_attrs = sys.edge(p.decorator_, p.component_).getAssAttrs();
+    auto &attrs = ass_attrs.size()
+                      ? ass_attrs
+                      : sys.edge(p.decorator_, p.component_).getAggAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : result) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -192,21 +211,53 @@ void BridgeAnalyzer::struct_analyze() {
     for (const auto &ipas : spis[SPT_IPAS]) {
       if (ipas[2] == ci[0] && ipas[1] != ci[2] && ipas[2] != ci[1] &&
           ci[1] != ipas[1] && ci[2] != ipas[2]) {
-        add(Bridge(ipas[0], ipas[1], ipas[2],
-                               ci[1], ci[2]));
+        add(Bridge(ipas[0], ipas[1], ipas[2], ci[1], ci[2]));
       }
     }
+  }
+}
+
+/**
+ * Abstraction.[Method] = RefinedAbstraction.[Method]
+ *  → Implementor.[Method] = ConImplementor.[Method]
+ */
+void BridgeAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.refined_abstraction_], *sys[p.abstraction_]);
+    auto &attrs = sys.edge(p.abstraction_, p.implementor_).getAggAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : result) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
 void FlyweightAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     for (const auto &agpi : spis[SPT_AGPI]) {
-      if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-        add(Flyweight(agpi[2], ci[0], ci[1],
-                                  ci[2]));
+      if (sys.hasDependency(agpi[2], agpi[0]) &&
+        agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
+        add(Flyweight(agpi[2], ci[0], ci[1], ci[2]));
       }
     }
+  }
+}
+
+/**
+ * FlyweightFactory.[Method] ⇒ Flyweight,
+ * FlyweightFactory.[Method] → ConcreteFlyweight.[Constructor]
+ */
+void FlyweightAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto &attrs = sys.edge(p.factory_, p.concrete_flyweight_).getAggAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : sys[p.flyweight_]->methods_) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -231,6 +282,15 @@ void FacadeAnalyzer::struct_analyze() {
 }
 
 /**
+ * No behavioral features
+ */
+void FacadeAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    p.setBehave(true);
+  }
+}
+
+/**
  * AbstractFactory
  */
 void AbstractFactoryAnalyzer::struct_analyze() {
@@ -239,10 +299,24 @@ void AbstractFactoryAnalyzer::struct_analyze() {
       if (icd[2] == ci[1] && icd[1] != ci[2] && icd[1] != ci[0] &&
           icd[0] != ci[2] && icd[0] != ci[0] &&
           sys.hasDependency(icd[1], ci[2])) {
-        add(AbstractFactory(icd[0], icd[1], ci[0],
-                                        ci[1], ci[2]));
+        add(AbstractFactory(icd[0], icd[1], ci[0], ci[1], ci[2]));
       }
     }
+  }
+}
+
+/**
+ * AbstractFactory.[Method] = ConFactory.[Method] ⇒ Product
+ * ConFactory.[Method] → ConProduct.[Constructor]
+ */
+void AbstractFactoryAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    // DpdtJavaBehavioralListener listener;
+    // for (auto &request : sys[p.concrete_factory_]->methods_) {
+    //   // std::cout << "request: " << request->name() << std::endl;
+    //   tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    // }
+    p.setBehave(true);
   }
 }
 
@@ -253,10 +327,25 @@ void BuilderAnalyzer::struct_analyze() {
   for (const auto &aspi : spis[SPT_ASPI]) {
     for (const auto &ica : spis[SPT_ICA]) {
       if (aspi[0] == ica[0] && aspi[1] == ica[1] && aspi[2] != ica[2]) {
-        add(Builder(ica[0], ica[1], aspi[2],
-                                ica[2]));
+        add(Builder(ica[0], ica[1], aspi[2], ica[2]));
       }
     }
+  }
+}
+
+/**
+ * Builder.[Method] = ConBuilder.[Method] ⇒ Product
+ * Director.[Method] → (Builder.[Method] = ConBuilder.[Method])
+ */
+void BuilderAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto &attrs = sys.edge(p.director_, p.builder_).getAggAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : sys[p.director_]->methods_) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -267,10 +356,18 @@ void FactoryAnalyzer::struct_analyze() {
   for (const auto &dci : spis[SPT_DCI]) {
     for (const auto &icd : spis[SPT_ICD]) {
       if (dci[0] != icd[0] && dci[1] == icd[2] && dci[2] == icd[1]) {
-        add(Factory(dci[0], dci[1], icd[0],
-                                icd[1]));
+        add(Factory(dci[0], dci[1], icd[0], icd[1]));
       }
     }
+  }
+}
+
+/**
+ * Creator.[Mehtod] = ConcreteCreator.[Mehod] ⇒ Product
+ */
+void FactoryAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    p.setBehave(true);
   }
 }
 
@@ -278,13 +375,27 @@ void FactoryAnalyzer::struct_analyze() {
  * Prototype
  */
 void PrototypeAnalyzer::struct_analyze() {
-  for (const auto &agpi : spis[SPT_AGPI]) {
+  for (const auto &agpi : spis[SPT_ASPI]) {
     for (const auto &ci : spis[SPT_CI]) {
       if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-        add(Prototype(agpi[2], ci[0], ci[1],
-                                  ci[2]));
+        add(Prototype(agpi[2], ci[0], ci[1], ci[2]));
       }
     }
+  }
+}
+
+/**
+ * Client.[Method] -> Prototype.[Method]
+ */
+void PrototypeAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto &attrs = sys.edge(p.client_, p.prototype_).getAssAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : sys[p.client_]->methods_) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -306,7 +417,8 @@ void SingletonAnalyzer::behavioral_analyze() {
   for (auto &p : patterns_) {
     auto &ctors = sys[p.singleton_]->ctors_;
     for (auto ctor : ctors) {
-      if (ctor && (ctor->isPrivate() || ctor->isProtected() || ctor->isStaticPublic())) {
+      if (ctor && (ctor->isPrivate() || ctor->isProtected() ||
+                   ctor->isStaticPublic())) {
         p.setBehave(1);
         break;
       }
@@ -320,9 +432,26 @@ void SingletonAnalyzer::behavioral_analyze() {
 void ResponsibilityChainAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     if (sys.hasDependency(ci[0], ci[0])) {
-      add(
-          ResponsibilityChain(ci[0], ci[1], ci[2]));
+      add(ResponsibilityChain(ci[0], ci[1], ci[2]));
     }
+  }
+}
+
+/**
+ * Handler.[Method] = ConcreteHandlerB.[Method]
+ *  = ConcreteHandlerA.[Mehtod] → Handler.[Method];
+ * Handler.[Method] = ConcreteHandlerA.[Method]
+ *  = ConcreteHandlerB.[Method] → Handler.[Method]
+ */
+void ResponsibilityChainAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.concrete_handler1_], *sys[p.handler_]);
+    auto &attrs = sys.edge(p.handler_, p.concrete_handler1_).getAssAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : result) {
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -333,10 +462,26 @@ void CommandAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &ica : spis[SPT_ICA]) {
       if (agpi[0] == ica[0] && agpi[1] == ica[1] && agpi[2] != ica[2]) {
-        add(Command(agpi[2], ica[0], ica[1],
-                                ica[2]));
+        add(Command(agpi[2], ica[0], ica[1], ica[2]));
       }
     }
+  }
+}
+
+/**
+ * Commander.[Method] = ConcreteCommand.[Method] → Receiver.[Mehtod]
+ * Invoker.[Method] → Command.[Method] = ConcreteCommand.[Method]
+ */
+void CommandAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.concrete_command_], *sys[p.command_]);
+    auto &attrs = sys.edge(p.concrete_command_, p.receiver_).getAggAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : result) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -352,6 +497,18 @@ void InterpreterAnalyzer::struct_analyze() {
 }
 
 /**
+ * AbstractExpression.[Method] = TerminalExpression.[Method]
+ *  = NonerminalExpression.[Method] → Receiver.[Method]
+ */
+void InterpreterAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.terminal_expr_], *sys[p.abstract_expr_]);
+    auto result2 = intersected(*sys[p.nonterminal_expr_], *sys[p.abstract_expr_]);
+    p.setBehave(!result2.empty() && !result.empty());
+  }
+}
+
+/**
  * Iterator
  * ICA & ICD
  */
@@ -359,10 +516,19 @@ void IteratorAnalyzer::struct_analyze() {
   for (const auto &ica : spis[SPT_ICA]) {
     for (const auto &icd : spis[SPT_ICD]) {
       if (ica[0] != icd[0] && ica[1] == icd[2] && ica[2] == icd[1]) {
-        add(Iterator(ica[0], ica[1], icd[0],
-                                 icd[1]));
+        add(Iterator(ica[0], ica[1], icd[0], icd[1]));
       }
     }
+  }
+}
+
+/**
+ * ConcreteAggregate.[Method] ⇒ ConcreteIterator
+ */
+void IteratorAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    if (sys.hasDependency(p.concrete_aggregate_, p.concrete_iterator_))
+      p.setBehave(true);
   }
 }
 
@@ -379,10 +545,26 @@ void MediatorAnalyzer::struct_analyze() {
           sys.hasAssociation(ci[0], ica[0]) &&
           // ConcreteMediator --> ConcreteColleague2
           sys.hasAssociation(ica[1], ci[2])) {
-        add(Mediator(ica[0], ica[1], ci[0],
-                                 ci[1], ci[2]));
+        add(Mediator(ica[0], ica[1], ci[0], ci[1], ci[2]));
       }
     }
+  }
+}
+
+/**
+ * Colleague.[Method] ⇒ Mediator,
+ * Mediator.[Method] = ConMediator.[Method] → Colleague.[Method]
+ */
+void MediatorAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.concrete_mediator_], *sys[p.mediator_]);
+    auto &attrs = sys.edge(p.concrete_mediator_, p.concrete_colleague1_).getAssAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : result) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -394,10 +576,19 @@ void MementoAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &dpi : spis[SPT_DPI]) {
       if (agpi[0] == dpi[0] && agpi[1] == dpi[1] && agpi[2] != dpi[2]) {
-        add(Memento(dpi[0], dpi[1], agpi[2],
-                                dpi[2]));
+        add(Memento(dpi[0], agpi[2], dpi[2]));
       }
     }
+  }
+}
+
+/**
+ * Caretaker.[Method] ⇒ Memento,
+ * 
+ */
+void MementoAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    p.setBehave(true);
   }
 }
 
@@ -411,10 +602,24 @@ void ObserverAnalyzer::struct_analyze() {
       if (agpi[0] == icd[0] && agpi[1] == icd[1] && agpi[2] != icd[2] &&
           // ConcreteSubject --> Subject
           sys.hasInheritance(icd[2], agpi[2])) {
-        add(Observer(agpi[2], icd[2], icd[0],
-                                 icd[1]));
+        add(Observer(agpi[2], icd[2], icd[0], icd[1]));
       }
     }
+  }
+}
+
+/**
+ * Subject.[Method] → Observer.[Method] = ConObserver.[Method]
+ */
+void ObserverAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto &attrs = sys.edge(p.subject_, p.observer_).getAggAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : sys[p.subject_]->methods_) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -426,10 +631,25 @@ void StateAnalyzer::struct_analyze() {
   for (const auto &agpi : spis[SPT_AGPI]) {
     for (const auto &ci : spis[SPT_CI]) {
       if (agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
-        add(
-            State(agpi[2], ci[0], ci[1], ci[2]));
+        add(State(agpi[2], ci[0], ci[1], ci[2]));
       }
     }
+  }
+}
+
+/**
+ * State.[Method] = ConStateA.[Method] → ConStateB.[Constructor]
+ */
+void StateAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.state_], *sys[p.concrete_state1_]);
+    auto &attrs = sys.edge(p.context_, p.state_).getAggAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : result) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 
@@ -441,12 +661,29 @@ void StrategyAnalyzer::struct_analyze() {
   for (const auto &aspi : spis[SPT_ASPI]) {
     for (const auto &ci : spis[SPT_CI]) {
       if (aspi[0] == ci[0] && aspi[1] == ci[1] && aspi[2] != ci[2]) {
-        add(
-            Strategy(aspi[2], ci[0], ci[1], ci[2]));
+        add(Strategy(aspi[2], ci[0], ci[1], ci[2]));
       }
     }
   }
 }
+
+/**
+ * Context.[Method] → Strategy.[Method] = ConStrategyA.[Method]
+ * Context.[Method] → Strategy.[Method] = ConStrategyB.[Method]
+ */
+void StrategyAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.strategy_], *sys[p.concrete_strategy1_]);
+    auto &attrs = sys.edge(p.context_, p.strategy_).getAggAttrs();
+    DpdtJavaBehavioralListener listener{attrs};
+    for (auto &request : result) {
+      // std::cout << "request: " << request->name() << std::endl;
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
+  }
+}
+
 
 /**
  * Template
@@ -457,6 +694,17 @@ void TemplateAnalyzer::struct_analyze() {
     if (!sys.hasAssOrAgg(ci[1], ci[0]) && !sys.hasAssOrAgg(ci[2], ci[0])) {
       add(Template(ci[0], ci[1], ci[2]));
     }
+  }
+}
+
+/**
+ * AbstractClass.[Method] → AbstractClass.[Method] = ConcreteClass.[Method]
+ */
+void TemplateAnalyzer::behavioral_analyze() {
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.abstract_], *sys[p.concrete1_]);
+    auto result2 = intersected(result, sys[p.concrete2_]->methods_);
+    p.setBehave(!result2.empty());
   }
 }
 
@@ -473,179 +721,25 @@ void VisitorAnalyzer::struct_analyze() {
           sys.hasDependency(icd[2], dpi[0]) &&
           // concrete element --|> element
           sys.hasInheritance(icd[2], dpi[2])) {
-        add(Visitor(dpi[2], dpi[0], icd[2],
-                                dpi[1]));
+        add(Visitor(dpi[2], dpi[0], icd[2], dpi[1]));
       }
     }
   }
-}
-
-
-/**
- * (1) Component.[Method] = Decorator.[Method] → Component.[Method]
- * (2) Component.[Method] = Decorator.[Method]
- *     = ConcreteDecorator.[Method] → Component.[Method]
- */
-void DecoratorAnalyzer::behavioral_analyze() {
-  // auto result = intersected(component_.methods_, concrete_component_.methods_);
-  
-}
-
-/**
- * Abstraction.[Method] = RefinedAbstraction.[Method]
- *  → Implementor.[Method] = ConImplementor.[Method]
- */
-void BridgeAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * FlyweightFactory.[Method] ⇒ Flyweight,
- * FlyweightFactory.[Method] → ConcreteFlyweight.[Constructor]
- */
-void FlyweightAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * Facade.[Method] = ConcreteFacade.[Method] → SubSystem.[Method]
- */
-void FacadeAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * AbstractFactory.[Method] = ConFactory.[Method] ⇒ Product
- * ConFactory.[Method] → ConProduct.[ConstrucationMethod]
- */
-void AbstractFactoryAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * Builder.[Method] = ConBuilder.[Method] ⇒ Product
- * Director.[Method] → (Builder.[Method] = ConBuilder.[Method])
- */
-void BuilderAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * Creator.[Mehtod] = ConcreteCreator.[Mehod] ⇒ Product
- */
-void FactoryAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * ConcretePrototype ∼ {Cloneable}
- */
-void PrototypeAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * Handler.[Method] = ConcreteHandlerB.[Method]
- *  = ConcreteHandlerA.[Mehtod] → Handler.[Method];
- * Handler.[Method] = ConcreteHandlerA.[Method]
- *  = ConcreteHandlerB.[Method] → Handler.[Method]
- */
-void ResponsibilityChainAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * Commander.[Method] = ConcreteCommand.[Method] → Receiver.[Mehtod]
- * Invoker.[Method] → Command.[Method] = ConcreteCommand.[Method]
- */
-void CommandAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * AbstractExpression.[Method] = TerminalExpression.[Method]
- *  = NonerminalExpression.[Method] → Receiver.[Method]
- */
-void InterpreterAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * ConcreteIterator.[Method] ⇒ ConcreteAggregate.Collection.Object
- */
-void IteratorAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * Colleague.[Method] ⇒ Mediator,
- * Mediator.[Method] = ConMediator.[Method] → Colleague.[Method]
- */
-void MediatorAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * Caretaker.[Method] ⇒ Memento,
- * Original.[Method] → ConMemento.[Method]
- */
-void MementoAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * Subject.[Method] → Observer.[Method] = ConObserver.[Method]
- */
-void ObserverAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * State.[Method] = ConStateA.[Method] → ConStateB.[Constructor]
- * State.[Method] = ConStateB.[Method] → ConstateA.[Constructor]
- */
-void StateAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * Context.[Method] → Strategy.[Method] = ConStrategyA.[Method]
- * Context.[Method] → Strategy.[Method] = ConStrategyB.[Method]
- */
-void StrategyAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
-}
-
-/**
- * AbstractClass.[Method] → AbstractClass.[Method] = ConcreteClass.[Method]
- */
-void TemplateAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
 }
 
 /**
  * Element.[Method] = ConElement.[Method] → Visitor.[Method]
  */
 void VisitorAnalyzer::behavioral_analyze() {
-  std::vector<Method *> result;
-  
+  for (auto &p : patterns_) {
+    auto result = intersected(*sys[p.concrete_elem], *sys[p.element]);
+    // DpdtJavaBehavioralListener listener{};
+    // for (auto &request : result) {
+    //   // std::cout << "request: " << request->name() << std::endl;
+    //   tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    // }
+    p.setBehave(!result.empty());
+  }
 }
 
 void AdapterAnalyzer::print(bool structural) const {
@@ -783,9 +877,8 @@ void CommandAnalyzer::print(bool structural) const {
 void InterpreterAnalyzer::print(bool structural) const {
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
-      printf("Interpreter<%s, %s, %s>\n",
-             name(p.abstract_expr_), name(p.terminal_expr_),
-             name(p.nonterminal_expr_));
+      printf("Interpreter<%s, %s, %s>\n", name(p.abstract_expr_),
+             name(p.terminal_expr_), name(p.nonterminal_expr_));
     }
   }
 }
@@ -795,7 +888,7 @@ void IteratorAnalyzer::print(bool structural) const {
     if (p.behave() || structural) {
       printf("Iterator<%s, %s, %s, %s>\n", name(p.iterator_),
              name(p.concrete_iterator_), name(p.aggregate_),
-             name(p.aggregate_iterator_));
+             name(p.concrete_aggregate_));
     }
   }
 }
@@ -813,8 +906,8 @@ void MediatorAnalyzer::print(bool structural) const {
 void MementoAnalyzer::print(bool structural) const {
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
-      printf("Memento<%s, %s, %s, %s>\n", name(p.memento_),
-             name(p.memento_imp_), name(p.caretaker_), name(p.originator_));
+      printf("Memento<%s, %s, %s>\n", name(p.memento_),
+              name(p.caretaker_), name(p.originator_));
     }
   }
 }

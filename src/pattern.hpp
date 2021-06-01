@@ -290,14 +290,14 @@ class Iterator : public Pattern {
   size_t iterator_;
   size_t concrete_iterator_;
   size_t aggregate_;
-  size_t aggregate_iterator_;
+  size_t concrete_aggregate_;
 
   Iterator(size_t iterator, size_t concrete_iterator, size_t aggregate,
-           size_t aggregate_iterator)
+           size_t concrete_aggregate)
       : iterator_(iterator),
         concrete_iterator_(concrete_iterator),
         aggregate_(aggregate),
-        aggregate_iterator_(aggregate_iterator) {}
+        concrete_aggregate_(concrete_aggregate) {}
 };
 
 /**
@@ -326,14 +326,12 @@ class Mediator : public Pattern {
 class Memento : public Pattern {
  public:
   size_t memento_;
-  size_t memento_imp_;
   size_t caretaker_;
   size_t originator_;
 
-  Memento(size_t memento, size_t memento_imp, size_t caretaker,
+  Memento(size_t memento, size_t caretaker,
           size_t originator)
       : memento_(memento),
-        memento_imp_(memento_imp),
         caretaker_(caretaker),
         originator_(originator) {}
 };

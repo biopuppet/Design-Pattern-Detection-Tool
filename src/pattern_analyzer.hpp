@@ -85,7 +85,8 @@ class CompositeAnalyzer : public PatternAnalyzer {
 
 class DecoratorAnalyzer : public PatternAnalyzer {
   std::vector<Decorator> patterns_;
-public:
+
+ public:
   explicit DecoratorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
