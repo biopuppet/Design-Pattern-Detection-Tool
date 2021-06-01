@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <ctime>
 
 #include "argh.h"
 #include "parser.hpp"
@@ -121,16 +122,27 @@ int main(int argc, char **argv) {
   if (dump_graph) system->print();
 
   std::cerr << "Detecting sub-patterns..." << std::endl;
+  auto start = clock();
   SubPatternDetector spd{*system, dump_sp};
   spd.detect_all();
+  auto end = clock();
+  double endtime1=(double)(end-start)/CLOCKS_PER_SEC;
 
   auto pa = PatternAnalyzer::createPatternAnalyzer(spd, pattern);
   std::cerr << "Structual analyzing..." << std::endl;
   pa->struct_analyze();
+  auto end2 = clock();
+  double endtime2=(double)(end2-end)/CLOCKS_PER_SEC;
   std::cerr << "Behavioral analyzing..." << std::endl;
   pa->behavioral_analyze();
+  auto end3 = clock();
+  double endtime3=(double)(end3-end2)/CLOCKS_PER_SEC;
   pa->print(structural);
   delete pa;
 
+  std::cerr << "SP recovery: " << endtime1 * 1000 << "ms" <<std::endl;
+  std::cerr << "Structural: " << endtime2 * 1000 << "ms" <<std::endl;
+  std::cerr << "Behavioral: " << endtime3 * 1000 << "ms" <<std::endl;
+  std::cerr << "Total: " << (endtime1 + endtime2 + endtime3) * 1000 << "ms" <<std::endl;
   return 0;
 }
