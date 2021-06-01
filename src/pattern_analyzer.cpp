@@ -223,7 +223,8 @@ void BridgeAnalyzer::struct_analyze() {
  */
 void BridgeAnalyzer::behavioral_analyze() {
   for (auto &p : patterns_) {
-    auto result = intersected(*sys[p.refined_abstraction_], *sys[p.abstraction_]);
+    auto result =
+        intersected(*sys[p.refined_abstraction_], *sys[p.abstraction_]);
     auto &attrs = sys.edge(p.abstraction_, p.implementor_).getAggAttrs();
     DpdtJavaBehavioralListener listener{attrs};
     for (auto &request : result) {
@@ -237,8 +238,8 @@ void BridgeAnalyzer::behavioral_analyze() {
 void FlyweightAnalyzer::struct_analyze() {
   for (const auto &ci : spis[SPT_CI]) {
     for (const auto &agpi : spis[SPT_AGPI]) {
-      if (sys.hasDependency(agpi[2], agpi[0]) &&
-        agpi[0] == ci[0] && agpi[1] == ci[1] && agpi[2] != ci[2]) {
+      if (sys.hasDependency(agpi[2], agpi[0]) && agpi[0] == ci[0] &&
+          agpi[1] == ci[1] && agpi[2] != ci[2]) {
         add(Flyweight(agpi[2], ci[0], ci[1], ci[2]));
       }
     }
@@ -503,7 +504,8 @@ void InterpreterAnalyzer::struct_analyze() {
 void InterpreterAnalyzer::behavioral_analyze() {
   for (auto &p : patterns_) {
     auto result = intersected(*sys[p.terminal_expr_], *sys[p.abstract_expr_]);
-    auto result2 = intersected(*sys[p.nonterminal_expr_], *sys[p.abstract_expr_]);
+    auto result2 =
+        intersected(*sys[p.nonterminal_expr_], *sys[p.abstract_expr_]);
     p.setBehave(!result2.empty() && !result.empty());
   }
 }
@@ -558,7 +560,8 @@ void MediatorAnalyzer::struct_analyze() {
 void MediatorAnalyzer::behavioral_analyze() {
   for (auto &p : patterns_) {
     auto result = intersected(*sys[p.concrete_mediator_], *sys[p.mediator_]);
-    auto &attrs = sys.edge(p.concrete_mediator_, p.concrete_colleague1_).getAssAttrs();
+    auto &attrs =
+        sys.edge(p.concrete_mediator_, p.concrete_colleague1_).getAssAttrs();
     DpdtJavaBehavioralListener listener{attrs};
     for (auto &request : result) {
       // std::cout << "request: " << request->name() << std::endl;
@@ -584,7 +587,6 @@ void MementoAnalyzer::struct_analyze() {
 
 /**
  * Caretaker.[Method] ⇒ Memento,
- * 
  */
 void MementoAnalyzer::behavioral_analyze() {
   for (auto &p : patterns_) {
@@ -668,8 +670,7 @@ void StrategyAnalyzer::struct_analyze() {
 }
 
 /**
- * Context.[Method] → Strategy.[Method] = ConStrategyA.[Method]
- * Context.[Method] → Strategy.[Method] = ConStrategyB.[Method]
+ * Context.[Method] → Strategy.[Method] = ConStrategy.[Method]
  */
 void StrategyAnalyzer::behavioral_analyze() {
   for (auto &p : patterns_) {
@@ -683,7 +684,6 @@ void StrategyAnalyzer::behavioral_analyze() {
     p.setBehave(listener.nonEmpty());
   }
 }
-
 
 /**
  * Template
@@ -743,63 +743,99 @@ void VisitorAnalyzer::behavioral_analyze() {
 }
 
 void AdapterAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
-    if (p.behave() || structural)
+    if (p.behave() || structural) {
+      ++cnt;
       printf("Adapter<%s, %s, %s>\n", name(p.target_), name(p.adapter_),
              name(p.adaptee_));
+    }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void ProxyAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
-    if (p.behave() || structural)
+    if (p.behave() || structural) {
+      ++cnt;
       printf("Proxy<%s, %s, %s>\n", name(p.subject_), name(p.real_subject_),
              name(p.proxy_));
+    }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void CompositeAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Composite<%s, %s, %s>\n", name(p.component_), name(p.composite_),
              name(p.leaf_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void DecoratorAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Decorator<%s, %s, %s, %s>\n", name(p.component_),
              name(p.concrete_component_), name(p.decorator_),
              name(p.concrete_decorator_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void BridgeAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Bridge<%s, %s, %s, %s, %s>\n", name(p.abstraction_),
              name(p.refined_abstraction_), name(p.implementor_),
              name(p.concrete_implementor1_), name(p.concrete_implementor2_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void FlyweightAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Flyweight<%s, %s, %s, %s>\n", name(p.factory_),
              name(p.flyweight_), name(p.concrete_flyweight_),
              name(p.unshared_concrete_flyweight_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void FacadeAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Facade<%s, ", name(p.facade_));
       printf("Subsystems<%s", p.subsystems_[0]->name());
       for (size_t i = 1; i < p.subsystems_.size(); ++i) {
@@ -808,152 +844,232 @@ void FacadeAnalyzer::print(bool structural) const {
       printf(">>\n");
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void AbstractFactoryAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("AbstractFactory<%s, %s, %s, %s, %s>\n", name(p.abstract_factory_),
              name(p.concrete_factory_), name(p.product_),
              name(p.concrete_product1_), name(p.concrete_product2_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void BuilderAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Builder<%s, %s, %s, %s>\n", name(p.builder_),
              name(p.concrete_builder_), name(p.director_), name(p.product_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void FactoryAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Factory<%s, %s, %s, %s>\n", name(p.product_),
              name(p.concrete_product_), name(p.creator_),
              name(p.concrete_creator_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void PrototypeAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Prototype<%s, %s, %s, %s>\n", name(p.client_), name(p.prototype_),
              name(p.concrete_prototype_), name(p.concrete_prototype2_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void SingletonAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Singleton<%s>\n", name(p.singleton_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void ResponsibilityChainAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("ResponsibilityChain<%s, %s, %s>\n", name(p.handler_),
              name(p.concrete_handler1_), name(p.concrete_handler2_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void CommandAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Command<%s, %s, %s, %s>\n", name(p.invoker_), name(p.command_),
              name(p.concrete_command_), name(p.receiver_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void InterpreterAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Interpreter<%s, %s, %s>\n", name(p.abstract_expr_),
              name(p.terminal_expr_), name(p.nonterminal_expr_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void IteratorAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Iterator<%s, %s, %s, %s>\n", name(p.iterator_),
              name(p.concrete_iterator_), name(p.aggregate_),
              name(p.concrete_aggregate_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void MediatorAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Mediator<%s, %s, %s, %s, %s>\n", name(p.mediator_),
              name(p.concrete_mediator_), name(p.colleague_),
              name(p.concrete_colleague1_), name(p.concrete_colleague2_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void MementoAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
-      printf("Memento<%s, %s, %s>\n", name(p.memento_),
-              name(p.caretaker_), name(p.originator_));
+      ++cnt;
+      printf("Memento<%s, %s, %s>\n", name(p.memento_), name(p.caretaker_),
+             name(p.originator_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void ObserverAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Observer<%s, %s, %s, %s>\n", name(p.subject_),
              name(p.concrete_subject_), name(p.observer_),
              name(p.concrete_observer_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void StateAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("State<%s, %s, %s, %s>\n", name(p.context_), name(p.state_),
              name(p.concrete_state1_), name(p.concrete_state2_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void StrategyAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Strategy<%s, %s, %s, %s>\n", name(p.context_), name(p.strategy_),
              name(p.concrete_strategy1_), name(p.concrete_strategy2_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void TemplateAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
+
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Template<%s, %s, %s>\n", name(p.abstract_), name(p.concrete1_),
              name(p.concrete2_));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }
 
 void VisitorAnalyzer::print(bool structural) const {
+  std::cout << patterns_.size() << std::endl;
+  int cnt = 0;
   for (const auto &p : patterns_) {
     if (p.behave() || structural) {
+      ++cnt;
       printf("Visitor<%s, %s, %s, %s>\n", name(p.element), name(p.visitor),
              name(p.concrete_elem), name(p.concrete_visitor));
     }
   }
+  std::cout << "Total: " << cnt << std::endl;
 }

@@ -38,9 +38,9 @@ class PatternAnalyzer {
 };
 
 class ProxyAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Proxy> patterns_;
 
- public:
   explicit ProxyAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -55,9 +55,9 @@ class ProxyAnalyzer : public PatternAnalyzer {
 };
 
 class AdapterAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Adapter> patterns_;
 
- public:
   explicit AdapterAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -71,9 +71,9 @@ class AdapterAnalyzer : public PatternAnalyzer {
 };
 
 class CompositeAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Composite> patterns_;
 
- public:
   explicit CompositeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -84,9 +84,9 @@ class CompositeAnalyzer : public PatternAnalyzer {
 };
 
 class DecoratorAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Decorator> patterns_;
 
- public:
   explicit DecoratorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -97,9 +97,9 @@ class DecoratorAnalyzer : public PatternAnalyzer {
 };
 
 class BridgeAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Bridge> patterns_;
 
- public:
   explicit BridgeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -110,9 +110,9 @@ class BridgeAnalyzer : public PatternAnalyzer {
 };
 
 class FlyweightAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Flyweight> patterns_;
 
- public:
   explicit FlyweightAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -123,9 +123,9 @@ class FlyweightAnalyzer : public PatternAnalyzer {
 };
 
 class FacadeAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Facade> patterns_;
 
- public:
   explicit FacadeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -136,9 +136,9 @@ class FacadeAnalyzer : public PatternAnalyzer {
 };
 
 class AbstractFactoryAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<AbstractFactory> patterns_;
 
- public:
   explicit AbstractFactoryAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -149,9 +149,9 @@ class AbstractFactoryAnalyzer : public PatternAnalyzer {
 };
 
 class BuilderAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Builder> patterns_;
 
- public:
   explicit BuilderAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -162,9 +162,9 @@ class BuilderAnalyzer : public PatternAnalyzer {
 };
 
 class FactoryAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Factory> patterns_;
 
- public:
   explicit FactoryAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -175,9 +175,9 @@ class FactoryAnalyzer : public PatternAnalyzer {
 };
 
 class PrototypeAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Prototype> patterns_;
 
- public:
   explicit PrototypeAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -188,9 +188,9 @@ class PrototypeAnalyzer : public PatternAnalyzer {
 };
 
 class SingletonAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Singleton> patterns_;
 
- public:
   explicit SingletonAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -201,9 +201,9 @@ class SingletonAnalyzer : public PatternAnalyzer {
 };
 
 class ResponsibilityChainAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<ResponsibilityChain> patterns_;
 
- public:
   explicit ResponsibilityChainAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -214,9 +214,9 @@ class ResponsibilityChainAnalyzer : public PatternAnalyzer {
 };
 
 class CommandAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Command> patterns_;
 
- public:
   explicit CommandAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -227,9 +227,9 @@ class CommandAnalyzer : public PatternAnalyzer {
 };
 
 class InterpreterAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Interpreter> patterns_;
 
- public:
   explicit InterpreterAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -240,9 +240,9 @@ class InterpreterAnalyzer : public PatternAnalyzer {
 };
 
 class IteratorAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Iterator> patterns_;
 
- public:
   explicit IteratorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -253,9 +253,9 @@ class IteratorAnalyzer : public PatternAnalyzer {
 };
 
 class MediatorAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Mediator> patterns_;
 
- public:
   explicit MediatorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -266,9 +266,9 @@ class MediatorAnalyzer : public PatternAnalyzer {
 };
 
 class MementoAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Memento> patterns_;
 
- public:
   explicit MementoAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -279,9 +279,9 @@ class MementoAnalyzer : public PatternAnalyzer {
 };
 
 class ObserverAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Observer> patterns_;
 
- public:
   explicit ObserverAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -292,9 +292,9 @@ class ObserverAnalyzer : public PatternAnalyzer {
 };
 
 class StateAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<State> patterns_;
 
- public:
   explicit StateAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -305,9 +305,9 @@ class StateAnalyzer : public PatternAnalyzer {
 };
 
 class StrategyAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Strategy> patterns_;
 
- public:
   explicit StrategyAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -318,9 +318,9 @@ class StrategyAnalyzer : public PatternAnalyzer {
 };
 
 class TemplateAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Template> patterns_;
 
- public:
   explicit TemplateAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 
@@ -331,9 +331,9 @@ class TemplateAnalyzer : public PatternAnalyzer {
 };
 
 class VisitorAnalyzer : public PatternAnalyzer {
+ public:
   std::vector<Visitor> patterns_;
 
- public:
   explicit VisitorAnalyzer(const SubPatternDetector &spd)
       : PatternAnalyzer(spd) {}
 

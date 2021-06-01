@@ -329,11 +329,8 @@ class Memento : public Pattern {
   size_t caretaker_;
   size_t originator_;
 
-  Memento(size_t memento, size_t caretaker,
-          size_t originator)
-      : memento_(memento),
-        caretaker_(caretaker),
-        originator_(originator) {}
+  Memento(size_t memento, size_t caretaker, size_t originator)
+      : memento_(memento), caretaker_(caretaker), originator_(originator) {}
 };
 
 /**
