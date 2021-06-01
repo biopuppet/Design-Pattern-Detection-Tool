@@ -8,12 +8,16 @@
 
 class DpdtJavaBehavioralListener : public JavaParserBaseListener {
  public:
-  DpdtJavaBehavioralListener(std::vector<Attribute *> &attrs) : attrs_(attrs) {}
+  DpdtJavaBehavioralListener(std::vector<Method *> &methods)
+      : attrs_(nullptr), methods_(&methods) {}
+  DpdtJavaBehavioralListener(std::vector<Attribute *> &attrs)
+      : attrs_(&attrs), methods_(nullptr) {}
   void enterExpression(JavaParser::ExpressionContext * /*ctx*/) override;
 
   bool nonEmpty() const { return result_.size(); }
 
-  std::vector<Attribute *> &attrs_;
+  std::vector<Attribute *> *attrs_;
+  std::vector<Method *> *methods_;
   std::vector<JavaParser::ExpressionContext *> result_;
 };
 

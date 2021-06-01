@@ -39,23 +39,38 @@ inline static MethodList intersected(const Node &n1, const Node &n2) {
 void DpdtJavaBehavioralListener::enterExpression(
     JavaParser::ExpressionContext *ctx) {
   // sufficient condition
-  if (!ctx->methodCall() || !ctx->bop) {
+  if (!ctx->methodCall()) {
     return;
   }
-  // assert(ctx->bop == '.');
-  auto expr = ctx->expression(0);
   auto call = ctx->methodCall()->IDENTIFIER();
+  // pure call
+  if (call && !ctx->bop) {
+    auto sr = call->getText();
+    if (methods_) {
+      // std::cout << "Methods: " << sr << std::endl;
+      for (const auto m : *methods_) {
+        if (m->name() == sr) {
+          result_.emplace_back(ctx);
+          break;
+        }
+      }
+    }
+    return;
+  }
+  // bop & expr
+  auto expr = ctx->expression(0);
   if (expr && call) {
     auto caller = expr->getText();
-    auto sr = call->getText();
-    for (const auto &attr : attrs_) {
-      // TODO: 2 types of caller: direct & indirect calling mode
-      if (attr->name_ == caller) {
-        // std::cout << "Caller: " << caller << std::endl;
-        // std::cout << "Method: " << sr << std::endl;
-        // std::cout << ctx->getText() << std::endl;
-        result_.emplace_back(ctx);
-        return;
+     if (attrs_) {
+      for (const auto &attr : *attrs_) {
+        // TODO: 2 types of caller: direct & indirect calling mode
+        if (attr->name_ == caller) {
+          // std::cout << "Caller: " << caller << std::endl;
+          // std::cout << "Method: " << sr << std::endl;
+          // std::cout << ctx->getText() << std::endl;
+          result_.emplace_back(ctx);
+          break;
+        }
       }
     }
   }
@@ -705,7 +720,11 @@ void TemplateAnalyzer::behavioral_analyze() {
   for (auto &p : patterns_) {
     auto result = intersected(*sys[p.abstract_], *sys[p.concrete1_]);
     auto result2 = intersected(result, sys[p.concrete2_]->methods_);
-    p.setBehave(!result2.empty());
+    DpdtJavaBehavioralListener listener{result2};
+    for (auto &request : sys[p.abstract_]->methods_) {
+      tree::ParseTreeWalker::DEFAULT.walk(&listener, request->ctx_);
+    }
+    p.setBehave(listener.nonEmpty());
   }
 }
 

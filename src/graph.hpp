@@ -141,6 +141,8 @@ struct Method {
   bool isPublic() const { return qual_.has(M_PUBLIC); }
   bool isStatic() const { return qual_.has(M_STATIC); }
   bool isStaticPublic() const { return isPublic() && isStatic(); }
+  bool operator==(const Method &m) { return this->name_ == m.name_; }
+  bool operator!=(const Method &m) { return this->name_ != m.name_; }
 };
 
 struct MethodCmp {
