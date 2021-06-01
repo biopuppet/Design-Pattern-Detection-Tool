@@ -1260,3 +1260,426 @@ Number of Classes: 20
 External Dependencies: 37
 Functionality: 25
 Reusability: 3.4642
+
+### JUnit
+Software Name: jUnit   ver.4.10    (Singleton)  
+Root: org.junit.runner.Description
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 37
+Reusability: 10.5250
+
+Software Name: jUnit   ver.4.10    (Singleton)  
+Root: org.junit.runner.manipulation.Sorter
+Number of Classes: 1
+External Dependencies: 2
+Functionality: 6
+Reusability: 2.1250
+
+Software Name: jUnit   ver.4.10    (Template Method)  
+Root: org.junit.internal.ComparisonCriteria
+Number of Classes: 3
+External Dependencies: 2
+Functionality: 1
+Reusability: 0.8958
+
+Software Name: jUnit   ver.4.10    (Singleton)  
+Root: org.junit.rules.RuleChain
+Number of Classes: 1
+External Dependencies: 3
+Functionality: 0
+Reusability: 1.8333
+
+Software Name: jUnit   ver.4.10    (Singleton)  
+Root: org.junit.runner.manipulation.Filter
+Number of Classes: 1
+External Dependencies: 3
+Functionality: 8
+Reusability: 2.8167
+
+Software Name: jUnit   ver.4.10    ((Object)Adapter-Command)  
+Root: org.junit.runners.model.FrameworkMethod
+Number of Classes: 2
+External Dependencies: 4
+Functionality: 10
+Reusability: 3.9018
+
+Software Name: jUnit   ver.4.10    (Template Method)  
+Root: org.hamcrest.BaseDescription
+Number of Classes: 2
+External Dependencies: 4
+Functionality: 4
+Reusability: 2.6836
+
+Software Name: jUnit   ver.4.10    (Template Method)  
+Root: org.junit.internal.matchers.SubstringMatcher
+Number of Classes: 2
+External Dependencies: 4
+Functionality: 1
+Reusability: 1.2417
+
+Software Name: jUnit   ver.4.10    (Decorator)  
+Root: org.junit.rules.RunRules
+Number of Classes: 8
+External Dependencies: 5
+Functionality: 13
+Reusability: 1.1875
+
+Software Name: jUnit   ver.4.10    (Decorator)  
+Root: org.junit.internal.runners.statements.RunAfters
+Number of Classes: 8
+External Dependencies: 5
+Functionality: 13
+Reusability: 1.1875
+
+Software Name: jUnit   ver.4.10    (Decorator)  
+Root: org.junit.internal.runners.statements.RunBefores
+Number of Classes: 8
+External Dependencies: 5
+Functionality: 13
+Reusability: 1.1875
+
+Software Name: jUnit   ver.4.10    (Decorator)  
+Root: org.junit.internal.runners.statements.ExpectException
+Number of Classes: 8
+External Dependencies: 5
+Functionality: 13
+Reusability: 1.1875
+
+Software Name: jUnit   ver.4.10    (Singleton)  
+Root: org.junit.internal.runners.rules.RuleFieldValidator
+Number of Classes: 1
+External Dependencies: 6
+Functionality: 2
+Reusability: 0.6000
+
+Software Name: jUnit   ver.4.10    ((Object)Adapter-Command)  
+Root: org.junit.runner.manipulation.Filter
+Number of Classes: 2
+External Dependencies: 6
+Functionality: 7
+Reusability: 1.5667
+
+Software Name: jUnit   ver.4.10    (Template Method)  
+Root: junit.runner.BaseTestRunner
+Number of Classes: 2
+External Dependencies: 8
+Functionality: 1
+Reusability: 7.2817
+
+Software Name: jUnit   ver.4.10    (Facade)  
+Root: org.junit.runners.AllTests
+Number of Classes: 3
+External Dependencies: 8
+Functionality: 5
+Reusability: 5.3669
+
+Software Name: jUnit   ver.4.10    (Singleton)  
+Root: junit.framework.JUnit4TestAdapterCache
+Number of Classes: 1
+External Dependencies: 9
+Functionality: 1
+Reusability: 0.8333
+
+Software Name: jUnit   ver.4.10    (Factory Method)  
+Root: org.junit.runners.model.RunnerBuilder
+Number of Classes: 8
+External Dependencies: 10
+Functionality: 7
+Reusability: 1.0499
+
+### RTSP
+
+Software Name: RTSP Proxy   ver.3.0    (Singleton)  
+Root: rtspproxy.rtsp.RtspCode
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 5
+Reusability: 3.1000
+
+Software Name: RTSP Proxy   ver.3.0    (Singleton)  
+Root: rtspproxy.proxy.PacketType
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 0
+Reusability: 1.6250
+
+Software Name: RTSP Proxy   ver.3.0    (Proxy)  
+Root: gov.nist.javax.sdp.fields.RepeatField
+Number of Classes: 2
+External Dependencies: 0
+Functionality: 0
+Reusability: 5.7906
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.URIField
+Number of Classes: 2
+External Dependencies: 0
+Functionality: 0
+Reusability: 11.5332
+
+Software Name: RTSP Proxy   ver.3.0    (Proxy)  
+Root: gov.nist.javax.sdp.fields.ZoneAdjustment
+Number of Classes: 2
+External Dependencies: 0
+Functionality: 0
+Reusability: 4.0429
+
+Software Name: RTSP Proxy   ver.3.0    (Proxy)  
+Root: gov.nist.javax.sdp.fields.EmailField
+Number of Classes: 2
+External Dependencies: 0
+Functionality: 0
+Reusability: 4.0429
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.SessionNameField
+Number of Classes: 2
+External Dependencies: 0
+Functionality: 0
+Reusability: 11.5582
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.ProtoVersionField
+Number of Classes: 2
+External Dependencies: 0
+Functionality: 0
+Reusability: 11.5582
+
+Software Name: RTSP Proxy   ver.3.0    (Proxy)  
+Root: gov.nist.javax.sdp.fields.EmailAddress
+Number of Classes: 2
+External Dependencies: 0
+Functionality: 0
+Reusability: 3.5750
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.KeyField
+Number of Classes: 2
+External Dependencies: 0
+Functionality: 0
+Reusability: 12.8082
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.InformationField
+Number of Classes: 2
+External Dependencies: 0
+Functionality: 0
+Reusability: 11.5582
+
+Software Name: RTSP Proxy   ver.3.0    (Template Method)  
+Root: rtspproxy.lib.number.UnsignedNumber
+Number of Classes: 5
+External Dependencies: 0
+Functionality: 9
+Reusability: 9.2328
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.MediaField
+Number of Classes: 2
+External Dependencies: 1
+Functionality: 0
+Reusability: 14.8959
+
+Software Name: RTSP Proxy   ver.3.0    (Proxy)  
+Root: gov.nist.javax.sdp.fields.ConnectionAddress
+Number of Classes: 2
+External Dependencies: 1
+Functionality: 6
+Reusability: 6.0523
+
+Software Name: RTSP Proxy   ver.3.0    (Proxy)  
+Root: gov.nist.javax.sdp.fields.ConnectionField
+Number of Classes: 2
+External Dependencies: 1
+Functionality: 0
+Reusability: 6.5484
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.ConnectionField
+Number of Classes: 2
+External Dependencies: 1
+Functionality: 0
+Reusability: 13.9082
+
+Software Name: RTSP Proxy   ver.3.0    (Proxy)  
+Root: gov.nist.core.HostPort
+Number of Classes: 2
+External Dependencies: 1
+Functionality: 6
+Reusability: 6.6690
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.OriginField
+Number of Classes: 2
+External Dependencies: 1
+Functionality: 0
+Reusability: 16.1523
+
+Software Name: RTSP Proxy   ver.3.0    (Proxy)  
+Root: gov.nist.javax.sdp.fields.OriginField
+Number of Classes: 2
+External Dependencies: 1
+Functionality: 6
+Reusability: 10.0479
+
+Software Name: RTSP Proxy   ver.3.0    (Proxy)  
+Root: gov.nist.javax.sdp.fields.AttributeField
+Number of Classes: 2
+External Dependencies: 2
+Functionality: 6
+Reusability: 5.9188
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.SDPObjectList
+Number of Classes: 2
+External Dependencies: 2
+Functionality: 0
+Reusability: 5.4167
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.SDPObjectList
+Number of Classes: 2
+External Dependencies: 2
+Functionality: 0
+Reusability: 7.0365
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: gov.nist.javax.sdp.fields.SDPObjectList
+Number of Classes: 2
+External Dependencies: 2
+Functionality: 0
+Reusability: 6.6610
+
+Software Name: RTSP Proxy   ver.3.0    (Facade)  
+Root: gov.nist.javax.sdp.parser.EmailFieldParser
+Number of Classes: 6
+External Dependencies: 2
+Functionality: 16
+Reusability: 5.2235
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: rtspproxy.lib.number.UnsignedByte
+Number of Classes: 2
+External Dependencies: 3
+Functionality: 5
+Reusability: 6.2969
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: rtspproxy.lib.number.UnsignedInt
+Number of Classes: 2
+External Dependencies: 3
+Functionality: 7
+Reusability: 6.0479
+
+Software Name: RTSP Proxy   ver.3.0    (Prototype)  
+Root: gov.nist.javax.sdp.fields.ConnectionField
+Number of Classes: 17
+External Dependencies: 3
+Functionality: 0
+Reusability: 6.1616
+
+Software Name: RTSP Proxy   ver.3.0    (Prototype)  
+Root: gov.nist.javax.sdp.fields.RepeatField
+Number of Classes: 17
+External Dependencies: 3
+Functionality: 0
+Reusability: 6.1616
+
+Software Name: RTSP Proxy   ver.3.0    (Prototype)  
+Root: gov.nist.javax.sdp.fields.ZoneField
+Number of Classes: 17
+External Dependencies: 3
+Functionality: 0
+Reusability: 6.1616
+
+Software Name: RTSP Proxy   ver.3.0    (Prototype)  
+Root: gov.nist.javax.sdp.fields.OriginField
+Number of Classes: 17
+External Dependencies: 3
+Functionality: 0
+Reusability: 6.1616
+
+Software Name: RTSP Proxy   ver.3.0    (Prototype)  
+Root: gov.nist.javax.sdp.fields.AttributeField
+Number of Classes: 17
+External Dependencies: 3
+Functionality: 0
+Reusability: 6.1616
+
+Software Name: RTSP Proxy   ver.3.0    (Template Method)  
+Root: gov.nist.javax.sdp.fields.SDPField
+Number of Classes: 17
+External Dependencies: 3
+Functionality: 0
+Reusability: 6.1616
+
+Software Name: RTSP Proxy   ver.3.0    (Prototype)  
+Root: gov.nist.javax.sdp.fields.SDPFieldList
+Number of Classes: 17
+External Dependencies: 3
+Functionality: 0
+Reusability: 6.1616
+
+Software Name: RTSP Proxy   ver.3.0    (Prototype)  
+Root: gov.nist.javax.sdp.fields.EmailField
+Number of Classes: 17
+External Dependencies: 3
+Functionality: 0
+Reusability: 6.1616
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: rtspproxy.lib.number.UnsignedByte
+Number of Classes: 2
+External Dependencies: 4
+Functionality: 4
+Reusability: 10.8992
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: rtspproxy.lib.number.UnsignedInt
+Number of Classes: 2
+External Dependencies: 4
+Functionality: 6
+Reusability: 10.6502
+
+Software Name: RTSP Proxy   ver.3.0    ((Object)Adapter-Command)  
+Root: rtspproxy.lib.number.UnsignedShort
+Number of Classes: 2
+External Dependencies: 4
+Functionality: 3
+Reusability: 10.8992
+
+Software Name: RTSP Proxy   ver.3.0    (Facade)  
+Root: gov.nist.core.HostNameParser
+Number of Classes: 4
+External Dependencies: 4
+Functionality: 17
+Reusability: 8.0374
+
+Software Name: RTSP Proxy   ver.3.0    (Template Method)  
+Root: gov.nist.core.GenericObject
+Number of Classes: 5
+External Dependencies: 4
+Functionality: 17
+Reusability: 6.4892
+
+Software Name: RTSP Proxy   ver.3.0    (Template Method)  
+Root: gov.nist.javax.sdp.fields.SDPObject
+Number of Classes: 8
+External Dependencies: 5
+Functionality: 0
+Reusability: 3.9640
+
+Software Name: RTSP Proxy   ver.3.0    (Abstract Factory)  
+Root: gov.nist.javax.sdp.parser.SDPParser
+Number of Classes: 16
+External Dependencies: 6
+Functionality: 0
+Reusability: 1.8307
+
+Software Name: RTSP Proxy   ver.3.0    (Factory Method)  
+Root: gov.nist.javax.sdp.parser.SDPParser
+Number of Classes: 32
+External Dependencies: 7
+Functionality: 0
+Reusability: 4.0869
