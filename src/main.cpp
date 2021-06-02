@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
   }
   if (dump_graph) system->print();
 
-  std::cerr << "Detecting sub-patterns..." << std::endl;
+  // std::cerr << "Detecting sub-patterns..." << std::endl;
   auto start = clock();
   SubPatternDetector spd{*system, dump_sp};
   spd.detect_all();
@@ -129,11 +129,11 @@ int main(int argc, char **argv) {
   double endtime1=(double)(end-start)/CLOCKS_PER_SEC;
 
   auto pa = PatternAnalyzer::createPatternAnalyzer(spd, pattern);
-  std::cerr << "Structual analyzing..." << std::endl;
+  // std::cerr << "Structual analyzing..." << std::endl;
   pa->struct_analyze();
   auto end2 = clock();
   double endtime2=(double)(end2-end)/CLOCKS_PER_SEC;
-  std::cerr << "Behavioral analyzing..." << std::endl;
+  // std::cerr << "Behavioral analyzing..." << std::endl;
   pa->behavioral_analyze();
   auto end3 = clock();
   double endtime3=(double)(end3-end2)/CLOCKS_PER_SEC;

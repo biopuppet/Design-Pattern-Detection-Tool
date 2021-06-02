@@ -171,378 +171,6 @@ External Dependencies: 1
 Functionality: 0
 Reusability: 1.8333
 
-### Logisim
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.util.StringGetter
-Number of Classes: 2
-External Dependencies: 1
-Functionality: 187
-Reusability: 1.7500
-
-Software Name: Logisim   ver.2.7.1    (Facade)  
-Root: com.cburch.logisim.gui.generic.CanvasPane
-Number of Classes: 3
-External Dependencies: 1
-Functionality: 8
-Reusability: 3.7252
-
-Software Name: Logisim   ver.2.7.1    (Facade)  
-Root: com.cburch.logisim.util.WindowMenuItem
-Number of Classes: 3
-External Dependencies: 1
-Functionality: 7
-Reusability: 1.8230
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.analyze.model.Entry
-Number of Classes: 1
-External Dependencies: 2
-Functionality: 10
-Reusability: 2.5500
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.data.BitWidth
-Number of Classes: 1
-External Dependencies: 2
-Functionality: 77
-Reusability: 4.5260
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.circuit.WireSet
-Number of Classes: 1
-External Dependencies: 2
-Functionality: 7
-Reusability: 1.1250
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.util.StringGetter
-Number of Classes: 2
-External Dependencies: 2
-Functionality: 187
-Reusability: 3.3958
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.data.Value
-Number of Classes: 1
-External Dependencies: 3
-Functionality: 102
-Reusability: 14.2778
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.gui.appear.ClipboardContents
-Number of Classes: 1
-External Dependencies: 3
-Functionality: 3
-Reusability: 1.7500
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.data.Bounds
-Number of Classes: 1
-External Dependencies: 3
-Functionality: 117
-Reusability: 13.2855
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.data.Direction
-Number of Classes: 1
-External Dependencies: 3
-Functionality: 82
-Reusability: 5.7708
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.gui.menu.MenuItemHelper
-Number of Classes: 2
-External Dependencies: 3
-Functionality: 5
-Reusability: 2.8111
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.gui.menu.MenuItemHelper
-Number of Classes: 2
-External Dependencies: 3
-Functionality: 2
-Reusability: 2.8111
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.util.EventSourceWeakSupport
-Number of Classes: 2
-External Dependencies: 3
-Functionality: 21
-Reusability: 5.3348
-
-Software Name: Logisim   ver.2.7.1    (Strategy)  
-Root: com.cburch.logisim.gui.generic.CanvasPane
-Number of Classes: 3
-External Dependencies: 3
-Functionality: 8
-Reusability: 3.8065
-
-Software Name: Logisim   ver.2.7.1    (Decorator)  
-Root: com.cburch.draw.undo.ActionUnion
-Number of Classes: 3
-External Dependencies: 3
-Functionality: 24
-Reusability: 2.8984
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.util.StringGetter
-Number of Classes: 2
-External Dependencies: 4
-Functionality: 158
-Reusability: 2.1607
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.tools.move.ConnectorThread
-Number of Classes: 1
-External Dependencies: 5
-Functionality: 2
-Reusability: 1.3125
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.analyze.gui.AnalyzerManager
-Number of Classes: 1
-External Dependencies: 5
-Functionality: 2
-Reusability: 1.3125
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.draw.undo.UndoLog
-Number of Classes: 2
-External Dependencies: 5
-Functionality: 2
-Reusability: 3.0227
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.util.StringGetter
-Number of Classes: 2
-External Dependencies: 5
-Functionality: 158
-Reusability: 0.9167
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.draw.model.HandleGesture
-Number of Classes: 2
-External Dependencies: 5
-Functionality: 16
-Reusability: 3.1889
-
-Software Name: Logisim   ver.2.7.1    (Strategy)  
-Root: com.cburch.logisim.util.WindowMenuItem
-Number of Classes: 4
-External Dependencies: 5
-Functionality: 7
-Reusability: 1.6954
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.gui.main.Clipboard
-Number of Classes: 1
-External Dependencies: 6
-Functionality: 2
-Reusability: 4.5417
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.analyze.model.Implicant
-Number of Classes: 1
-External Dependencies: 6
-Functionality: 2
-Reusability: 2.5357
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.std.wiring.PinAttributes
-Number of Classes: 1
-External Dependencies: 6
-Functionality: 1
-Reusability: 1.0750
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.draw.model.Handle
-Number of Classes: 2
-External Dependencies: 6
-Functionality: 21
-Reusability: 3.0656
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.data.Location
-Number of Classes: 2
-External Dependencies: 6
-Functionality: 137
-Reusability: 5.6646
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.comp.TextField
-Number of Classes: 2
-External Dependencies: 6
-Functionality: 2
-Reusability: 8.9062
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.data.Attribute
-Number of Classes: 2
-External Dependencies: 6
-Functionality: 173
-Reusability: 2.4688
-
-Software Name: Logisim   ver.2.7.1    (Template Method)  
-Root: com.cburch.logisim.tools.key.NumericConfigurator
-Number of Classes: 3
-External Dependencies: 6
-Functionality: 34
-Reusability: 1.7937
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.std.wiring.ProbeAttributes
-Number of Classes: 1
-External Dependencies: 7
-Functionality: 2
-Reusability: 0.8333
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.circuit.RadixOption
-Number of Classes: 1
-External Dependencies: 7
-Functionality: 7
-Reusability: 2.7917
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.instance.InstanceLogger
-Number of Classes: 2
-External Dependencies: 7
-Functionality: 11
-Reusability: 1.3979
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.gui.main.EditHandler
-Number of Classes: 2
-External Dependencies: 7
-Functionality: 6
-Reusability: 3.6958
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.tools.key.KeyConfigurationResult
-Number of Classes: 2
-External Dependencies: 7
-Functionality: 8
-Reusability: 1.5600
-
-Software Name: Logisim   ver.2.7.1    (Template Method)  
-Root: com.cburch.logisim.gui.menu.EditPopup
-Number of Classes: 2
-External Dependencies: 8
-Functionality: 1
-Reusability: 0.2292
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.std.memory.MemContents
-Number of Classes: 2
-External Dependencies: 8
-Functionality: 7
-Reusability: 5.1638
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.gui.log.Model
-Number of Classes: 2
-External Dependencies: 8
-Functionality: 9
-Reusability: 3.8072
-
-Software Name: Logisim   ver.2.7.1    (Strategy)  
-Root: com.cburch.logisim.gui.generic.AttrTableModelEvent
-Number of Classes: 3
-External Dependencies: 8
-Functionality: 12
-Reusability: 2.8003
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.std.gates.EvenParityGate
-Number of Classes: 1
-External Dependencies: 9
-Functionality: 2
-Reusability: -1.1667
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.analyze.gui.TableTabCaret
-Number of Classes: 2
-External Dependencies: 9
-Functionality: 2
-Reusability: 1.5476
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.gui.main.LogisimToolbarItem
-Number of Classes: 2
-External Dependencies: 9
-Functionality: 4
-Reusability: 2.0647
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.gui.menu.MenuItemImpl
-Number of Classes: 2
-External Dependencies: 9
-Functionality: 4
-Reusability: 0.7521
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.util.StringGetter
-Number of Classes: 2
-External Dependencies: 9
-Functionality: 158
-Reusability: 1.0625
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.draw.canvas.Canvas
-Number of Classes: 2
-External Dependencies: 9
-Functionality: 16
-Reusability: 5.2922
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.gui.prefs.PrefOptionList
-Number of Classes: 2
-External Dependencies: 9
-Functionality: 4
-Reusability: 0.6607
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.data.AttributeSet
-Number of Classes: 2
-External Dependencies: 9
-Functionality: 119
-Reusability: 4.2878
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.analyze.gui.TableTabClip
-Number of Classes: 2
-External Dependencies: 9
-Functionality: 2
-Reusability: 2.6616
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.std.gates.OddParityGate
-Number of Classes: 1
-External Dependencies: 10
-Functionality: 2
-Reusability: -0.9214
-
-Software Name: Logisim   ver.2.7.1    (Singleton)  
-Root: com.cburch.logisim.file.LibraryManager
-Number of Classes: 1
-External Dependencies: 10
-Functionality: 3
-Reusability: 1.5553
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.gui.prefs.PrefOptionList
-Number of Classes: 2
-External Dependencies: 10
-Functionality: 4
-Reusability: 0.5357
-
-Software Name: Logisim   ver.2.7.1    ((Object)Adapter-Command)  
-Root: com.cburch.logisim.gui.prefs.PrefOptionList
-Number of Classes: 2
-External Dependencies: 10
-Functionality: 4
-Reusability: 0.5357
-
 ### Lizzy
 Software Name: Lizzy   ver.1.1.1    (Singleton)  
 Root: christophedelory.xml.Version
@@ -1260,6 +888,189 @@ Number of Classes: 20
 External Dependencies: 37
 Functionality: 25
 Reusability: 3.4642
+
+### Teamcenter
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.procedure.plmxmlpdm.classtype.UserValueDataType
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 3
+Reusability: 2.6250
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.resources.ImageEnum
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 18
+Reusability: 2.0833
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.procedure.plmxmlpdm.classtype.WorkflowActionTypeEnum
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 5
+Reusability: 4.5938
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.procedure.plmxmlpdm.classtype.WorkflowTemplateStageEnum
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 2
+Reusability: 2.6250
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.procedure.plmxmlpdm.PlmXmlTagTypeCompleteEnum
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 0
+Reusability: 2.6250
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.procedure.plmxmlpdm.classtype.AccessIntentEnum
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 1
+Reusability: 2.6250
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.procedure.plmxmlpdm.UnusedRequiredTags.DecisionType
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 1
+Reusability: 2.6250
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.access.AccessTagTypeEnum
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 4
+Reusability: 2.6250
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.procedure.plmxmlpdm.UnusedRequiredTags.TaskStateType
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 1
+Reusability: 2.6250
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.procedure.plmxmlpdm.ProcedureTagTypeEnum
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 10
+Reusability: 2.6250
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.procedure.plmxmlpdm.classtype.WorkflowTemplateClassificationEnum
+Number of Classes: 1
+External Dependencies: 0
+Functionality: 3
+Reusability: 2.6250
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Singleton)  
+Root: tceav.manager.access.AccessControlHeaderEnum
+Number of Classes: 1
+External Dependencies: 1
+Functionality: 3
+Reusability: 4.3194
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Decorator)  
+Root: tceav.gui.access.NamedRuleDataFilterInterface
+Number of Classes: 5
+External Dependencies: 2
+Functionality: 4
+Reusability: 3.5029
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Template Method)  
+Root: tceav.gui.access.NamedRuleDataFilterAdapter
+Number of Classes: 4
+External Dependencies: 3
+Functionality: 3
+Reusability: 3.8005
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    ((Object)Adapter-Command)  
+Root: tceav.manager.access.NamedAclList
+Number of Classes: 2
+External Dependencies: 6
+Functionality: 5
+Reusability: 4.8325
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    ((Object)Adapter-Command)  
+Root: tceav.manager.access.NamedAclList
+Number of Classes: 2
+External Dependencies: 10
+Functionality: 9
+Reusability: 6.0287
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Proxy)  
+Root: tceav.manager.compare.CompareAccessManager
+Number of Classes: 2
+External Dependencies: 11
+Functionality: 6
+Reusability: 3.5287
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    ((Object)Adapter-Command)  
+Root: tceav.manager.access.RuleTreeNode
+Number of Classes: 2
+External Dependencies: 11
+Functionality: 14
+Reusability: 8.6405
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Strategy)  
+Root: tceav.gui.procedure.ActionTreeData
+Number of Classes: 8
+External Dependencies: 12
+Functionality: 26
+Reusability: 5.0287
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    ((Object)Adapter-Command)  
+Root: tceav.gui.tools.table.JTableAdvanced
+Number of Classes: 2
+External Dependencies: 16
+Functionality: 9
+Reusability: 0.6736
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Facade)  
+Root: tceav.gui.procedure.ActionTreeData
+Number of Classes: 8
+External Dependencies: 16
+Functionality: 41
+Reusability: 5.8032
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    ((Object)Adapter-Command)  
+Root: tceav.manager.compare.CompareAccessManager
+Number of Classes: 2
+External Dependencies: 20
+Functionality: 1
+Reusability: 1.6718
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    ((Object)Adapter-Command)  
+Root: tceav.manager.access.AccessManager
+Number of Classes: 2
+External Dependencies: 22
+Functionality: 6
+Reusability: 2.1892
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    (Facade)  
+Root: tceav.gui.procedure.ProcessTaskComponent
+Number of Classes: 4
+External Dependencies: 26
+Functionality: 22
+Reusability: 6.0038
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    ((Object)Adapter-Command)  
+Root: tceav.manager.procedure.ProcedureManager
+Number of Classes: 2
+External Dependencies: 34
+Functionality: 6
+Reusability: -0.0849
+
+Software Name: Teamcenter Engineering Admin View   ver.6.02.199    ((Object)Adapter-Command)  
+Root: tceav.manager.procedure.ProcedureManager
+Number of Classes: 2
+External Dependencies: 35
+Functionality: 6
+Reusability: -0.1592
 
 ### JUnit
 Software Name: jUnit   ver.4.10    (Singleton)  
